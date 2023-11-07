@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicBlazorApp", "MusicBlaz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicApi", "MusicApi\MusicApi.csproj", "{09976259-67BD-43EA-85F4-C9C5E9FDCA89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicTests", "MusicTests\MusicTests.csproj", "{8DF9AF3A-11E1-48B7-BBE4-10F3E94A6948}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{09976259-67BD-43EA-85F4-C9C5E9FDCA89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09976259-67BD-43EA-85F4-C9C5E9FDCA89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09976259-67BD-43EA-85F4-C9C5E9FDCA89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DF9AF3A-11E1-48B7-BBE4-10F3E94A6948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DF9AF3A-11E1-48B7-BBE4-10F3E94A6948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DF9AF3A-11E1-48B7-BBE4-10F3E94A6948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DF9AF3A-11E1-48B7-BBE4-10F3E94A6948}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
