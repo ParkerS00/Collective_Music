@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddDbContext<MusicDBContext>(config => config.UseNpgsql(builder.Configuration["MusicDB"]));
 
 var app = builder.Build();
 
