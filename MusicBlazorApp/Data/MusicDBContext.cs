@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace MusicBlazorApp.-Data;
+namespace MusicBlazorApp.Data;
 
-public partial class PostgresContext : DbContext
+public partial class MusicDBContext : DbContext
 {
-    public PostgresContext()
+    public MusicDBContext()
     {
     }
 
-    public PostgresContext(DbContextOptions<PostgresContext> options)
+    public MusicDBContext(DbContextOptions<MusicDBContext> options)
         : base(options)
     {
     }

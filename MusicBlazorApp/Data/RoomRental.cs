@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MusicBlazorApp.-Data;
+namespace MusicBlazorApp.Data;
 
 public partial class RoomRental
 {
