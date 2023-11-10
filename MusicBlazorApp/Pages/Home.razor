@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+<script src="https://kit.fontawesome.com/6f306315c2.js" crossorigin="anonymous"></script>
 <PageTitle>Collaborative Music - Home</PageTitle>
 
 <style>
@@ -7,10 +7,10 @@
 </style>
 
 <!-- Hero -->
-<div class="row align-items-center" style="background-color: #19222D; color: white; margin: 100px 0px 100px 0px; height: 400px;">
+<div class="hero-bar row align-items-center">
     <div class="col-md-3"></div>
     <div class="col-md-3">
-        <img class="img-fluid img h-100" src="images/HomeScreenGuitar.png" />
+        <img class="guitar-image img-fluid img" src="css/images/HomeScreenGuitar.png" />
     </div>
     <div class="col-md-3">
         <div class="d-flex flex-column align-items-lg-center">
@@ -21,20 +21,50 @@
     <div class="col-md-3"></div>
 </div>
 
+
+
 <!-- Three Button Section -->
-<div class="mx-5 my-5">
-    <div class="d-flex flex-row justify-content-around">
-        <div class="m-2 p-5" style="background-color: lightgrey; width: 270px"><h2><a href="#" class="">Purchase Instruments</a></h2></div>
-        <div class="m-2 p-5" style="background-color: lightgrey; width: 270px"><h2><a href="#" class="">Rent Instruments</a></h2></div>
-        <div class="m-2 p-5" style="background-color: lightgrey; width: 270px"><h2><a href="#" class="">Rent a Studio Room</a></h2></div>
+<div class="button-section mx-5">
+    <center class="service-tag">
+        <h2>Services</h2>
+    </center>
+    <div class="service-links-wrapper d-flex flex-row justify-content-around">
+        <div class="service-links m-2 p-5">
+            <center><h2><a href="#" class="service-links-name">Purchase Equipment</a></h2></center>
+            <center><i class="ikons fa-solid fa-cart-shopping mt-4"></i></center>
+        </div>
+        <div class="service-links m-2 p-5">
+            <center><h2><a href="#" class="service-links-name">Rent Instruments</a></h2></center>
+            <center><i class="ikons fa-solid fa-guitar mt-4"></i></center>
+            
+        </div>
+        <div class="service-links m-2 p-5" >
+            <center><h2><a href="#" class="service-links-name">Rent a Studio </a></h2></center>
+            <center><i class="ikons fa-solid fa-microphone-lines mt-4"></i></center>   
+        </div>
     </div>
 </div>
 
 <!-- How to Rent -->
 <div>
-    <div class="w-100" style="background-color: #5B0D13; color: white; margin: 0px; height: 300px; margin-bottom: 100px;">
-        <center><h2>How to Rent</h2></center>
-        
+    <div class="rent-bar w-100">
+        <center>
+            <h2 class="how-to-rent">How to Rent</h2>
+        </center>
+        <div class="how-to-rent-wrapper d-flex flex-row justify-content-around">
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4><a href="#" class="rent-descriptions-name">1. Create an Account</a></h4></center>
+                <center><i class="ikons fa-regular fa-user mt-4"></i></center>
+            </div>
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4><a href="#" class="rent-descriptions-name">2. Schedule Online Rental</a></h4></center>
+                <center><i class="ikons fa-solid fa-arrow-pointer mt-4"></i></center>
+            </div>
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4><a href="#" class="rent-descriptions-name">3. Pick Up Rental </a></h4></center>
+                <center><i class="ikons fa-solid fa-car mt-4"></i></center>
+            </div>
+        </div>
     </div>
 </div>
 

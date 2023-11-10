@@ -1,0 +1,65 @@
+﻿.hero-bar {
+    background-color: #19222D;
+    color: white;
+    margin: 100px 0px 100px 0px;
+    height: 400px;
+}
+
+.guitar-image {
+    position: absolute;
+    height: 600px;
+    top: 100px;
+    left: 200px;
+}
+
+.button-section {
+    margin-top: 150px;
+}
+
+.service-tag {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.service-links-wrapper {
+    margin-bottom: 125px;
+
+}
+
+.service-links {
+    background-color: lightgrey;
+    width: 270px;
+    height: 325px;
+
+}
+.service-links-name {
+    color: black;
+    text-decoration: none;
+}
+
+.ikons {
+    font-size: 100px;
+}
+
+.rent-bar {
+    background-color: #5B0D13;
+    color: white;
+    margin: 0px;
+    margin-bottom: 100px;
+}
+
+.how-to-rent {
+    padding-top: 50px;
+}
+
+.how-to-rent-wrapper{
+
+}
+.rent-descriptions {
+    width: 270px;
+    height: 325px;
+}
+.rent-descriptions-name {
+    color: white;
+    text-decoration: none;
+}
