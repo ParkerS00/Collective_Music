@@ -5,9 +5,9 @@ VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicBlazorApp", "MusicBlazorApp\MusicBlazorApp.csproj", "{780C7C84-98DF-4EA8-A3E7-9B24EC168841}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicApi", "MusicApi\MusicApi.csproj", "{09976259-67BD-43EA-85F4-C9C5E9FDCA89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicApi", "MusicApi\MusicApi.csproj", "{09976259-67BD-43EA-85F4-C9C5E9FDCA89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicTests", "MusicTests\MusicTests.csproj", "{8DF9AF3A-11E1-48B7-BBE4-10F3E94A6948}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicTests", "MusicTests\MusicTests.csproj", "{8DF9AF3A-11E1-48B7-BBE4-10F3E94A6948}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

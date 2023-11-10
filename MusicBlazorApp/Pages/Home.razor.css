@@ -9,7 +9,7 @@
     position: absolute;
     height: 600px;
     top: 100px;
-    left: 200px;
+    left: 30vw;
 }
 
 .button-section {
@@ -23,7 +23,8 @@
 
 .service-links-wrapper {
     margin-bottom: 125px;
-
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .service-links {
@@ -53,7 +54,7 @@
 }
 
 .how-to-rent-wrapper{
-
+    display: flex; flex-wrap: wrap;
 }
 .rent-descriptions {
     width: 270px;
@@ -62,4 +63,20 @@
 .rent-descriptions-name {
     color: white;
     text-decoration: none;
+}
+
+.location-descriptions{
+    
+}
+
+.map {
+    width: 325px;
+    height: 325px;
+}
+
+.location-title {
+    font-weight: 900;
+    text-decoration: none;
+    color: black;
+    margin-right: 175px;
 }
