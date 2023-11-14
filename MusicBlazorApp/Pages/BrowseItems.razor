@@ -1,6 +1,12 @@
 ﻿@page "/browse-instruments"
 @using MusicBlazorApp.Data;
 
+@using System.Net.Http;
+@using System.Net.Http.Json;
+
+
+@inject HttpClient httpClient;
+
 <style>
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
@@ -72,19 +78,7 @@
 
         <div class="p-4 d-flex flex-wrap flex-row" style="background-color: #EEEEEE; margin-right: 100px;">
             <!-- ITEMS -->
-            <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;">
-                <img class="card-img-top" src="https://dummyimage.com/400x500/000/fff" alt="Card image cap" style="border-radius: 0px;">
-                <div class="card-title"><h5 class="m-2">Fender Player Stratocaster</h5></div>
-                <div class="card-body">
-                    <p class="card-text"><strong>$399.99</strong></p>
-                    <div class="d-flex justify-content-end">
-                        <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>Rent</strong></div>
-                        <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>Purchase</strong></div>
-                        <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>Used</strong></div>
-                    </div>
-                </div>
-            </div>
-            @* 
+            
             @foreach (var item in Items)
             {
                 <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;">
@@ -100,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-            } *@
+            } 
 
 
         </div>
@@ -112,5 +106,12 @@
 @code {
     public string SearchQuery { get; set; }
 
-    public IEnumerable<Item>? Items { get; set; }
+    public List<Item>? Items { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Items = new List<Item>();
+        Items = await httpClient.GetFromJsonAsync<List<Item>>("https://localhost:7236/Items");
+    }
+
 }
