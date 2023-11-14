@@ -23,14 +23,14 @@ namespace MusicTests
                 .WithPassword("Strong_password_123!")
                 .Build();
 
-            Services.AddDbContextFactory<MusicDBContext>(options => options.UseNpgsql(_dbContainer.GetConnectionString()));
+            Services.AddDbContextFactory<MusicDbContext>(options => options.UseNpgsql(_dbContainer.GetConnectionString()));
         }
 
         public async Task InitializeAsync()
         {
             await _dbContainer.StartAsync();
 
-            var dbContext = Services.GetRequiredService<MusicDBContext>();
+            var dbContext = Services.GetRequiredService<MusicDbContext>();
             await dbContext.Database.MigrateAsync();
         }
 

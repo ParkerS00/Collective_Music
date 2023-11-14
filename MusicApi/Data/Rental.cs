@@ -7,9 +7,7 @@ public partial class Rental
 {
     public int Id { get; set; }
 
-    public DateOnly? RentalOut { get; set; }
-
-    public DateOnly? RentalIn { get; set; }
+    public DateOnly? RentalDate { get; set; }
 
     public int? CustomerId { get; set; }
 

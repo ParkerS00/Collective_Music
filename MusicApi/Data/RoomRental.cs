@@ -13,6 +13,10 @@ public partial class RoomRental
 
     public decimal? ActualPrice { get; set; }
 
+    public DateTime? StartTime { get; set; }
+
+    public DateTime? EndTime { get; set; }
+
     public virtual Rental? Rental { get; set; }
 
     public virtual Room? Room { get; set; }

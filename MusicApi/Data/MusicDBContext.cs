@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MusicBlazorApp.Data;
 
-public partial class MusicDBContext : DbContext
+public partial class MusicDbContext : DbContext
 {
-    public MusicDBContext()
+    public MusicDbContext()
     {
     }
 
-    public MusicDBContext(DbContextOptions<MusicDBContext> options)
+    public MusicDbContext(DbContextOptions<MusicDbContext> options)
         : base(options)
     {
     }
@@ -214,6 +214,9 @@ public partial class MusicDBContext : DbContext
             entity.Property(e => e.ItemId).HasColumnName("item_id");
             entity.Property(e => e.OutCondition).HasColumnName("out_condition");
             entity.Property(e => e.RentalId).HasColumnName("rental_id");
+            entity.Property(e => e.ReturnDate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("return_date");
 
             entity.HasOne(d => d.Item).WithMany(p => p.ItemRentals)
                 .HasForeignKey(d => d.ItemId)
@@ -277,6 +280,7 @@ public partial class MusicDBContext : DbContext
                 .HasColumnName("final_price");
             entity.Property(e => e.ItemId).HasColumnName("item_id");
             entity.Property(e => e.PurchaseId).HasColumnName("purchase_id");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
 
             entity.HasOne(d => d.Item).WithMany(p => p.PurchaseItems)
                 .HasForeignKey(d => d.ItemId)
@@ -296,8 +300,7 @@ public partial class MusicDBContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
             entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
-            entity.Property(e => e.RentalIn).HasColumnName("rental_in");
-            entity.Property(e => e.RentalOut).HasColumnName("rental_out");
+            entity.Property(e => e.RentalDate).HasColumnName("rental_date");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Rentals)
                 .HasForeignKey(d => d.CustomerId)
@@ -358,8 +361,14 @@ public partial class MusicDBContext : DbContext
             entity.Property(e => e.ActualPrice)
                 .HasColumnType("money")
                 .HasColumnName("actual_price");
+            entity.Property(e => e.EndTime)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("end_time");
             entity.Property(e => e.RentalId).HasColumnName("rental_id");
             entity.Property(e => e.RoomId).HasColumnName("room_id");
+            entity.Property(e => e.StartTime)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("start_time");
 
             entity.HasOne(d => d.Rental).WithMany(p => p.RoomRentals)
                 .HasForeignKey(d => d.RentalId)

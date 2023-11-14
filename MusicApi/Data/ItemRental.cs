@@ -15,6 +15,8 @@ public partial class ItemRental
 
     public string? OutCondition { get; set; }
 
+    public DateTime? ReturnDate { get; set; }
+
     public virtual Item? Item { get; set; }
 
     public virtual Rental? Rental { get; set; }
