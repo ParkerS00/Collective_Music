@@ -1,15 +1,22 @@
 ﻿@page "/rent-a-room"
 
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+</style>
+
 <h1>Rent A Room</h1>
 
 <div class="row">
     <div class="col">
+        <h3>Select a Date</h3>
+        <p class="alert alert-info"> Dusty Note: This is where input date would go :( </p>
     </div>
     <div class="col">
-
+        <h4>Date: @Date</h4>
+        <button>Register for Date</button>
     </div>
 </div>
 
 @code {
-
+    public DateOnly? Date { get; set; }
 }
