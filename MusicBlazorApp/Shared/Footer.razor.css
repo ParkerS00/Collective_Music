@@ -4,6 +4,15 @@
     color: white;
     padding: 20px; /* Add padding to the footer as needed */
 }
+.name{
+    margin-left:15em;
+
+}
+.address{
+    margin-left:15em;
+}
+
+
 
 
 body {
