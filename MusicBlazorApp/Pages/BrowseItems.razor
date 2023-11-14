@@ -6,6 +6,11 @@
 
 <h3>Browse Instruments</h3>
 
-@code {
+<div class="my-5 mx-3 d-flex justify-content-end">
+    <InputText @bind-Value="SearchQuery"></InputText>
+    <button type="submit">Search</button>
+</div>
 
+@code {
+    public string SearchQuery { get; set; }
 }
