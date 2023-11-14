@@ -1,0 +1,116 @@
+﻿@page "/browse-instruments"
+@using MusicBlazorApp.Data;
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+</style>
+
+<div class="row">
+    <div class="col-lg-2 col-md-3 ">
+        <!-- Filter Section -->
+        <nav id="filter-sidebar" class="collapse d-lg-block sidebar collapse bg-white">
+            <div class="position-sticky mx-3">
+                <h4>Filter</h4>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Purchase New
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Purchase Used
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Rent
+                    </label>
+                </div>
+                <hr />
+                <h4>Category</h4>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Guitars
+                    </label>
+                </div>
+                <hr />
+                <h4>Price</h4>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        &lt; $50.00
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        $50.00 - $100.00
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        $100.00 - $200.00
+                    </label>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class=" col-lg-10 col-md-9">
+
+        <!-- SEARCH BAR AND TITLE -->
+        <h1>Browse Instruments</h1>
+        <div class="my-5 mx-3 d-flex justify-content-end">
+            
+            <InputText @bind-Value="SearchQuery"></InputText>
+            <button type="submit">Search</button>
+        </div>
+
+        <div class="p-4 d-flex flex-wrap flex-row" style="background-color: #EEEEEE; margin-right: 100px;">
+            <!-- ITEMS -->
+            <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;">
+                <img class="card-img-top" src="https://dummyimage.com/400x500/000/fff" alt="Card image cap" style="border-radius: 0px;">
+                <div class="card-title"><h5 class="m-2">Fender Player Stratocaster</h5></div>
+                <div class="card-body">
+                    <p class="card-text"><strong>$399.99</strong></p>
+                    <div class="d-flex justify-content-end">
+                        <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>Rent</strong></div>
+                        <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>Purchase</strong></div>
+                        <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>Used</strong></div>
+                    </div>
+                </div>
+            </div>
+            @* 
+            @foreach (var item in Items)
+            {
+                <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;">
+                    <img class="card-img-top" src="@item.ItemImages.FirstOrDefault()" alt="@item.ItemName" style="border-radius: 0px;">
+                    <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>$@item.SellPrice</strong></p>
+                        <div class="d-flex justify-content-end">
+                            @foreach (var status in item.ItemStatuses)
+                            {
+                                <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>@status</strong></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            } *@
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    public string SearchQuery { get; set; }
+
+    public IEnumerable<Item>? Items { get; set; }
+}

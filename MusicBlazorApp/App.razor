@@ -6,7 +6,12 @@
     <NotFound>
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+            <div style="display:flex; flex-direction:column; min-height:calc(100vh - 310.4px);">
+                <div id="content-wrap" style="padding-bottom: 2.5rem;">
+                    <center><h1>Sorry There's Nothing At This Address</h1></center>
+                    <center><img class="guitar-image img-fluid img" src="css/images/rah.webp" width="500" height="600" /></center>
+                </div>
+            </div>
         </LayoutView>
     </NotFound>
 </Router>
