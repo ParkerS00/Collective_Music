@@ -1,0 +1,13 @@
+﻿#footer {
+    margin-top: auto; /* Push the footer to the bottom */
+    background-color: #19222D;
+    color: white;
+    padding: 20px; /* Add padding to the footer as needed */
+}
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
