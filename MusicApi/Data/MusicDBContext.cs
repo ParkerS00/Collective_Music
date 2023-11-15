@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace MusicBlazorApp.Data;
 
-public partial class MusicDbContext : DbContext
+public partial class MusicDbContext : IdentityDbContext
 {
     public MusicDbContext()
     {
@@ -49,15 +50,12 @@ public partial class MusicDbContext : DbContext
 
     public virtual DbSet<Status> Statuses { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Name=MusicDB");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .HasPostgresExtension("pg_catalog", "azure")
-            .HasPostgresExtension("pg_catalog", "pgaadauth")
-            .HasPostgresExtension("pg_cron");
+        //modelBuilder
+        //    .HasPostgresExtension("pg_catalog", "azure")
+        //    .HasPostgresExtension("pg_catalog", "pgaadauth")
+        //    .HasPostgresExtension("pg_cron");
 
         modelBuilder.Entity<Brand>(entity =>
         {
@@ -406,8 +404,6 @@ public partial class MusicDbContext : DbContext
                 .HasColumnName("status_name");
         });
 
-        OnModelCreatingPartial(modelBuilder);
+        base.OnModelCreating(modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
