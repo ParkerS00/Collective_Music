@@ -22,7 +22,7 @@ public class ItemsController : Controller
     [HttpGet()]
     public async Task<IEnumerable<Item>> Get()
     {
-        IEnumerable<Item> iDb = await itemService.GetAll();
+        IEnumerable<Item> items = await itemService.GetAll();
 
         // TODO eventually add an itemDTO
         //var items = new List<Item>();
@@ -31,9 +31,14 @@ public class ItemsController : Controller
         //{
         //    items.Add(item);
         //}
-        
-        return iDb;
-        
+
+        return items;
     }
-   
+
+    [HttpGet("{id}")]
+    public async Task<Item> Get(int id)
+    {
+        Item item = await itemService.Get(id);
+        return item;
+    }
 }

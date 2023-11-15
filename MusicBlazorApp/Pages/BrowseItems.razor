@@ -1,11 +1,12 @@
 ﻿@page "/browse-instruments"
-@using MusicBlazorApp.Data;
 
+@using MusicBlazorApp.Data;
 @using System.Net.Http;
 @using System.Net.Http.Json;
 
 
 @inject HttpClient httpClient;
+@inject NavigationManager NavManager;
 
 <style>
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -115,6 +116,6 @@
 
     public void HandleClick(int id)
     {
-        // TODO Navigate To View Item Page
+        NavManager.NavigateTo($"/View-Item/{id}");
     }
 }

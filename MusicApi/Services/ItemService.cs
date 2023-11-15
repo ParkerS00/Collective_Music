@@ -17,7 +17,8 @@ public class ItemService : I_ItemService<Item>
 
     public async Task<Item> Get(int id)
     {
-        throw new NotImplementedException();
+        var context = contextFactory.CreateDbContext();
+        return await context.Items.Include(i => i.ItemStatuses).Where(i => i.Id == id).FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Item>> GetAll()
