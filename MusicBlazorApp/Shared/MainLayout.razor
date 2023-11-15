@@ -19,7 +19,7 @@
                                 <a class="nav-link" href="/rent-a-room">Rent a Recording Studio</a>
                                 <AuthorizeView>
                                 <Authorized>
-                                    <a href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
+                                    <a class="user nav-link" href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
                                     <form method="post" action="Identity/Account/Logout">
                                         <button type="submit" class="nav-link btn btn-link">Log out</button>
                                     </form>

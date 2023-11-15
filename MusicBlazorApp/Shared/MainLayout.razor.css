@@ -35,6 +35,12 @@ main {
         text-overflow: ellipsis;
     }
 
+.user {
+    text-decoration: none;
+    color: rgba(255,255,255,.55)
+
+}
+
 @media (max-width: 640.98px) {
     .top-row:not(.auth) {
         display: none;
