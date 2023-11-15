@@ -7,9 +7,9 @@ namespace MusicApi.Services;
 public class ItemService : I_ItemService<Item>
 {
     private readonly ILogger<ItemService> logger;
-    private IDbContextFactory<MusicDBContext> contextFactory;
+    private IDbContextFactory<MusicDbContext> contextFactory;
 
-    public ItemService(ILogger<ItemService> logger, IDbContextFactory<MusicDBContext> context)
+    public ItemService(ILogger<ItemService> logger, IDbContextFactory<MusicDbContext> context)
     {
         this.logger = logger;
         this.contextFactory = context;
@@ -24,6 +24,8 @@ public class ItemService : I_ItemService<Item>
     {
         var context = contextFactory.CreateDbContext();
         return await context.Items
+            .Include(i => i.ItemStatuses)
+            //.Include(i => (i.ItemStatuses as ItemStatus).Status)
             .ToListAsync();
     }
 
