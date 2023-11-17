@@ -10,9 +10,9 @@ namespace MusicApi.Controllers;
 public class ItemsController : Controller
 {
     private readonly ILogger<ItemsController> logger;
-    private readonly I_ItemService<Item> itemService;
+    private readonly IItemService<Item> itemService;
 
-    public ItemsController(ILogger<ItemsController> logger, I_ItemService<Item> itemService)
+    public ItemsController(ILogger<ItemsController> logger, IItemService<Item> itemService)
     {
         this.logger = logger;
         this.itemService = itemService;

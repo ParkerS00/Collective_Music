@@ -13,7 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContextFactory<MusicDbContext>(config => config.UseNpgsql(builder.Configuration["MusicDB"]));
-builder.Services.AddScoped<I_ItemService<Item>, ItemService>();
+builder.Services.AddScoped<IItemService<Item>, ItemService>();
+builder.Services.AddScoped<IRoomRentalService, RoomRentalService>();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers().AddJsonOptions(x =>x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 

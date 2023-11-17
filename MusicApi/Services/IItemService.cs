@@ -3,7 +3,7 @@ using MusicBlazorApp.Data;
 
 namespace MusicApi.Services;
 
-public interface I_ItemService<Item>
+public interface IItemService<Item>
 {
     Task<IEnumerable<Item>> GetAll();
     Task<Item> Get(int id);
