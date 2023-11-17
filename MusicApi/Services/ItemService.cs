@@ -4,7 +4,7 @@ using MusicBlazorApp.Data;
 
 namespace MusicApi.Services;
 
-public class ItemService : I_ItemService<Item>
+public class ItemService : IItemService<Item>
 {
     private readonly ILogger<ItemService> logger;
     private IDbContextFactory<MusicDbContext> contextFactory;
