@@ -22,4 +22,13 @@ public class RoomRentalController : Controller
         return await roomRentalService.GetAll();
     }
 
+    //[HttPost("{email}/{start}/")
+    //return id
+
+    //CustomerID - from user email
+    //RentalStart date - Current date
+    //RentalID - database
+    //RoomID - Get the chosen rooms id
+    //ActualPrice - Should just be the suggest
+    //StartTime - Whatever chosen
 }
