@@ -1,4 +1,8 @@
 ﻿@page "/rent-a-room"
+@using MusicBlazorApp.Data;
+
+@inject HttpClient httpClient;
+@inject AuthenticationStateProvider auth
 
 <style>
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -17,6 +21,43 @@
     </div>
 </div>
 
-@code {
-    public DateOnly? Date { get; set; }
+@if(roomRentals.Count() > 0)
+{
+    @foreach(var roomRental in roomRentals)
+    {
+        <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;">
+            <div class="card-title"><h5 class="m-2">@roomRental.StartTime - @roomRental.EndTime</h5></div>
+            <div class="card-body">
+                <p class="card-text"><strong>$@roomRental.ActualPrice</strong></p>
+            </div>
+        </div>
+    }
 }
+@code {
+
+    
+    //CustomerID - from user email
+    //RentalStart date - Current date
+    //RentalID - database
+    //RoomID - Get the chosen rooms id
+    //ActualPrice - Should just be the suggest
+    //StartTime - Whatever chosen
+
+
+    //Chosen rental date
+    public DateOnly? Date { get; set; }
+    private List<RoomRental> roomRentals = new List<RoomRental>();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        roomRentals = await httpClient.GetFromJsonAsync<List<RoomRental>>("https://localhost:7236/RoomRental");
+    }
+
+    private async Task MakeRoomRental()
+    {
+        var userName = (await auth.GetAuthenticationStateAsync()).User.Identity.Name;
+    }
+}
+

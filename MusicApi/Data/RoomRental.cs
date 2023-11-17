@@ -20,4 +20,5 @@ public partial class RoomRental
     public virtual Rental? Rental { get; set; }
 
     public virtual Room? Room { get; set; }
+
 }
