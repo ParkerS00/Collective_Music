@@ -35,11 +35,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
-	<PropertyGroup>
-		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-		<EnableDefaultNoneItems>false</EnableDefaultNoneItems>
-	</PropertyGroup>
+	
 
 
 </Project>
