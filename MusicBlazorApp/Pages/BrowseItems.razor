@@ -12,67 +12,68 @@
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
 
-<div class="row">
-    <div class="col-lg-2 col-md-3 ">
-        <!-- Filter Section -->
-        <nav id="filter-sidebar" class="collapse d-lg-block sidebar collapse bg-white">
-            <div class="position-sticky mx-3">
-                <h4>Filter</h4>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Purchase New
-                    </label>
+<div class="row">   
+    <div class="col-lg-2 col-md-3">
+        <div class="sticky-top" style="top: 75px;">
+            <!-- Filter Section -->
+            <nav id="filter-sidebar" class="collapse d-lg-block sidebar collapse bg-white">
+                <div class=" mx-3">
+                    <h4>Filter</h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" >
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Purchase New
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="used" id="flexCheckDefault" @bind="FilterUsed">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Purchase Used
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="rent" id="flexCheckDefault" @bind="FilterRent">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Rent
+                        </label>
+                    </div>
+                    <hr />
+                    <h4>Category</h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Guitars
+                        </label>
+                    </div>
+                    <hr />
+                    <h4>Price</h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" @bind-value="@FilterLt50" @bind-value:after="FilterItems">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            &lt; $50.00
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" @bind-value="@Filter50to100" @bind-value:after="FilterItems">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            $50.00 - $100.00
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            $100.00 - $200.00
+                        </label>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Purchase Used
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Rent
-                    </label>
-                </div>
-                <hr />
-                <h4>Category</h4>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Guitars
-                    </label>
-                </div>
-                <hr />
-                <h4>Price</h4>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        &lt; $50.00
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        $50.00 - $100.00
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        $100.00 - $200.00
-                    </label>
-                </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
     </div>
     <div class=" col-lg-10 col-md-9">
-
         <!-- SEARCH BAR AND TITLE -->
         <h1>Browse Instruments</h1>
         <div class="my-5 mx-3 d-flex justify-content-end">
-            
+
             <InputText @bind-Value="SearchQuery"></InputText>
             <button type="submit">Search</button>
         </div>
@@ -87,26 +88,36 @@
                     <div class="card-body">
                         <p class="card-text"><strong>$@item.SellPrice</strong></p>
                         @* <div class="d-flex justify-content-end">
-                            @foreach (var status in item.ItemStatuses)
-                            {
-                                <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>@status.StatusId</strong></div>
-                            }
-                        </div> *@
+                    @foreach (var status in item.ItemStatuses)
+                    {
+                    <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>@status.StatusId</strong></div>
+                    }
+                    </div> *@
                     </div>
                 </div>
-            } 
+            }
 
 
         </div>
     </div>
 </div>
 
-
-
 @code {
     public string SearchQuery { get; set; }
 
     public List<Item>? Items { get; set; }
+
+    public bool FilterNew { get; set; } = true;
+
+    public bool FilterUsed { get; set; }
+
+    public bool FilterRent { get; set; }
+
+    [Parameter]
+    public bool FilterLt50 { get; set; }
+
+    [Parameter]
+    public bool Filter50to100 { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -117,5 +128,17 @@
     public void HandleClick(int id)
     {
         NavManager.NavigateTo($"/View-Item/{id}");
+    }
+
+    public void FilterItems()
+    {
+        if (FilterLt50)
+        {
+            Items = Items.Where(i => i.SellPrice <= 50).ToList();
+        }
+        if (Filter50to100)
+        {
+            Items = Items.Where(i => i.SellPrice >= 50).ToList();
+        }
     }
 }
