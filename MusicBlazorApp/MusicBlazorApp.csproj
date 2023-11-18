@@ -35,6 +35,9 @@
     <ProjectReference Include="..\MusicApi\MusicApi.csproj" />
   </ItemGroup>
 
+	<PropertyGroup>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
+	</PropertyGroup>
 
 
 
