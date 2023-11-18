@@ -1,0 +1,38 @@
+﻿@page "/ImageUpload"
+@inject IHostEnvironment Environment
+@inject HttpClient httpClient;
+@inject AuthenticationStateProvider auth
+@using MusicBlazorApp.Data;
+
+<h1>ImageUpload</h1>
+<InputFile OnChange="@LoadFiles" multiple />
+<p>@FilePath</p>
+<div><button @onclick="SaveImage">Save</button></div>
+
+@code {
+    string FilePath { get; set; } = "";
+    List<Item> Items { get; set; } = new();
+    IBrowserFile image;
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     Items = await httpClient.GetFromJsonAsync<List<Item>>("https://localhost:7236/Items");
+    // }
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        image = e.File;
+        FilePath  = Path.Combine(Environment.ContentRootPath, "wwwroot", "css", "images", "itemImages", "1.jpg");
+
+    }
+
+    private async Task SaveImage()
+    {
+
+        if(image is not null)
+        {
+            await using FileStream fs = new(FilePath, FileMode.Create);
+            await image.OpenReadStream().CopyToAsync(fs);
+        }
+    }
+}

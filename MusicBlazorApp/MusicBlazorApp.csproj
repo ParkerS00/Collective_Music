@@ -35,4 +35,7 @@
     <ProjectReference Include="..\MusicApi\MusicApi.csproj" />
   </ItemGroup>
 
+
+
+
 </Project>

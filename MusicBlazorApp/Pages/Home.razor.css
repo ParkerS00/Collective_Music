@@ -27,9 +27,9 @@
     flex-wrap: wrap;
 }
 
-.links{
-    text-decoration:none;
-    color:black
+.links {
+    text-decoration: none;
+    color: black
 }
 
 .service-links {
@@ -41,19 +41,19 @@
     display: inline-block;
 }
 
-.service-links:hover {
-    background-color: black;
-    color: white;
-}
+    .service-links:hover {
+        background-color: black;
+        color: white;
+    }
 
 .service-links-name {
     color: inherit; /* Inherit text color from the parent */
     text-decoration: none; /* Remove underline from the link */
 }
 
-.service-links-name:hover{
-    color:white;
-}
+    .service-links-name:hover {
+        color: white;
+    }
 
 .ikons {
     font-size: 100px;
