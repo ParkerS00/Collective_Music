@@ -39,12 +39,11 @@
     <Folder Include="wwwroot\css\images\itemImages\" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Content Include="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
+	<PropertyGroup>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+	</PropertyGroup>
+
 
 </Project>
