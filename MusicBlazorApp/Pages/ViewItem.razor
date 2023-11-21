@@ -57,6 +57,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Item = await httpClient.GetFromJsonAsync<Item>($"https://localhost:7236/Items/{ItemId}");
+        Item = await httpClient.GetFromJsonAsync<Item>($"https://musicapi20231118154059.azurewebsites.net/Items/{ItemId}");
     }
 }
