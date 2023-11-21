@@ -37,7 +37,6 @@
         <div class="col-md-6">
             <h1>@Item.ItemName</h1>
             <p><strong>$@Item.SellPrice</strong></p>
-            
             <div class="ratings my-5">
                 <i class="fa fa-star rating-color"></i>
                 <i class="fa fa-star rating-color"></i>
@@ -70,7 +69,7 @@
                 </div>
             </div>
         </div>
-    
+
         <div>
             <h3>Reviews</h3>
             <hr />
@@ -117,5 +116,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         Item = await httpClient.GetFromJsonAsync<ItemDto>($"{Constants.ApiEndpoint}/Items/{ItemId}");
+
+        if (Item is not null)
+        {
+            Reviews = Item.Reviews;
+        }
     }
 }
