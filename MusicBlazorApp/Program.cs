@@ -20,8 +20,8 @@ builder.Services.AddHttpClient();
 // Google Authentication
 services.AddAuthentication().AddGoogle(googleOptions =>
 {
-    googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
-    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+    googleOptions.ClientId = configuration["ClientId"];
+    googleOptions.ClientSecret = configuration["ClientSecret"];
 });
 
 builder.Services.AddDbContext<MusicDbContext>(config => config.UseNpgsql(builder.Configuration["MusicDB"]));
