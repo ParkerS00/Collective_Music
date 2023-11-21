@@ -74,7 +74,6 @@
         <!-- SEARCH BAR AND TITLE -->
         <h1>Browse Instruments</h1>
         <div class="my-5 mx-3 d-flex justify-content-end">
-
             <InputText @bind-Value="SearchQuery"></InputText>
             <button type="submit">Search</button>
         </div>
@@ -86,12 +85,12 @@
                 @foreach (var item in Items)
                 {
                     <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;" @onclick="() => HandleClick(item.Id)">
-                        @*<img class="card-img-top" src="@item.ImageFilePaths.FirstOrDefault()" alt="@item.ItemName" style="border-radius: 0px;">*@
+                        @*<img class="card-img-top" src="@item.ImageFilePaths.FirstOrDefault()" alt="@item.ItemName" style="border-radius: 0px;"> *@
                         <div class="card-title"><h5 class="m-2">@item.Id - @item.ItemName</h5></div>
                         <div class="card-body">
                             <p class="card-text"><strong>$@item.SellPrice</strong></p>
                             <div class="d-flex justify-content-end">
-                               @*  @foreach (var status in item.ItemStatuses)
+                               @*@foreach (var status in item.ItemStatuses)
                                 {
                                     <div class="pill d-flex" style="background-color: #A0020D; color: white; border-radius: 5px;"><strong>@status</strong></div>
                                 } *@

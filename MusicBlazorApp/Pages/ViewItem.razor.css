@@ -1,0 +1,14 @@
+﻿body {
+}
+
+.main-container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    margin-bottom: 15%;
+}
+
+.review-tile {
+    background-color: #F2F2F2;
+}
