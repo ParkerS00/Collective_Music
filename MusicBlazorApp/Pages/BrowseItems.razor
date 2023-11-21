@@ -1,5 +1,6 @@
 ﻿@page "/browse-instruments"
 
+@using MusicApi.Data;
 @using MusicBlazorApp.Data;
 @using System.Net.Http;
 @using System.Net.Http.Json;
@@ -83,16 +84,16 @@
             @foreach (var item in Items)
             {
                 <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;" @onclick="() => HandleClick(item.Id)">
-                    <img class="card-img-top" src="@item.ItemImages.FirstOrDefault()" alt="@item.ItemName" style="border-radius: 0px;">
+                    <img class="card-img-top" src="@item.ImageFilePaths.FirstOrDefault()" alt="@item.ItemName" style="border-radius: 0px;">
                     <div class="card-title"><h5 class="m-2">@item.Id - @item.ItemName</h5></div>
                     <div class="card-body">
                         <p class="card-text"><strong>$@item.SellPrice</strong></p>
-                        @* <div class="d-flex justify-content-end">
-                    @foreach (var status in item.ItemStatuses)
-                    {
-                    <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>@status.StatusId</strong></div>
-                    }
-                    </div> *@
+                        <div class="d-flex justify-content-end">
+                            @foreach (var status in item.ItemStatuses)
+                            {
+                                <div class="pill p-3 m-2" style="background-color: #A0020D; color: white; border-radius: 10px;"><strong>@status</strong></div>
+                            }
+                        </div>
                     </div>
                 </div>
             }
@@ -103,9 +104,9 @@
 </div>
 
 @code {
-    public string SearchQuery { get; set; }
+    public string? SearchQuery { get; set; }
 
-    public List<Item>? Items { get; set; }
+    public List<ItemDto>? Items { get; set; }
 
     public bool FilterNew { get; set; } = true;
 
@@ -121,8 +122,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Items = new List<Item>();
-        Items = await httpClient.GetFromJsonAsync<List<Item>>("https://localhost:7236/Items");
+        Items = new List<ItemDto>();
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>("https://musicapi20231118154059.azurewebsites.net/Items");
     }
 
     public void HandleClick(int id)

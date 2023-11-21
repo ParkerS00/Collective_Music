@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MusicApi.Data;
 using MusicApi.Services;
 using MusicBlazorApp.Data;
 
@@ -20,25 +21,16 @@ public class ItemsController : Controller
 
     // enpoint "/items"
     [HttpGet()]
-    public async Task<IEnumerable<Item>> Get()
+    public async Task<IEnumerable<ItemDto>> Get()
     {
         IEnumerable<Item> items = await itemService.GetAll();
-
-        // TODO eventually add an itemDTO
-        //var items = new List<Item>();
-
-        //foreach(var item in iDb)
-        //{
-        //    items.Add(item);
-        //}
-
-        return items;
+        return items.Select(i => new ItemDto(i));
     }
 
     [HttpGet("{id}")]
-    public async Task<Item> Get(int id)
+    public async Task<ItemDto> Get(int id)
     {
         Item item = await itemService.Get(id);
-        return item;
+        return new ItemDto(item);
     }
 }

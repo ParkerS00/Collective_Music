@@ -18,7 +18,13 @@ public class ItemService : IItemService<Item>
     public async Task<Item> Get(int id)
     {
         var context = contextFactory.CreateDbContext();
-        return await context.Items.Include(i => i.ItemStatuses).Where(i => i.Id == id).FirstOrDefaultAsync();
+        return await context.Items
+            .Include(i => i.ItemStatuses)
+                .ThenInclude(iStat => iStat.Status)
+            .Include(c => c.ItemCategories)
+                .ThenInclude(c => c.Category)
+            .Include(i => i.ItemImages)
+            .Where(i => i.Id == id).FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Item>> GetAll()
@@ -26,7 +32,10 @@ public class ItemService : IItemService<Item>
         var context = contextFactory.CreateDbContext();
         return await context.Items
             .Include(i => i.ItemStatuses)
-            //.Include(i => (i.ItemStatuses as ItemStatus).Status)
+            .ThenInclude(itemStat => itemStat.Status)
+            .Include(i => i.ItemCategories)
+                .ThenInclude(ic => ic.Category)
+            .Include(i => i.ItemImages)
             .ToListAsync();
     }
 
