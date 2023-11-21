@@ -45,14 +45,10 @@ public class ItemsController : Controller
     {
         var item = new Item()
         {
-            Id = request.Id
-            ,
-            ItemName = request.ItemName
-            ,
-            Description = request.ItemText
-            ,
-            SellPrice = request.SellPrice
-            ,
+            Id = request.Id,
+            ItemName = request.ItemName,
+            Description = request.ItemText,
+            SellPrice = request.SellPrice,
             SuggestedRentalPrice = request.RentPrice
         };
 

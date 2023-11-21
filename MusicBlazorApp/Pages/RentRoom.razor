@@ -52,7 +52,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        roomRentals = await httpClient.GetFromJsonAsync<List<RoomRental>>("https://musicapi20231118154059.azurewebsites.net/RoomRental");
+        roomRentals = await httpClient.GetFromJsonAsync<List<RoomRental>>($"{Constants.ApiEndpoint}/RoomRental");
     }
 
     private async Task MakeRoomRental()
