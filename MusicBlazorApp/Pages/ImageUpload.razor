@@ -14,22 +14,22 @@
     List<Item> Items { get; set; } = new();
     IBrowserFile image;
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Items = await httpClient.GetFromJsonAsync<List<Item>>("https://localhost:7236/Items");
-    // }
+    protected override async Task OnInitializedAsync()
+    {
+        Items = await httpClient.GetFromJsonAsync<List<Item>>("https://musicapi20231118154059.azurewebsites.net/items");
+    }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
         image = e.File;
-        FilePath  = Path.Combine(Environment.ContentRootPath, "wwwroot", "css", "images", "itemImages", "1.jpg");
+        FilePath = Path.Combine(Environment.ContentRootPath, "wwwroot", "css", "images", "itemImages", "1.jpg");
 
     }
 
     private async Task SaveImage()
     {
 
-        if(image is not null)
+        if (image is not null)
         {
             await using FileStream fs = new(FilePath, FileMode.Create);
             await image.OpenReadStream().CopyToAsync(fs);
