@@ -2,7 +2,7 @@
 @inject IHostEnvironment Environment
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth
-@using MusicBlazorApp.Data;
+@using MusicApi.Data;
 
 <h1>ImageUpload</h1>
 
@@ -82,13 +82,13 @@
 
 @code {
     string FilePath { get; set; } = "";
-    List<Item> Items { get; set; } = new();
-    Item selectedItem = new();
+    List<ItemDto> Items { get; set; } = new();
+    ItemDto selectedItem = new();
     IBrowserFile image;
 
     protected override async Task OnInitializedAsync()
     {
-        Items = await httpClient.GetFromJsonAsync<List<Item>>("https://musicapi20231118154059.azurewebsites.net/items");
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>("https://musicapi20231118154059.azurewebsites.net/items");
     }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
@@ -108,7 +108,7 @@
         }
     }
 
-    private void EditItem(Item selected)
+    private void EditItem(ItemDto selected)
     {
         selectedItem = selected;
     }
