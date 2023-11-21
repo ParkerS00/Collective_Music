@@ -15,6 +15,7 @@
                 <th scope="col">Description</th>
                 <th scope="col">$Sell Price</th>
                 <th scope="col">$Suggested Rental Price</th>
+                <th scope="col">Image Upload</th>
                 <th scope="col">#</th>
             </tr>
         </thead>
@@ -67,6 +68,13 @@
                                 </div>
                             </div>
                         </td>
+                        <td>
+                            <div>
+                                <InputFile OnChange="@LoadFiles" multiple />
+                                <p>@FilePath</p>
+                                <div><button @onclick="SaveImage">Save</button></div>
+                            </div>
+                        </td>
                     }
                     <td><button class="btn btn-primary" @onclick="() => EditItem(item)">Edit</button></td>
                 </tr>
@@ -76,9 +84,7 @@
 </div>
 
 
-@* <InputFile OnChange="@LoadFiles" multiple />
-<p>@FilePath</p>
-<div><button @onclick="SaveImage">Save</button></div> *@
+
 
 @code {
     string FilePath { get; set; } = "";
@@ -94,7 +100,10 @@
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
         image = e.File;
-        FilePath = Path.Combine(Environment.ContentRootPath, "wwwroot", "css", "images", "itemImages", "1.jpg");
+        DateTime time = DateTime.Now;
+
+        var uniqueIdentifier = $"{time.Year}-{time.Month}-{time.Day}-{time.Hour}-{time.Minute}-{time.Second}-{selectedItem.SerialNumber}";
+        FilePath = Path.Combine(Environment.ContentRootPath, "wwwroot", "css", "images", "itemImages", $"{uniqueIdentifier}.jpg");
 
     }
 
