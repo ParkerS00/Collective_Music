@@ -21,10 +21,15 @@ public class ItemsController : Controller
 
     // enpoint "/items"
     [HttpGet()]
-    public async Task<IEnumerable<ItemDto>> Get()
+    public async Task<List<ItemDto>> Get()
     {
         IEnumerable<Item> items = await itemService.GetAll();
-        return items.Select(i => new ItemDto(i));
+        List<ItemDto> itemDtos = new List<ItemDto>();
+        foreach (var item in items)
+        {
+            itemDtos.Add(item.ToItemDto());
+        }
+        return itemDtos;
     }
 
     [HttpGet("{id}")]

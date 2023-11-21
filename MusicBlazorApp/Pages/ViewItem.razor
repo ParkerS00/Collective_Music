@@ -1,4 +1,5 @@
 ﻿@page "/View-Item/{ItemId:int}"
+@using MusicApi.Data;
 @using MusicBlazorApp.Data;
 
 @inject HttpClient httpClient;
@@ -53,10 +54,10 @@
     [Parameter]
     public int ItemId { get; set; }
 
-    public Item Item { get; set; }
+    public ItemDto Item { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Item = await httpClient.GetFromJsonAsync<Item>($"https://musicapi20231118154059.azurewebsites.net/Items/{ItemId}");
+        Item = await httpClient.GetFromJsonAsync<ItemDto>($"https://musicapi20231118154059.azurewebsites.net/Items/{ItemId}");
     }
 }
