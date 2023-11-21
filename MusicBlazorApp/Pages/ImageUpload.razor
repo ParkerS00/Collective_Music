@@ -73,6 +73,7 @@
                         <td>
                             <div>
                                 <InputFile OnChange="@LoadFiles" multiple />
+                                <p>@Test</p>
                                 <p>@ImageSaveLocation</p>
                             </div>
                         </td>
@@ -98,6 +99,7 @@
     List<ItemDto>? Items { get; set; } = new();
     ItemDto? selectedItem = new();
     IBrowserFile? image;
+    string Test { get; set; }
 
 
     //Editing values
@@ -111,7 +113,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>("https://musicapi20231118154059.azurewebsites.net/items");
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{Constants.ApiEndpoint}/items");
     }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
@@ -142,12 +144,13 @@
         SellPrice = selected.SellPrice;
         RentPrice = selected.SuggestedRentalPrice;
         selectedItem = selected;
+        Test = Constants.ApiEndpoint;
     }
 
     private async Task Submit()
     {
         var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, SellPrice, RentPrice, filePath);
-        await httpClient.PostAsJsonAsync("https://musicapi20231118154059.azurewebsites.net/items", request);
+        await httpClient.PostAsJsonAsync($"{Constants.ApiEndpoint}/items", request);
         selectedItem = null;
         image = null;
     }

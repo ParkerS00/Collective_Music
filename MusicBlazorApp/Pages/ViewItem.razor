@@ -116,11 +116,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Item = await httpClient.GetFromJsonAsync<ItemDto>($"https://musicapi20231118154059.azurewebsites.net/Items/{ItemId}");
-
-        if (Item is not null)
-        {
-            Reviews = Item.Reviews;
-        }
+        Item = await httpClient.GetFromJsonAsync<ItemDto>($"{Constants.ApiEndpoint}/Items/{ItemId}");
     }
 }

@@ -5,6 +5,8 @@ public class Constants
 {
     public static string DefaultAdminUsername { get; } = nameof(DefaultAdminUsername);
     public static string DefaultAdminPassword { get; } = nameof(DefaultAdminPassword);
+
+    public static string ApiEndpoint { get; set; } = nameof(ApiEndpoint);
     public const string AdminRole = "admins";
 }
 
@@ -20,6 +22,14 @@ public class DefaultUserService : BackgroundService
         var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+        var before = Constants.ApiEndpoint;
+        Constants.ApiEndpoint = config[Constants.ApiEndpoint];
+
+        if(Constants.ApiEndpoint == before)
+        {
+            throw new Exception("Please add the ApiEndpoint to the user secrets");
+        }
 
         var username = config[Constants.DefaultAdminUsername];
         var password = config[Constants.DefaultAdminPassword];

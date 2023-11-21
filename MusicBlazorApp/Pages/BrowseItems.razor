@@ -123,7 +123,7 @@
     protected override async Task OnInitializedAsync()
     {
         Items = new List<ItemDto>();
-        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>("https://musicapi20231118154059.azurewebsites.net/Items"); //calls ItemsController @endpoint /Items
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{Constants.ApiEndpoint}/Items");
     }
 
     public void HandleClick(int id)
