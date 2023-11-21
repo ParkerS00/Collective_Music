@@ -8,7 +8,7 @@ public class ItemDto
     public int Id { get; set; }
     public string? ItemName { get; set; }
 
-    public int? SerialNumber { get; set; }
+    public string? SerialNumber { get; set; }
 
     public string? Description { get; set; }
 
@@ -22,10 +22,12 @@ public class ItemDto
 
     public ItemDto(Item item)
     {
+        Id = item.Id;
         ItemName = item.ItemName;
         Description = item.Description;
         SellPrice = item.SellPrice;
         SuggestedRentalPrice = item.SuggestedRentalPrice;
+        SerialNumber = item.SerialNumber;
 
         
         if (item.ItemStatuses != null)
@@ -39,14 +41,19 @@ public class ItemDto
         }
     }
 
+    public ItemDto()
+    {
+
+    }
+
 }
 
 public static class DbObjToDtoObj
 {
     public static ItemDto ToItemDto(this Item item)
     {
-        return new(item);
-
+        ItemDto newDto = new(item);
+        return newDto;
     }
 
 }
