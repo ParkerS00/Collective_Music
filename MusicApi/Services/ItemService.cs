@@ -24,7 +24,10 @@ public class ItemService : IItemService<Item>
             .Include(c => c.ItemCategories)
                 .ThenInclude(c => c.Category)
             .Include(i => i.ItemImages)
-            .Where(i => i.Id == id).FirstOrDefaultAsync();
+            .Include(i => i.Reviews)
+                .ThenInclude(r => r.Customer)
+            .Where(i => i.Id == id)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Item>> GetAll()
@@ -32,10 +35,12 @@ public class ItemService : IItemService<Item>
         var context = contextFactory.CreateDbContext();
         return await context.Items
             .Include(i => i.ItemStatuses)
-            .ThenInclude(itemStat => itemStat.Status)
+                .ThenInclude(itemStat => itemStat.Status)
             .Include(i => i.ItemCategories)
                 .ThenInclude(ic => ic.Category)
             .Include(i => i.ItemImages)
+            .Include(r => r.Reviews)
+                 .ThenInclude(r => r.Customer)
             .ToListAsync();
     }
 

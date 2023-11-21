@@ -1,14 +1,30 @@
-﻿body {
-}
-
-.main-container {
+﻿.main-container {
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 5%;
+    margin-top: 10%;
     margin-bottom: 15%;
 }
 
 .review-tile {
     background-color: #F2F2F2;
+}
+
+.red-button {
+    background-color: #5B0D13;
+    color: white;
+    border-radius: 25px;
+    height: 50px;
+    text-align: center;
+    transition: background-color .2s;
+}
+
+.red-button:hover {
+    background-color: #6F1218;
+}
+
+.red-button * {
+    color: white;
+    text-decoration: none;
+    padding-top: 12px;
 }

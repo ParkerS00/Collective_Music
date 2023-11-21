@@ -20,6 +20,8 @@ public class ItemDto
     public List<string>? ItemStatuses { get; set; }
     public List<string>? ItemCategories { get; set; }
 
+    public List<Review>? Reviews { get; set; }
+
     public ItemDto(Item item)
     {
         Id = item.Id;
@@ -38,6 +40,11 @@ public class ItemDto
         if (item.ItemCategories != null)
         {
             ItemCategories = item.ItemCategories.Select(x => x.Category.CategoryName).ToList();
+        }
+
+        if (item.Reviews != null)
+        {
+            Reviews = item.Reviews.ToList();
         }
     }
 

@@ -36,7 +36,7 @@
         </div>
         <div class="col-md-6">
             <h1>@Item.ItemName</h1>
-            <p>$@Item.SellPrice</p>
+            <p><strong>$@Item.SellPrice</strong></p>
             
             <div class="ratings my-5">
                 <i class="fa fa-star rating-color"></i>
@@ -46,7 +46,7 @@
                 <i class="fa fa-star"></i>
                 <span>4.35 rating out of 5<br /><a href="#">Leave a Review</a></span>
             </div>
-            <h6>Description</h6>
+            <h5><strong>Description</strong></h5>
             <p>@Item.Description</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tempor quam velit. Cras aliquet, eros vitae varius faucibus, tellus neque dignissim tellus, id efficitur massa metus vitae neque. Cras id lorem non risus vehicula eleifend. In venenatis tellus orci, non eleifend lacus ultrices eget. Nullam odio elit, elementum in nunc maximus, consequat maximus tortor. Morbi interdum libero ac orci hendrerit aliquam. Sed mollis neque odio, eget tincidunt nibh faucibus quis. Nam elementum quis neque iaculis hendrerit. Vivamus id arcu faucibus, faucibus arcu ultricies, dictum mi. Mauris non enim posuere, tristique mi at, euismod tortor. Ut porttitor magna non purus tincidunt vestibulum. Ut aliquam viverra ipsum, id malesuada arcu viverra nec. Phasellus eu quam pellentesque, pulvinar tellus quis, fermentum nisl. Curabitur pulvinar molestie massa. Nam sit amet orci lacus.</p>
 
@@ -54,40 +54,50 @@
 
             <h5>Purchase Information</h5>
             <hr>
-            <a href="#" style="background-color: red; color: white;">Purchase</a>
+            <div class="row">
+                <div class="col-md-6"><p>Purchase new or used and pick up in store. </p></div>
+                <div class="col-md-6">
+                    <div class="red-button"><h5><a href="#">Purchase</a></h5></div>
+                </div>
+            </div>
 
             <h5>Rental Information</h5>
             <hr />
+            <div class="row">
+                <div class="col-md-6"><p>Rent this item. Pick up and drop off in store.</p></div>
+                <div class="col-md-6">
+                    <div class="red-button"><h5><a href="#">Rent</a></h5></div>
+                </div>
+            </div>
         </div>
     
         <div>
             <h3>Reviews</h3>
-            <div class="row review-tile p-4 m-3">
-                <h5>User 1</h5>
-                <div class="ratings">
-                    <i class="fa fa-star rating-color"></i>
-                    <i class="fa fa-star rating-color"></i>
-                    <i class="fa fa-star rating-color"></i>
-                    <i class="fa fa-star rating-color"></i>
-                    <i class="fa fa-star"></i>
-                    <span>4 rating out of 5</span>
-                </div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tempor quam velit. Cras aliquet, eros vitae varius faucibus, tellus neque dignissim tellus, id efficitur massa metus vitae neque.</p>
-            </div>
-            <div class="row review-tile p-4 m-3">
-                <h5>User 5</h5>
-                <div class="ratings">
-                    <i class="fa fa-star rating-color"></i>
-                    <i class="fa fa-star rating-color"></i>
-                    <i class="fa fa-star rating-color"></i>
-                    <i class="fa fa-star rating-color"></i>
-                    <i class="fa fa-star"></i>
-                    <span>3 rating out of 5</span>
-                </div>
-            </div>
+            <hr />
+            @if (Reviews is not null)
+            {
+                @foreach (var rev in Reviews)
+                {
+                    <div class="row review-tile p-4 m-3">
+                        <h5>@rev.Customer</h5>
+                        <div class="ratings">
+                            <i class="fa fa-star rating-color"></i>
+                            <i class="fa fa-star rating-color"></i>
+                            <i class="fa fa-star rating-color"></i>
+                            <i class="fa fa-star rating-color"></i>
+                            <i class="fa fa-star"></i>
+                            <span>@rev.Rating rating out of 5</span>
+                        </div>
+                        <p>@rev.ReviewText</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No Reviews for this item yet</p>
+                <a href="#">Leave a Review</a>
+            }
         </div>
-
-
     </div>
 }
 else
@@ -100,10 +110,17 @@ else
     [Parameter]
     public int ItemId { get; set; }
 
+    public List<Review>? Reviews { get; set; }
+
     public ItemDto Item { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Item = await httpClient.GetFromJsonAsync<ItemDto>($"https://musicapi20231118154059.azurewebsites.net/Items/{ItemId}");
+
+        if (Item is not null)
+        {
+            Reviews = Item.Reviews;
+        }
     }
 }
