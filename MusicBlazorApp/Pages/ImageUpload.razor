@@ -3,6 +3,7 @@
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth
 @using MusicApi.Data;
+@using MusicApi.FrontFacingData;
 
 <h1>ImageUpload</h1>
 
@@ -30,6 +31,7 @@
                         <td>@item.Description</td>
                         <td>@item.SellPrice</td>
                         <td>@item.SuggestedRentalPrice</td>
+                        <td></td>
                     }
                     else
                     {
@@ -37,24 +39,14 @@
                         <td>
                             <div class="form-row">
                                 <div class="input-group">
-                                    <input type="text" class="form-control text">
+                                    <input type="text" class="form-control text" @bind="ItemName">
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="form-row">
                                 <div class="input-group">
-                                    <input type="text" class="form-control text">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-row">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input type="number" value="@item.SellPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
+                                    <input type="text" class="form-control text" @bind="ItemDescription">
                                 </div>
                             </div>
                         </td>
@@ -64,19 +56,34 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">$</span>
                                     </div>
-                                    <input type="number" value="@item.SuggestedRentalPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
+                                    <input type="number" @bind="SellPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="number" @bind="RentPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div>
                                 <InputFile OnChange="@LoadFiles" multiple />
-                                <p>@FilePath</p>
-                                <div><button @onclick="SaveImage">Save</button></div>
+                                <p>@ImageSaveLocation</p>
                             </div>
                         </td>
                     }
-                    <td><button class="btn btn-primary" @onclick="() => EditItem(item)">Edit</button></td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => EditItem(item)">Edit</button>
+                        @if (item == selectedItem)
+                        {
+                            <button class="btn btn-secondary" @onclick="Submit">Submit</button>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -87,10 +94,20 @@
 
 
 @code {
-    string FilePath { get; set; } = "";
-    List<ItemDto> Items { get; set; } = new();
-    ItemDto selectedItem = new();
-    IBrowserFile image;
+    string ImageSaveLocation { get; set; } = "";
+    List<ItemDto>? Items { get; set; } = new();
+    ItemDto? selectedItem = new();
+    IBrowserFile? image;
+
+
+    //Editing values
+    string ItemName { get; set; } = "";
+    string ItemDescription { get; set; } = "";
+    decimal? SellPrice { get; set; }
+    decimal? RentPrice { get; set; }
+    string? filePath { get; set; }
+
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,8 +119,9 @@
         image = e.File;
         DateTime time = DateTime.Now;
 
-        var uniqueIdentifier = $"{time.Year}-{time.Month}-{time.Day}-{time.Hour}-{time.Minute}-{time.Second}-{selectedItem.SerialNumber}";
-        FilePath = Path.Combine(Environment.ContentRootPath, "wwwroot", "css", "images", "itemImages", $"{uniqueIdentifier}.jpg");
+        var uniqueIdentifier = $"{time.Year}-{time.Month}-{time.Day}-{time.Hour}-{time.Minute}-{time.Second}-{selectedItem.SerialNumber}.jpg";
+        filePath = uniqueIdentifier;
+        ImageSaveLocation = Path.Combine(Environment.ContentRootPath, "wwwroot", "css", "images", "itemImages", $"{uniqueIdentifier}");
 
     }
 
@@ -112,13 +130,25 @@
 
         if (image is not null)
         {
-            await using FileStream fs = new(FilePath, FileMode.Create);
+            await using FileStream fs = new(ImageSaveLocation, FileMode.Create);
             await image.OpenReadStream().CopyToAsync(fs);
         }
     }
 
     private void EditItem(ItemDto selected)
     {
+        ItemName = selected.ItemName;
+        ItemDescription = selected.Description;
+        SellPrice = selected.SellPrice;
+        RentPrice = selected.SuggestedRentalPrice;
         selectedItem = selected;
+    }
+
+    private async Task Submit()
+    {
+        var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, SellPrice, RentPrice, filePath);
+        await httpClient.PostAsJsonAsync("https://musicapi20231118154059.azurewebsites.net/items", request);
+        selectedItem = null;
+        image = null;
     }
 }

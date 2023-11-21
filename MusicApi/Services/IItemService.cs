@@ -11,4 +11,6 @@ public interface IItemService<Item>
     Task<Item> Update(Item item);
     Task<Item> Delete(int id);
 
+    Task AddImageFilePath(string filePath, int itemId, bool isPrimary);
+
 }
