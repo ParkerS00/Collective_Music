@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicApi.Data;
+using MusicApi.FrontFacingData;
 using MusicApi.Services;
 using MusicBlazorApp.Data;
 
@@ -37,5 +38,28 @@ public class ItemsController : Controller
     {
         Item item = await itemService.Get(id);
         return new ItemDto(item);
+    }
+
+    [HttpPost("{itemRequest}")]
+    public async Task Post([FromBody] AddItemRequest request)
+    {
+        var item = new Item()
+        {
+            Id = request.Id
+            ,
+            ItemName = request.ItemName
+            ,
+            Description = request.ItemText
+            ,
+            SellPrice = request.SellPrice
+            ,
+            SuggestedRentalPrice = request.RentPrice
+        };
+
+        await itemService.Update(item);
+        if (request.ImageFilePath is not null && request.ImageFilePath != "")
+        {
+            await itemService.AddImageFilePath(request.ImageFilePath, item.Id, true);
+        }
     }
 }

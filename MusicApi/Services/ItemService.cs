@@ -49,8 +49,38 @@ public class ItemService : IItemService<Item>
         throw new NotImplementedException();
     }
 
-    public Task<Item> Update(Item item)
+    public async Task<Item> Update(Item item)
     {
-        throw new NotImplementedException();
+        //Get item from db
+        var context = contextFactory.CreateDbContext();
+        var ruc = await context.Items.Where(i => i.Id == item.Id).FirstOrDefaultAsync();
+
+        //alter item from db
+        ruc.ItemName = item.ItemName;
+        ruc.Description = item.Description;
+        ruc.SellPrice = item.SellPrice;
+        ruc.SuggestedRentalPrice = item.SuggestedRentalPrice;
+
+        //Put back in the database
+        context.Items.Update(ruc);
+        await context.SaveChangesAsync();
+
+        return ruc;
+    }
+
+    public async Task AddImageFilePath(string filePath, int itemId, bool isPrimary)
+    {
+        //TODO: Change all the previous true images to false
+        var context = contextFactory.CreateDbContext();
+
+        var newItemImage = new ItemImage()
+        {
+            ItemId = itemId,
+            Filepath = filePath,
+            IsPrimary = isPrimary
+        };
+
+        await context.ItemImages.AddAsync(newItemImage);
+        await context.SaveChangesAsync();
     }
 }
