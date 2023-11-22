@@ -156,7 +156,7 @@
 
     private async Task Submit()
     {
-        var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, SellPrice, RentPrice, filePath);
+        var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, SellPrice, RentPrice, filePath, isPrimary);
         var response = await httpClient.PostAsJsonAsync($"{Constants.ApiEndpoint}/items/{request}", request);
         await SaveImage();
         selectedItem = null;
