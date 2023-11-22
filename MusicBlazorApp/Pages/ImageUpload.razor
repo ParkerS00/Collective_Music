@@ -83,6 +83,12 @@
                         @if (item == selectedItem)
                         {
                             <button class="btn btn-secondary" @onclick="Submit">Submit</button>
+                            <td>
+                                <div>
+                                    <input type="radio" name="Is Primary" id="IsPrimary" @bind-value="@isPrimary"/>
+                                    <label for="IsPrimary">Is Primary</label>
+                                </div>
+                            </td>
                         }
                     </td>
                 </tr>
@@ -108,6 +114,7 @@
     decimal? SellPrice { get; set; }
     decimal? RentPrice { get; set; }
     string? filePath { get; set; }
+    bool isPrimary = false;
 
 
 

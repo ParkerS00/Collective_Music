@@ -8,12 +8,13 @@
         public decimal? SellPrice { get; set; }
         public decimal? RentPrice { get; set; }
         public string? ImageFilePath { get; set; }
+        public bool IsPrimary { get; set; }
         public AddItemRequest()
         {
             
         }
 
-        public AddItemRequest(int id, string itemName ,string itemText, decimal? sellPrice, decimal? rentPrice, string? imageFilePath)
+        public AddItemRequest(int id, string itemName ,string itemText, decimal? sellPrice, decimal? rentPrice, string? imageFilePath, bool isPrimary)
         {
             Id = id;
             ItemName = itemName;
@@ -21,6 +22,7 @@
             SellPrice = sellPrice;
             RentPrice = rentPrice;
             ImageFilePath = imageFilePath;
+            IsPrimary = isPrimary;
         }
     }
 }

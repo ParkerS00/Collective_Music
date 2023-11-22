@@ -17,6 +17,8 @@ public class ItemDto
 
     public List<string>? ImageFilePaths { get; set; } = new List<string>();
 
+    public string? PrimaryImagePath { get; set; }
+
     public List<string>? ItemStatuses { get; set; }
     public List<string>? ItemCategories { get; set; }
 
@@ -49,6 +51,10 @@ public class ItemDto
 
         foreach (var path in item.ItemImages)
         {
+            if (path.IsPrimary == true)
+            {
+                PrimaryImagePath = path.Filepath.ToString();
+            }
             ImageFilePaths.Add(path.Filepath.ToString());
         }
     }
