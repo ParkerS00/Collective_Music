@@ -28,3 +28,11 @@
     text-decoration: none;
     padding-top: 12px;
 }
+
+.fa-star {
+    color: grey;
+}
+
+.rating-color {
+    color: goldenrod;
+}

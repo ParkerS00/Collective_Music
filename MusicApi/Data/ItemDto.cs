@@ -15,12 +15,12 @@ public class ItemDto
     public decimal? SellPrice { get; set; }
     public decimal? SuggestedRentalPrice { get; set;}
 
-    public List<string>? ImageFilePaths { get; set; }
+    public List<string>? ImageFilePaths { get; set; } = new List<string>();
 
     public List<string>? ItemStatuses { get; set; }
     public List<string>? ItemCategories { get; set; }
 
-    public List<Review>? Reviews { get; set; }
+    public List<Review>? Reviews { get; set; } = new List<Review>();
 
     public ItemDto(Item item)
     {
@@ -45,6 +45,11 @@ public class ItemDto
         if (item.Reviews != null)
         {
             Reviews = item.Reviews.ToList();
+        }
+
+        foreach (var path in item.ItemImages)
+        {
+            ImageFilePaths.Add(path.Filepath.ToString());
         }
     }
 
