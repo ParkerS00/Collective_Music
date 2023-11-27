@@ -43,11 +43,19 @@
             <h1>@Item.ItemName</h1>
             <p><strong>$@Item.SellPrice</strong></p>
             <div class="ratings my-5">
-                <i class="fa fa-star rating-color"></i>
-                <i class="fa fa-star rating-color"></i>
-                <i class="fa fa-star rating-color"></i>
-                <i class="fa fa-star rating-color"></i>
-                <i class="fa fa-star"></i>
+                @for (int i = 1; i <= 5; i++)
+                {
+                    @if (ItemAverageRating >= i)
+                    {
+                        <i class="fa fa-star rating-color"></i>
+
+                    }
+                    else
+                    {
+                        <i class="fa fa-star"></i>
+
+                    }
+                }
                 <span>@ItemAverageRating rating out of 5<br /><a href="#">Leave a Review</a></span>
             </div>
             <h5><strong>Description</strong></h5>
@@ -112,7 +120,11 @@
 }
 else
 {
-    <h1>Loading...</h1>
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
 }
 
 
@@ -128,7 +140,7 @@ else
 
     public bool IsFirstImg = true;
 
-    public float? ItemAverageRating { get; set; }
+    public decimal? ItemAverageRating { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -154,12 +166,12 @@ else
 
     public void GetAverageRating()
     {
-        float? sum = 0;
+        decimal sum = 0;
         foreach(var rating in Item.Reviews)
         {
-            sum += rating.Rating;   
+            sum += (decimal)rating.Rating;   
         }
 
-        ItemAverageRating = sum / (float?)Item.Reviews.Count();
+        ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
     }
 }
