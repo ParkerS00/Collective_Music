@@ -23,14 +23,6 @@ public class DefaultUserService : BackgroundService
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        var before = Constants.ApiEndpoint;
-        Constants.ApiEndpoint = config[Constants.ApiEndpoint];
-
-        if(Constants.ApiEndpoint == before)
-        {
-            throw new Exception("Please add the ApiEndpoint to the user secrets");
-        }
-
         var username = config[Constants.DefaultAdminUsername];
         var password = config[Constants.DefaultAdminPassword];
         if (username is null || password is null)

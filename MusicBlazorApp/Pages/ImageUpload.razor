@@ -1,7 +1,8 @@
 ﻿@page "/ImageUpload"
-@inject IHostEnvironment Environment
+@inject IHostEnvironment Environment;
 @inject HttpClient httpClient;
-@inject AuthenticationStateProvider auth
+@inject AuthenticationStateProvider auth;
+@inject IConfiguration config;
 @using MusicApi.Data;
 @using MusicApi.FrontFacingData;
 
@@ -120,7 +121,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{Constants.ApiEndpoint}/items");
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/items");
     }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
@@ -157,7 +158,7 @@
     private async Task Submit()
     {
         var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, SellPrice, RentPrice, filePath, isPrimary);
-        var response = await httpClient.PostAsJsonAsync($"{Constants.ApiEndpoint}/items/{request}", request);
+        var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/items/{request}", request);
         await SaveImage();
         selectedItem = null;
         image = null;

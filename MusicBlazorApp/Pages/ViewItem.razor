@@ -1,7 +1,7 @@
 ﻿@page "/View-Item/{ItemId:int}"
 @using MusicApi.Data;
 @using MusicBlazorApp.Data;
-
+@inject IConfiguration config;
 @inject HttpClient httpClient;
 @inject IHostEnvironment Environment
 
@@ -124,7 +124,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Item = await httpClient.GetFromJsonAsync<ItemDto>($"{Constants.ApiEndpoint}/Items/{ItemId}");
+        Item = await httpClient.GetFromJsonAsync<ItemDto>($"{config[Constants.ApiEndpoint]}/Items/{ItemId}");
 
         if (Item is not null)
         {

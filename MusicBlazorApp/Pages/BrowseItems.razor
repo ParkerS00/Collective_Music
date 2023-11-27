@@ -8,6 +8,7 @@
 
 @inject HttpClient httpClient;
 @inject NavigationManager NavManager;
+@inject IConfiguration config;
 
 <style>
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -123,7 +124,7 @@
     protected override async Task OnInitializedAsync()
     {
         Items = new List<ItemDto>();
-        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{Constants.ApiEndpoint}/Items");
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
 
         foreach(var item in Items)
         {

@@ -1,6 +1,6 @@
 ﻿@page "/rent-a-room"
 @using MusicBlazorApp.Data;
-
+@inject IConfiguration config;
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth
 
@@ -52,7 +52,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        roomRentals = await httpClient.GetFromJsonAsync<List<RoomRental>>($"{Constants.ApiEndpoint}/RoomRental");
+        roomRentals = await httpClient.GetFromJsonAsync<List<RoomRental>>($"{config[Constants.ApiEndpoint]}/RoomRental");
     }
 
     private async Task MakeRoomRental()
