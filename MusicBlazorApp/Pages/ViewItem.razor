@@ -81,11 +81,21 @@
                     <div class="row review-tile p-4 m-3">
                         <h5>@rev.Author</h5>
                         <div class="ratings">
-                            <i class="fa fa-star rating-color"></i>
-                            <i class="fa fa-star rating-color"></i>
-                            <i class="fa fa-star rating-color"></i>
-                            <i class="fa fa-star rating-color"></i>
-                            <i class="fa fa-star"></i>
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                @if(rev.Rating <= i)
+                                {
+                                    <i class="fa fa-star rating-color"></i>
+
+                                }
+                                else
+                                {
+                                    <i class="fa fa-star"></i>
+
+                                }
+                            }
+                            
+                          
                             <span>@rev.Rating rating out of 5</span>
                         </div>
                         <p>@rev.Text</p>
