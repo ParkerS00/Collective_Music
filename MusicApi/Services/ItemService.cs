@@ -24,8 +24,8 @@ public class ItemService : IItemService<Item>
             .Include(c => c.ItemCategories)
                 .ThenInclude(c => c.Category)
             .Include(i => i.ItemImages)
-            //.Include(i => i.Reviews)
-            //    .ThenInclude(r => r.Customer)
+            .Include(i => i.Reviews)
+                .ThenInclude(r => r.Customer)
             .Where(i => i.Id == id)
             .FirstOrDefaultAsync();
     }

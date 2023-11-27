@@ -83,7 +83,7 @@
                 @foreach (var rev in Reviews)
                 {
                     <div class="row review-tile p-4 m-3">
-                        <h5>@rev.Customer</h5>
+                        <h5>@rev.Author</h5>
                         <div class="ratings">
                             <i class="fa fa-star rating-color"></i>
                             <i class="fa fa-star rating-color"></i>
@@ -92,7 +92,7 @@
                             <i class="fa fa-star"></i>
                             <span>@rev.Rating rating out of 5</span>
                         </div>
-                        <p>@rev.ReviewText</p>
+                        <p>@rev.Text</p>
                     </div>
                 }
             }
@@ -114,7 +114,7 @@ else
     [Parameter]
     public int ItemId { get; set; }
 
-    public List<Review>? Reviews { get; set; }
+    public IEnumerable<ReviewDto>? Reviews { get; set; }
 
     public ItemDto Item { get; set; }
 

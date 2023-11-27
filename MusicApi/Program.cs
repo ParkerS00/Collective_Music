@@ -16,8 +16,8 @@ builder.Services.AddDbContextFactory<MusicDbContext>(config => config.UseNpgsql(
 builder.Services.AddScoped<IItemService<Item>, ItemService>();
 builder.Services.AddScoped<IRoomRentalService, RoomRentalService>();
 builder.Services.AddHttpClient();
-builder.Services.AddControllers().AddJsonOptions(x =>
-    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+//builder.Services.AddControllers().AddJsonOptions(x =>
+//    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>

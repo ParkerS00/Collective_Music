@@ -22,7 +22,7 @@ public class ItemDto
     public List<string>? ItemStatuses { get; set; }
     public List<string>? ItemCategories { get; set; }
 
-    public List<Review>? Reviews { get; set; } = new List<Review>();
+    public IEnumerable<ReviewDto>? Reviews { get; set; }
 
     public ItemDto(Item item)
     {
@@ -46,7 +46,13 @@ public class ItemDto
 
         if (item.Reviews != null)
         {
-            Reviews = item.Reviews.ToList();
+            Reviews = item.Reviews.Select(r => new ReviewDto
+            {
+                Text = r.ReviewText,
+                Rating = r.Rating,
+                Author = r.Customer.FirstName,
+                Date = r.ReviewDate
+            });
         }
 
         foreach (var path in item.ItemImages)
