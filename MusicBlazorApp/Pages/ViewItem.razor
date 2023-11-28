@@ -108,14 +108,17 @@
                         <i class="fa fa-star"></i>
                     }
                 }
-                @if (ItemAverageRating != 0)
+                @if (CurrentUserId == 0)
+                {
+                    <span class="mx-3">Login to leave a review!</span>
+                }
+                else if (ItemAverageRating != 0)
                 {
                     <span class="mx-3">@ItemAverageRating rating out of 5<br /><a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a></span>
                 }
                 else
                 {
-                    <span class="mx-3">There are no reviews yet</span>
-                    <span class="mx-3"><a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a></span>
+                    <span class="mx-3">There are no reviews yet<a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a></span>
                 }
             </div>
             <h5><strong>Description</strong></h5>
