@@ -55,7 +55,11 @@ public class ItemsController : Controller
         await itemService.Update(item);
         if (request.ImageFilePath is not null && request.ImageFilePath != "")
         {
-            await itemService.AddImageFilePath(request.ImageFilePath, item.Id, true);
+            if(request.IsPrimary)
+            {
+                await itemService.RemovePrimaries(request.Id);
+            }
+            await itemService.AddImageFilePath(request.ImageFilePath, item.Id, request.IsPrimary);
         }
     }
 }

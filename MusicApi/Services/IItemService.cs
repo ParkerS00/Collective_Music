@@ -13,4 +13,6 @@ public interface IItemService<Item>
 
     Task AddImageFilePath(string filePath, int itemId, bool isPrimary);
 
+    Task RemovePrimaries(int id);
+
 }
