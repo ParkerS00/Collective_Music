@@ -86,12 +86,13 @@
                             <button class="btn btn-secondary" @onclick="Submit">Submit</button>
                             <td>
                                 <div>
-                                    <input type="radio" name="Is Primary" id="IsPrimary" @bind-value="@isPrimary"/>
+                                    <input type="checkbox" name="Is Primary" id="IsPrimary" @onclick="swap"/>
+                                    <p>@isPrimary</p>
                                     <label for="IsPrimary">Is Primary</label>
                                 </div>
                             </td>
                         }
-                    </td>
+                   </td>
                 </tr>
             }
         </tbody>
@@ -117,6 +118,10 @@
     string? filePath { get; set; }
     bool isPrimary = false;
 
+    private void swap()
+    {
+        isPrimary = !isPrimary;
+    }
 
 
     protected override async Task OnInitializedAsync()

@@ -88,4 +88,22 @@ public class ItemService : IItemService<Item>
         await context.ItemImages.AddAsync(newItemImage);
         await context.SaveChangesAsync();
     }
+
+    public async Task RemovePrimaries(int id)
+    {
+        var context = contextFactory.CreateDbContext();
+
+        var Primaries = await context.ItemImages
+                                .Where(i => i.ItemId == id)
+                                .Where(i => i.IsPrimary == true) 
+                                .ToListAsync();
+
+        foreach (var primary in Primaries) 
+        {
+            primary.IsPrimary = false;
+            context.ItemImages.Update(primary);
+        }
+
+        await context.SaveChangesAsync();
+    }
 }
