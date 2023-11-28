@@ -3,6 +3,7 @@ using MusicApi.Data;
 using MusicApi.FrontFacingData;
 using MusicApi.Services;
 using MusicBlazorApp.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MusicApi.Controllers;
 
@@ -45,14 +46,24 @@ public class ItemsController : Controller
     {
         var item = new Item()
         {
-            Id = request.Id,
+            //Id = request.Id,
             ItemName = request.ItemName,
             Description = request.ItemText,
             SellPrice = request.SellPrice,
-            SuggestedRentalPrice = request.RentPrice
+            SuggestedRentalPrice = request.RentPrice,
+            SerialNumber = request.SKU
         };
+        if (request.Id > 0)
+        {
+            item.Id = request.Id;
+            item = await itemService.Update(item);
+        }
+        else
+        {
+            item = await itemService.Add(item);
+        }
 
-        await itemService.Update(item);
+     
         if (request.ImageFilePath is not null && request.ImageFilePath != "")
         {
             if(request.IsPrimary)

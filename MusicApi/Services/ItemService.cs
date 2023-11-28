@@ -46,7 +46,21 @@ public class ItemService : IItemService<Item>
 
     public async Task<Item> Add(Item item)
     {
-        throw new NotImplementedException();
+        Item item1 = new Item()
+        {
+            ItemName = item.ItemName,
+            Description = item.Description,
+            SellPrice = item.SellPrice,
+            SuggestedRentalPrice = item.SuggestedRentalPrice,
+            SerialNumber = item.SerialNumber,
+
+        };
+        var context = contextFactory.CreateDbContext();
+        context.Items.Add(item1);
+        //string connection = context.Database.GetConnectionString();
+        await context.SaveChangesAsync();
+
+        return item1;
     }
 
     public Task<Item> Delete(int id)

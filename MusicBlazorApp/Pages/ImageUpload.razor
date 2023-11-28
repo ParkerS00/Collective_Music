@@ -18,7 +18,7 @@
                 <th scope="col">$Sell Price</th>
                 <th scope="col">$Suggested Rental Price</th>
                 <th scope="col">Image Upload</th>
-                <th scope="col">#</th>
+                <th scope="col"><button class="btn btn-success" @onclick="() => showPopup = true">Add</button></th>
             </tr>
         </thead>
         <tbody>
@@ -74,12 +74,11 @@
                         <td>
                             <div>
                                 <InputFile OnChange="@LoadFiles" multiple />
-                                <p>@Test</p>
-                                <p>@ImageSaveLocation</p>
                             </div>
                         </td>
                     }
                     <td>
+                        
                         <button class="btn btn-primary" @onclick="() => EditItem(item)">Edit</button>
                         @if (item == selectedItem)
                         {
@@ -98,6 +97,37 @@
     </table>
 </div>
 
+@if(showPopup)
+{
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Item</h3>
+                <!-- Button to close the popup -->
+                <button type="button" class="close"
+                @onclick="() => showPopup = false">
+                    <span aria-hidden="true">X</span>
+                </button>
+            </div>
+            <!-- Edit form for the current user -->
+            <div class="modal-body">
+                <!-- Only show Id if not a new user -->
+                    <input class="form-control" type="text" placeholder="SKU" @bind="addItem.SKU" />
+                    <input class="form-control" type="text" placeholder="Name" @bind="addItem.ItemName" />
+                    <input class="form-control" type="text" placeholder="Description" @bind="addItem.ItemText" />
+                    <input type="number" @bind="addItem.SellPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" placeholder="Sell Price" />
+                    <input type="number" @bind="addItem.RentPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" placeholder="Rent Price"/>
+                    <InputFile OnChange="@LoadFiles" single />
+                    <button class="btn btn-primary" @onclick="() => AddItem()">Submit</button>
+                    <button class="btn btn-primary" @onclick="() => CancelPopUp()">Cancel</button>
+                <br />
+                @* <span style="color:red">@strError</span> *@
+            </div>
+        </div>
+    </div>
+</div>
+}
 
 
 
@@ -106,8 +136,8 @@
     List<ItemDto>? Items { get; set; } = new();
     ItemDto? selectedItem = new();
     IBrowserFile? image;
-    string Test { get; set; }
-
+    bool showPopup { get; set; } = false;
+    AddItemRequest addItem { get; set; } = new();
 
     //Editing values
     string ItemName { get; set; } = "";
@@ -133,7 +163,7 @@
         image = e.File;
         DateTime time = DateTime.Now;
 
-        var uniqueIdentifier = $"{time.Year}-{time.Month}-{time.Day}-{time.Hour}-{time.Minute}-{time.Second}-{selectedItem.SerialNumber}.jpg";
+        var uniqueIdentifier = $"{time.Year}-{time.Month}-{time.Day}-{time.Hour}-{time.Minute}-{time.Second}-{selectedItem.SerialNumber}";
         filePath = uniqueIdentifier;
         ImageSaveLocation = Path.Combine(Environment.ContentRootPath, "wwwroot", "css", "images", "itemImages", $"{uniqueIdentifier}");
 
@@ -144,7 +174,7 @@
 
         if (image is not null)
         {
-            await using FileStream fs = new(ImageSaveLocation, FileMode.Create);
+            await using FileStream fs = new(ImageSaveLocation + ".jpg", FileMode.Create);
             await image.OpenReadStream().CopyToAsync(fs);
         }
     }
@@ -156,12 +186,26 @@
         SellPrice = selected.SellPrice;
         RentPrice = selected.SuggestedRentalPrice;
         selectedItem = selected;
-        Test = Constants.ApiEndpoint;
+    }
+
+    private async Task AddItem()
+    {
+        var request = new AddItemRequest(addItem.Id, addItem.ItemName, addItem.ItemText, addItem.SKU, addItem.SellPrice, addItem.RentPrice, filePath + addItem.SKU + ".jpg", true);
+        var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/items/{request}", request);
+        await SaveImage();
+    }
+
+    private void CancelPopUp()
+    {
+        addItem = new();
+        image = null;
+        ImageSaveLocation = "";
+        showPopup = false;
     }
 
     private async Task Submit()
     {
-        var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, SellPrice, RentPrice, filePath, isPrimary);
+        var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, selectedItem.SerialNumber ,SellPrice, RentPrice, filePath + ".jpg", isPrimary);
         var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/items/{request}", request);
         await SaveImage();
         selectedItem = null;
