@@ -1,30 +1,70 @@
 ﻿@page "/View-Item/{ItemId:int}"
 @using MusicApi.Data;
+@using MusicApi.Request;
 @using MusicBlazorApp.Data;
+@using MusicApi.FrontFacingData;
+@inject UserManager<IdentityUser> userManager;
 @inject IConfiguration config;
 @inject HttpClient httpClient;
-@inject IHostEnvironment Environment
+@inject AuthenticationStateProvider auth;
+@inject IHostEnvironment Environment;
+
+
 
 <style>
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
 
 
-<button @onclick="TogglePopUp">Show Pop Up</button>
-
-@if (PopupVisible)
-{
-    <div class="overlay" style="position: absolute; height: 100vh; width: 100vw; background-color: black;">
-        <div style="position: absolute; height: 400px; width: 400px; background-color: blue;">
-            <h1>This is a popup</h1>
-        </div>
-
-    </div>
-}
-
-
 @if (Item is not null)
 {
+    @if (PopupVisible)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Edit User</h3>
+                        <!-- Button to close the popup -->
+                        <button type="button" class="close"
+                        @onclick="TogglePopUp">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                    </div>
+                    <!-- Edit form for the current user -->
+                    <div class="modal-body">
+                        <p>Rating out of 5</p>
+                        <input type="number" min="1" max="5" @bind-value="ReviewRating" />
+                        <p>Review Text</p>
+                        <input type="text" @bind-value="ReviewTxt"/>
+                        <br /><br />
+                        <!-- Button to submit the review -->
+                        <button class="btn btn-primary"
+                        @onclick="SubmitReview">
+                            Submit
+                        </button>
+
+                        <br />
+                        <span style="color:red">@strError</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overlay d-none" style="background-attachment: fixed; position: absolute; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.5);">
+            <div class="p-5" style="position: absolute; height: 500px; width: 600px; background-color: rgba(255, 255, 255, 1); top: 35%; left: 30%; z-index: 1; border-radius: 10px;">
+                <h2>Review Item</h2>
+                <form>
+                    <p>Rating out of 5</p>
+                    <input type="number" min="1" max="5"/>
+                    <p>Review Text</p>
+                    <input type="text"/>
+                </form>
+                <button class="btn btn-primary" @onclick="TogglePopUp">Submit</button>
+            </div>
+
+        </div>
+    }
     <div class="row main-container">
         <div class="col-md-6">
             <div class="d-flex flex-column">
@@ -70,11 +110,12 @@
                 }
                 @if (ItemAverageRating != 0)
                 {
-                    <span class="mx-3">@ItemAverageRating rating out of 5<br /><a href="#">Leave a Review</a></span>
+                    <span class="mx-3">@ItemAverageRating rating out of 5<br /><a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a></span>
                 }
                 else
                 {
                     <span class="mx-3">There are no reviews yet</span>
+                    <span class="mx-3"><a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a></span>
                 }
             </div>
             <h5><strong>Description</strong></h5>
@@ -107,6 +148,7 @@
                 {
                     <div class="row review-tile p-4 m-3">
                         <h5>@rev.Author</h5>
+                        <small>@rev.Date</small>
                         <div class="ratings">
                             @for (int i = 1; i <= 5; i++)
                             {
@@ -159,9 +201,21 @@ else
 
     public bool IsFirstImg = true;
 
+    // Review Stuff
     public decimal? ItemAverageRating { get; set; }
 
     bool PopupVisible { get; set; }
+
+    public string strError { get; set; }
+
+    public string ReviewTxt { get; set; }
+
+    public int ReviewRating { get; set; }
+
+    // User Stuff
+    public IdentityUser objUser = new();
+
+    public int CurrentUserId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -175,6 +229,21 @@ else
                 ImgFilePaths.Add(Path.Combine("css", "images", "itemImages", $"{img}"));
             }
         }
+
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var name = user.Identity.Name;
+
+        var allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
+
+        foreach (var cust in allCustomers)
+        {
+            if (cust.Email == name)
+            {
+                CurrentUserId = cust.Id;
+            }
+        }
+
 
         GetAverageRating();
     }
@@ -206,5 +275,13 @@ else
     public void TogglePopUp()
     {
         PopupVisible = !PopupVisible;
+    }
+
+    public async Task SubmitReview()
+    {
+        var request = new AddReviewRequest(Item.Id, CurrentUserId, DateOnly.FromDateTime(DateTime.Now), ReviewTxt, ReviewRating);
+        var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/review/{request}", request);
+
+        TogglePopUp();  // close popup
     }
 }
