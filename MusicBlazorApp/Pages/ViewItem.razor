@@ -9,6 +9,20 @@
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
 
+
+<button @onclick="TogglePopUp">Show Pop Up</button>
+
+@if (PopupVisible)
+{
+    <div class="overlay" style="position: absolute; height: 100vh; width: 100vw; background-color: black;">
+        <div style="position: absolute; height: 400px; width: 400px; background-color: blue;">
+            <h1>This is a popup</h1>
+        </div>
+
+    </div>
+}
+
+
 @if (Item is not null)
 {
     <div class="row main-container">
@@ -48,15 +62,20 @@
                     @if (ItemAverageRating >= i)
                     {
                         <i class="fa fa-star rating-color"></i>
-
                     }
                     else
                     {
                         <i class="fa fa-star"></i>
-
                     }
                 }
-                <span>@ItemAverageRating rating out of 5<br /><a href="#">Leave a Review</a></span>
+                @if (ItemAverageRating != 0)
+                {
+                    <span class="mx-3">@ItemAverageRating rating out of 5<br /><a href="#">Leave a Review</a></span>
+                }
+                else
+                {
+                    <span class="mx-3">There are no reviews yet</span>
+                }
             </div>
             <h5><strong>Description</strong></h5>
             <p>@Item.Description</p>
@@ -142,6 +161,8 @@ else
 
     public decimal? ItemAverageRating { get; set; }
 
+    bool PopupVisible { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         Item = await httpClient.GetFromJsonAsync<ItemDto>($"{config[Constants.ApiEndpoint]}/Items/{ItemId}");
@@ -166,12 +187,24 @@ else
 
     public void GetAverageRating()
     {
-        decimal sum = 0;
-        foreach(var rating in Item.Reviews)
+        if (Item.Reviews.Count() > 0)
         {
-            sum += (decimal)rating.Rating;   
-        }
+            decimal sum = 0;
+            foreach(var rating in Item.Reviews)
+            {
+                sum += (decimal)rating.Rating;   
+            }
 
-        ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
+            ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
+        }
+        else
+        {
+            ItemAverageRating = 0;
+        }
+    }
+
+    public void TogglePopUp()
+    {
+        PopupVisible = !PopupVisible;
     }
 }
