@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContextFactory<MusicDbContext>(config => config.UseNpgsql(builder.Configuration["MusicDB"]));
 builder.Services.AddScoped<IItemService<Item>, ItemService>();
 builder.Services.AddScoped<IRoomRentalService, RoomRentalService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IReviewService<Review>, ReviewService>();
 builder.Services.AddScoped<ICustomerService<Customer>, CustomerService>();
 

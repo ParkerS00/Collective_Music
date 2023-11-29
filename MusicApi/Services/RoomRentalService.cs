@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MusicApi.Data;
 using MusicBlazorApp.Data;
 
 namespace MusicApi.Services
@@ -16,7 +17,9 @@ namespace MusicApi.Services
         public async Task<IEnumerable<RoomRental>> GetAll()
         {
             var context = contextFactory.CreateDbContext();
-            return await context.RoomRentals.ToListAsync();
+            return await context.RoomRentals
+                .Include(r => r.Room)
+                .ToListAsync();
         }
     }
 }

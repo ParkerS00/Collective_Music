@@ -1,8 +1,9 @@
 ﻿@page "/rent-a-room"
+@using MusicApi.Data;
 @using MusicBlazorApp.Data;
 @inject IConfiguration config;
 @inject HttpClient httpClient;
-@inject AuthenticationStateProvider auth
+@inject AuthenticationStateProvider auth;
 
 <style>
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -10,18 +11,31 @@
 
 <h1>Rent A Room</h1>
 
-<div class="row">
-    <div class="col">
-        <h3>Select a Date</h3>
-        <p class="alert alert-info"> Dusty Note: This is where input date would go :( </p>
-    </div>
-    <div class="col">
-        <h4>Date: @Date</h4>
-        <button>Register for Date</button>
+<div div class="main-content">
+    <img class="img-fluid img" src="https://dummyimage.com/600x400/000/fff" />
+    <div>
+        <h1 class="p-5">Rent your own recording studio</h1>
     </div>
 </div>
 
-@if(roomRentals.Count() > 0)
+<div class="row mt-5 main-content">
+    <div class="col">
+        <h3>Select a Date</h3>
+        <input type="date" @bind-value="Date"/>
+
+        <h3 class="mt-5">Select Begin Time</h3>
+        <input type="time" @bind-value="StartTime"/>
+
+        <h3 class="mt-5">Select End Time</h3>
+        <input type="time" @bind-value="EndTime" />
+    </div>
+    <div class="col">
+        <h4>Rooms Available for @Date from @StartTime to @EndTime</h4>
+        
+    </div>
+</div>
+
+@* @if(roomRentals.Count() > 0)
 {
     @foreach(var roomRental in roomRentals)
     {
@@ -32,33 +46,36 @@
             </div>
         </div>
     }
-}
+} *@
+
+
 @code {
-
-    
-    //CustomerID - from user email
-    //RentalStart date - Current date
-    //RentalID - database
-    //RoomID - Get the chosen rooms id
-    //ActualPrice - Should just be the suggest
-    //StartTime - Whatever chosen
-
 
     //Chosen rental date
     public DateOnly? Date { get; set; }
-    private List<RoomRental> roomRentals = new List<RoomRental>();
+
+    private IEnumerable<RoomDto> roomRentals = new List<RoomDto>();
+
+    public TimeOnly StartTime { get; set; }
+
+    public TimeOnly EndTime { get; set; }
 
 
 
     protected override async Task OnInitializedAsync()
     {
-        roomRentals = await httpClient.GetFromJsonAsync<List<RoomRental>>($"{config[Constants.ApiEndpoint]}/RoomRental");
+        roomRentals = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/3/29/2023");
     }
 
     private async Task MakeRoomRental()
     {
         var userName = (await auth.GetAuthenticationStateAsync()).User.Identity.Name;
-       
+
+    }
+
+    private void GetAvailableRoomsOnDate (DateTime date)
+    {
+        
     }
 }
 
