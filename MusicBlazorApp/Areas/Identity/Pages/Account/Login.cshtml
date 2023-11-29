@@ -21,6 +21,11 @@
         text-decoration:none;
     }
 
+    #login-submit{
+        background-color:#6F1218;
+        color:white;
+    }
+
 </style>
 
 <div class="nav_home">
@@ -69,7 +74,7 @@
                         </label>
                     </div>
                     <div>
-                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                        <button id="login-submit" type="submit" class="w-100 btn btn-lg ">Log in</button>
                     </div>
                     <div>
                         <p>
@@ -105,7 +110,7 @@
                                 <p>
                                     @foreach (var provider in Model.ExternalLogins!)
                                     {
-                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                        <button id="login-submit" type="submit" class="btn " name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
                                     }
                                 </p>
                             </div>
