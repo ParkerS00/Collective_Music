@@ -18,4 +18,12 @@ public class CustomerService : ICustomerService<Customer>
         var context = _contextFactory.CreateDbContext();
         return await context.Customers.ToListAsync();
     }
+
+    public async Task<Customer> Add(Customer customer)
+    {
+        var context = _contextFactory.CreateDbContext();
+        context.Customers.Add(customer);
+        await context.SaveChangesAsync();
+        return customer;
+    }
 }

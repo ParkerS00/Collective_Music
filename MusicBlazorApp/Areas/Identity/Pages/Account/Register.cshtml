@@ -58,11 +58,27 @@
                     <h2>Create a new account.</h2>
                     <hr />
                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+@*                     <div class="form-floating mb-3">
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name" @bind-value="" />
+                        <label>First Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name" />
+                        <label>Last Name</label>
+                    </div> *@
                     <div class="form-floating mb-3">
                         <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                         <label asp-for="Input.Email">Email</label>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
+@*                     <div class="form-floating mb-3">
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Address" />
+                        <label >Address</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" />
+                        <label >Phone Number</label>
+                    </div> *@
                     <div class="form-floating mb-3">
                         <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                         <label asp-for="Input.Password">Password</label>

@@ -1,0 +1,69 @@
+﻿@page "/Account"
+<script src="https://kit.fontawesome.com/6f306315c2.js" crossorigin="anonymous"></script>
+
+<style>
+    body{
+        font-family:Inter;
+    }
+    #registerForm {
+        margin: 15px auto;
+        max-width: 300px;
+        min-width: 200px;
+    }
+
+    #external-account {
+        margin: 15px auto;
+        max-width: 300px;
+        min-width: 200px;
+    }
+
+    #registerSubmit {
+        outline: none;
+        background-color: #6F1218;
+        color: white;
+    }
+
+    .btn-primary {
+        border-color: black;
+    }
+
+</style>
+<body>
+    <div class="row">
+        <center>
+            <div class="register col-md-4">
+                <form id="registerForm" method="post">
+                    <h2>Finish Setting Up Your Account.</h2>
+                    <hr />
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name" />
+                        <label>First Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name" />
+                        <label>Last Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Address" />
+                        <label>Address</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" />
+                        <label>Phone Number</label>
+                    </div>
+                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+                </form>
+
+            </div>
+        </center>
+    </div>
+</body>
+
+
+
+
+
+@code {
+
+}

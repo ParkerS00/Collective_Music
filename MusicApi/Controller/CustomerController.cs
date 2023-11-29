@@ -24,6 +24,17 @@ public class CustomerController : Controller
         return await this.customerService.GetAll();
     }
 
+    [HttpPost("{customerRequest}")]
+    public async Task Post([FromBody] AddCustomerRequest request)
+    {
+        var customer = new Customer()
+        {
+            Email = request.Email,
+        };
+
+        await customerService.Add(customer);
+    }
+
 }
 
 

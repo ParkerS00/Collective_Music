@@ -36,7 +36,7 @@
                         <p>Rating out of 5</p>
                         <input type="number" min="1" max="5" @bind-value="ReviewRating" />
                         <p>Review Text</p>
-                        <input type="text" @bind-value="ReviewTxt"/>
+                        <input type="text" @bind-value="ReviewTxt" />
                         <br /><br />
                         <!-- Button to submit the review -->
                         <button class="btn btn-primary"
@@ -56,9 +56,9 @@
                 <h2>Review Item</h2>
                 <form>
                     <p>Rating out of 5</p>
-                    <input type="number" min="1" max="5"/>
+                    <input type="number" min="1" max="5" />
                     <p>Review Text</p>
-                    <input type="text"/>
+                    <input type="text" />
                 </form>
                 <button class="btn btn-primary" @onclick="TogglePopUp">Submit</button>
             </div>
@@ -110,7 +110,14 @@
                 }
                 @if (CurrentUserId == 0)
                 {
+
                     <span class="mx-3">Login to leave a review!</span>
+
+
+                }
+                else if (CurrentUserName is null)
+                {
+                    <span class="mx-3">Finish Setting Up Your Account To Leave A Review</span>
                 }
                 else if (ItemAverageRating != 0)
                 {
@@ -155,7 +162,7 @@
                         <div class="ratings">
                             @for (int i = 1; i <= 5; i++)
                             {
-                                @if(rev.Rating >= i)
+                                @if (rev.Rating >= i)
                                 {
                                     <i class="fa fa-star rating-color"></i>
 
@@ -166,8 +173,8 @@
 
                                 }
                             }
-                            
-                          
+
+
                             <span class="px-3">@rev.Rating rating out of 5</span>
                         </div>
                         <p class="m-3">@rev.Text</p>
@@ -219,6 +226,7 @@ else
     public IdentityUser objUser = new();
 
     public int CurrentUserId { get; set; }
+    public string CurrentUserName { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -244,6 +252,7 @@ else
             if (cust.Email == name)
             {
                 CurrentUserId = cust.Id;
+                CurrentUserName = cust.FirstName;
             }
         }
 
@@ -262,9 +271,9 @@ else
         if (Item.Reviews.Count() > 0)
         {
             decimal sum = 0;
-            foreach(var rating in Item.Reviews)
+            foreach (var rating in Item.Reviews)
             {
-                sum += (decimal)rating.Rating;   
+                sum += (decimal)rating.Rating;
             }
 
             ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
