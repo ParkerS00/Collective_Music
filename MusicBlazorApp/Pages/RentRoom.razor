@@ -19,52 +19,65 @@
 </div>
 
 <div class="row mt-5 main-content">
-    <div class="col">
-        <h3>Select a Date</h3>
-        <input type="date" @bind-value="Date"/>
 
-        <h3 class="mt-5">Select Begin Time</h3>
-        <input type="time" @bind-value="StartTime"/>
+    <h3 class="mt-5">Step One: Select a Room</h3>
+    <label for="cars">Choose a room:</label>
+   @*  <select name="cars" id="cars" @bind-value="SelectedRoom">
+        @foreach (var room in Rooms)
+        {
+            <option value="@room">@room.RoomName</option>
+        }
+    </select> *@
+    @if (SelectedRoom is not null)
+    {
+        <p>@SelectedRoom.RoomName</p>
+    }
 
-        <h3 class="mt-5">Select End Time</h3>
-        <input type="time" @bind-value="EndTime" />
-    </div>
-    <div class="col">
-        <h4>Rooms Available for @Date from @StartTime to @EndTime</h4>
-        
-    </div>
+    <h3 class="mt-5">Step Two: Select a Date</h3>
+    <input type="date" @bind-value="Date" />
+
+    <h3 class="mt-5">Step Three: Select Time</h3>
+    <label for="starttime">Start Time</label>
+    <input type="time" @bind-value="StartTime" id="starttime" />
+    <label for="endtime">End Time</label>
+    <input type="time" @bind-value="EndTime" id="endtime" />
+    <ul>
+        @foreach (var room in Rooms)
+        {
+           <h1>@room.RoomName</h1>
+            @foreach (var timeframe in room.TimeFrames)
+            {
+                @if (timeframe.isAvailable)
+                {
+                    <li>@timeframe.startTime to @timeframe.endTime</li>
+                }
+                else
+                {
+                    <li style="text-decoration: overline; color: gray;">@timeframe.startTime to @timeframe.endTime</li>
+
+                }
+            }
+        }
+    </ul>
 </div>
 
-@* @if(roomRentals.Count() > 0)
-{
-    @foreach(var roomRental in roomRentals)
-    {
-        <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;">
-            <div class="card-title"><h5 class="m-2">@roomRental.StartTime - @roomRental.EndTime</h5></div>
-            <div class="card-body">
-                <p class="card-text"><strong>$@roomRental.ActualPrice</strong></p>
-            </div>
-        </div>
-    }
-} *@
-
-
 @code {
-
     //Chosen rental date
-    public DateOnly? Date { get; set; }
+    public DateOnly? Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-    private IEnumerable<RoomDto> roomRentals = new List<RoomDto>();
+    private IEnumerable<RoomDto> Rooms = new List<RoomDto>();
 
     public TimeOnly StartTime { get; set; }
 
     public TimeOnly EndTime { get; set; }
 
+    public Room SelectedRoom { get; set; }
+
 
 
     protected override async Task OnInitializedAsync()
     {
-        roomRentals = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/3/29/2023");
+        Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{Date?.Month}/{Date?.Day}/{Date?.Year}");
     }
 
     private async Task MakeRoomRental()
@@ -73,9 +86,9 @@
 
     }
 
-    private void GetAvailableRoomsOnDate (DateTime date)
+    private void GetAvailableRoomsOnDate(DateTime date)
     {
-        
+
     }
 }
 
