@@ -21,20 +21,24 @@
 <div class="row mt-5 main-content">
 
     <h3 class="mt-5">Step One: Select a Room</h3>
-    <label for="cars">Choose a room:</label>
-   @*  <select name="cars" id="cars" @bind-value="SelectedRoom">
-        @foreach (var room in Rooms)
-        {
-            <option value="@room">@room.RoomName</option>
-        }
-    </select> *@
+
+    <label for="selectedrm" class="form-label">Select Room</label>
+    <p>@SelectedRoomId</p>
     @if (SelectedRoom is not null)
     {
-        <p>@SelectedRoom.RoomName</p>
+        
+    <p>RoomName: @SelectedRoom.RoomName</p>
     }
 
+    <select class="select-element" @bind="SelectedRoomId" >
+        @foreach (var rm in Rooms)
+        {
+            <option value="@rm.Id" @onclick="() => UpdateRoom(rm.Id)">@rm.RoomName</option>
+        }
+    </select>
+
     <h3 class="mt-5">Step Two: Select a Date</h3>
-    <input type="date" @bind-value="Date" />
+    <input type="date"  @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" />
 
     <h3 class="mt-5">Step Three: Select Time</h3>
     <label for="starttime">Start Time</label>
@@ -42,10 +46,10 @@
     <label for="endtime">End Time</label>
     <input type="time" @bind-value="EndTime" id="endtime" />
     <ul>
-        @foreach (var room in Rooms)
+        @if (SelectedRoom is not null)
         {
-           <h1>@room.RoomName</h1>
-            @foreach (var timeframe in room.TimeFrames)
+            <h1>@SelectedRoom.RoomName</h1>
+            @foreach (var timeframe in SelectedRoom.TimeFrames)
             {
                 @if (timeframe.isAvailable)
                 {
@@ -58,6 +62,7 @@
                 }
             }
         }
+      
     </ul>
 </div>
 
@@ -71,24 +76,40 @@
 
     public TimeOnly EndTime { get; set; }
 
-    public Room SelectedRoom { get; set; }
 
+    public RoomDto SelectedRoom { get; set; }
 
+    public int SelectedRoomId { get; set; } = 1;
 
     protected override async Task OnInitializedAsync()
     {
         Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{Date?.Month}/{Date?.Day}/{Date?.Year}");
+
+        SelectedRoom = Rooms.Where(r => r.Id == SelectedRoomId).FirstOrDefault();
     }
 
     private async Task MakeRoomRental()
     {
         var userName = (await auth.GetAuthenticationStateAsync()).User.Identity.Name;
-
     }
 
     private void GetAvailableRoomsOnDate(DateTime date)
     {
 
+    }
+
+    private void UpdateRoom (int id)
+    {
+        SelectedRoomId = id;
+        SelectedRoom = Rooms.Where(r => r.Id == SelectedRoomId).FirstOrDefault();
+
+    }
+
+    private async Task UpdateDate(DateOnly date)
+    {
+
+        Date = date;
+        Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{Date?.Month}/{Date?.Day}/{Date?.Year}");
     }
 }
 
