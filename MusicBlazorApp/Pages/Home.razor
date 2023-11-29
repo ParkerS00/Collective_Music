@@ -16,93 +16,88 @@
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
 
-<AuthorizeView>
-    @if (context.User.Identity?.Name is not null)
-    {
-        
-    }
 
-    <!-- Hero -->
-    <div class="hero-bar row align-items-center">
-        <div class="col-md-3 "></div>
-        <div class="col-md-3">
-            <center><img class="guitar-image img-fluid img" src="css/images/HomeScreenGuitar.png" /></center>
-        </div>
-        <div class="col-md-3">
-            <div class="d-flex flex-column align-items-lg-center">
-                <h1>Collaborative Music</h1>
-                <h3>The one-stop music shop</h3>
-            </div>
-        </div>
-        <div class="col-md-3"></div>
+
+<!-- Hero -->
+<div class="hero-bar row align-items-center">
+    <div class="col-md-3 "></div>
+    <div class="col-md-3">
+        <center><img class="guitar-image img-fluid img" src="css/images/HomeScreenGuitar.png" /></center>
     </div>
+    <div class="col-md-3">
+        <div class="d-flex flex-column align-items-lg-center">
+            <h1>Collaborative Music</h1>
+            <h3>The one-stop music shop</h3>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
 
-    <!-- Three Button Section -->
-    <div class="button-section mx-5">
-        <center class="service-tag">
-            <h2>Services</h2>
+<!-- Three Button Section -->
+<div class="button-section mx-5">
+    <center class="service-tag">
+        <h2>Services</h2>
+    </center>
+    <div class="service-links-wrapper d-flex flex-row justify-content-around flex-sm-wrap">
+        <a class="links" href="/browse-instruments">
+            <div class="service-links m-2 p-5">
+                <center><h2><span class="service-links-name">Purchase Equipment</span></h2></center>
+                <center><i class="ikons fa-solid fa-cart-shopping mt-4"></i></center>
+            </div>
+        </a>
+
+        <a class="links" href="/browse-instruments">
+            <div class="service-links m-2 p-5">
+                <center><h2><span class="service-links-name">Rent Instruments</span></h2></center>
+                <center><i class="ikons fa-solid fa-guitar mt-4"></i></center>
+            </div>
+        </a>
+
+        <a class="links" href="/rent-a-room">
+            <div class="service-links m-2 p-5">
+                <center><h2><span class="service-links-name">Rent a Studio </span></h2></center>
+                <center><i class="ikons fa-solid fa-microphone-lines mt-4"></i></center>
+            </div>
+        </a>
+
+    </div>
+</div>
+
+<!-- How to Rent -->
+<div>
+    <div class="rent-bar w-100">
+        <center>
+            <h2 class="how-to-rent">How to Rent</h2>
         </center>
-        <div class="service-links-wrapper d-flex flex-row justify-content-around flex-sm-wrap">
-            <a class="links" href="/browse-instruments">
-                <div class="service-links m-2 p-5">
-                    <center><h2><span class="service-links-name">Purchase Equipment</span></h2></center>
-                    <center><i class="ikons fa-solid fa-cart-shopping mt-4"></i></center>
-                </div>
-            </a>
-
-            <a class="links" href="/browse-instruments">
-                <div class="service-links m-2 p-5">
-                    <center><h2><span class="service-links-name">Rent Instruments</span></h2></center>
-                    <center><i class="ikons fa-solid fa-guitar mt-4"></i></center>
-                </div>
-            </a>
-
-            <a class="links" href="/rent-a-room">
-                <div class="service-links m-2 p-5">
-                    <center><h2><span class="service-links-name">Rent a Studio </span></h2></center>
-                    <center><i class="ikons fa-solid fa-microphone-lines mt-4"></i></center>
-                </div>
-            </a>
-
-        </div>
-    </div>
-
-    <!-- How to Rent -->
-    <div>
-        <div class="rent-bar w-100">
-            <center>
-                <h2 class="how-to-rent">How to Rent</h2>
-            </center>
-            <div class="how-to-rent-wrapper d-flex flex-row justify-content-around flex-sm-wrap">
-                <div class="rent-descriptions m-2 p-5">
-                    <center><h4><a href="#" class="rent-descriptions-name">1. Create an Account</a></h4></center>
-                    <center><i class="ikons fa-regular fa-user mt-4"></i></center>
-                </div>
-                <div class="rent-descriptions m-2 p-5">
-                    <center><h4><a href="#" class="rent-descriptions-name">2. Schedule Online Rental</a></h4></center>
-                    <center><i class="ikons fa-solid fa-arrow-pointer mt-4"></i></center>
-                </div>
-                <div class="rent-descriptions m-2 p-5">
-                    <center><h4><a href="#" class="rent-descriptions-name">3. Pick Up Rental </a></h4></center>
-                    <center><i class="ikons fa-solid fa-car mt-4"></i></center>
-                </div>
+        <div class="how-to-rent-wrapper d-flex flex-row justify-content-around flex-sm-wrap">
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4><a href="#" class="rent-descriptions-name">1. Create an Account</a></h4></center>
+                <center><i class="ikons fa-regular fa-user mt-4"></i></center>
+            </div>
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4><a href="#" class="rent-descriptions-name">2. Schedule Online Rental</a></h4></center>
+                <center><i class="ikons fa-solid fa-arrow-pointer mt-4"></i></center>
+            </div>
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4><a href="#" class="rent-descriptions-name">3. Pick Up Rental </a></h4></center>
+                <center><i class="ikons fa-solid fa-car mt-4"></i></center>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Visit our Location -->
-    <div class="button-section mx-5">
-        <div class="location-wrapper d-flex flex-row justify-content-center flex-sm-wrap">
-            <div class="location-descriptions m-2 p-5 ">
-                <center><h1><a class="location-title">Visit our location</a></h1></center>
-                <h4>54 N Main St<br /> Ephraim, Utah <br />84337<br /> <br />(435) 111-1234</h4>
-            </div>
-            <div class="location-descriptions m-2 p-5">
-                <img class="map img" src="css/images/map.png" />
-            </div>
+<!-- Visit our Location -->
+<div class="button-section mx-5">
+    <div class="location-wrapper d-flex flex-row justify-content-center flex-sm-wrap">
+        <div class="location-descriptions m-2 p-5 ">
+            <center><h1><a class="location-title">Visit our location</a></h1></center>
+            <h4>54 N Main St<br /> Ephraim, Utah <br />84337<br /> <br />(435) 111-1234</h4>
+        </div>
+        <div class="location-descriptions m-2 p-5">
+            <img class="map img" src="css/images/map.png" />
         </div>
     </div>
-</AuthorizeView>
+</div>
 
 @code
 {
@@ -126,15 +121,18 @@
             }
             else
             {
+                userEmailAddress = name;
                 notFound = true;
             }
-            
+
         }
         if (notFound)
         {
-            userEmailAddress = name;
-            var request = new AddCustomerRequest(userEmailAddress);
-            var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
+            if (userEmailAddress is not null)
+            {
+                var request = new AddCustomerRequest(userEmailAddress);
+                var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
+            }
         }
     }
 }
