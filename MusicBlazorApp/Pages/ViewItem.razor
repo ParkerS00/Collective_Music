@@ -110,14 +110,11 @@
                 }
                 @if (CurrentUserId == 0)
                 {
-
-                    <span class="mx-3">Login to leave a review!</span>
-
-
+                    <span class="mx-3"><a href="/Identity/Account/Login">Login to leave a review!</a></span>
                 }
                 else if (CurrentUserName is null)
                 {
-                    <span class="mx-3">Finish Setting Up Your Account To Leave A Review</span>
+                    <span class="mx-3"><a href="/Account">Finish Setting Up Your Account To Leave A Review</a></span>
                 }
                 else if (ItemAverageRating != 0)
                 {
@@ -135,7 +132,21 @@
             <div class="row">
                 <div class="col-md-6"><p>Purchase new or used and pick up in store. </p></div>
                 <div class="col-md-6">
-                    <div class="red-button"><h5><a href="/Account">Purchase</a></h5></div>
+                    @if (CurrentUserName is null)
+                    {
+                        @if (CurrentUserId == 0)
+                        {
+                            <div class="red-button"><h5><a href="/Identity/Account/Login">Purchase</a></h5></div>
+                        }
+                        else
+                        {
+                            <div class="red-button"><h5><a href="/Account">Purchase</a></h5></div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="red-button"><h5><a href="/#">Purchase</a></h5></div>
+                    }
                 </div>
             </div>
 
@@ -144,7 +155,21 @@
             <div class="row">
                 <div class="col-md-6"><p>Rent this item. Pick up and drop off in store.</p></div>
                 <div class="col-md-6">
-                    <div class="red-button"><h5><a href="/Account">Rent</a></h5></div>
+                    @if (CurrentUserName is null)
+                    {
+                        @if (CurrentUserId == 0)
+                        {
+                            <div class="red-button"><h5><a href="/Identity/Account/Login">Rent</a></h5></div>
+                        }
+                        else
+                        {
+                            <div class="red-button"><h5><a href="/Account">Rent</a></h5></div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="red-button"><h5><a href="/#">Rent</a></h5></div>
+                    }
                 </div>
             </div>
         </div>
