@@ -1,9 +1,9 @@
-﻿using MusicBlazorApp.Data;
+﻿using MusicApi.Data;
+using MusicBlazorApp.Data;
 
-namespace MusicApi.Services
+namespace MusicApi.Services;
+
+public interface IRoomRentalService
 {
-    public interface IRoomRentalService
-    {
-        Task<IEnumerable<RoomRental>> GetAll();
-    }
+    Task<IEnumerable<RoomRental>> GetAll();
 }

@@ -6,6 +6,7 @@ namespace MusicApi.Data;
 public class ItemDto
 {
     public int Id { get; set; }
+
     public string? ItemName { get; set; }
 
     public string? SerialNumber { get; set; }
@@ -13,6 +14,7 @@ public class ItemDto
     public string? Description { get; set; }
 
     public decimal? SellPrice { get; set; }
+
     public decimal? SuggestedRentalPrice { get; set;}
 
     public List<string>? ImageFilePaths { get; set; } = new List<string>();
@@ -20,6 +22,7 @@ public class ItemDto
     public string? PrimaryImagePath { get; set; }
 
     public List<string>? ItemStatuses { get; set; }
+
     public List<string>? ItemCategories { get; set; }
 
     public IEnumerable<ReviewDto>? Reviews { get; set; }
@@ -74,7 +77,7 @@ public class ItemDto
 
 public static class DbObjToDtoObj
 {
-    public static ItemDto ToItemDto(this Item item)
+    public static ItemDto ToItemDto(this Item item) // Extension Method to the Item class
     {
         ItemDto newDto = new(item);
         return newDto;
