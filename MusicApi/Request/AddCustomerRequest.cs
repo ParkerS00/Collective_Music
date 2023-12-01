@@ -25,5 +25,14 @@
         {
             Email = userEmail;
         }
+
+        public AddCustomerRequest(string userEmail, string userFirstName, string userLastName, string userAddress, string userPhoneNumber)
+        {
+            Email= userEmail;
+            FirstName= userFirstName;
+            LastName= userLastName;
+            Address= userAddress;
+            PhoneNumber = userPhoneNumber;
+        }
     }
 }

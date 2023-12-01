@@ -1,4 +1,13 @@
 ﻿@page "/Account"
+@using MusicApi.Data;
+@using MusicApi.Request;
+@using MusicBlazorApp.Data;
+@using MusicApi.FrontFacingData;
+@inject UserManager<IdentityUser> userManager;
+@inject IConfiguration config;
+@inject HttpClient httpClient;
+@inject AuthenticationStateProvider auth;
+@inject IHostEnvironment Environment;
 <script src="https://kit.fontawesome.com/6f306315c2.js" crossorigin="anonymous"></script>
 
 <style>
@@ -37,22 +46,22 @@
                     <hr />
                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name" />
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name" @bind-value="firstName"/>
                         <label>First Name</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name" />
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name" @bind-value="lastName"/>
                         <label>Last Name</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Address" />
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Address" @bind-value="address"/>
                         <label>Address</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" />
+                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" @bind-value="phoneNumber"/>
                         <label>Phone Number</label>
                     </div>
-                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+                    <a href="#"><button type="submit" class="w-100 btn btn-lg btn-primary" @onclick="SubmitUser">Save</button></a>
                 </form>
 
             </div>
@@ -61,9 +70,34 @@
 </body>
 
 
-
-
-
 @code {
+    public int cutomerID { get; set; }
+    public string? firstName { get; set; }
+    public string? lastName { get; set; }
+    public string? address { get; set; }
+    public string? phoneNumber { get; set; }
+    public IEnumerable<Customer> allCustomers { get; set; }
+    public string? name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        name = user.Identity.Name;
+
+        allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
+    }
+
+    public async Task SubmitUser()
+    {
+        foreach (var cust in allCustomers)
+        {
+            if (cust.Email == name)
+            {
+                var request = new AddCustomerRequest(cust.Email, firstName, lastName, address, phoneNumber);
+                var response = await httpClient.PatchAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
+            }
+        }
+    }
 
 }

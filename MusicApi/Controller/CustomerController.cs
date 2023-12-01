@@ -35,6 +35,20 @@ public class CustomerController : Controller
         await customerService.Add(customer);
     }
 
+    [HttpPatch("{customerRequest}")]
+    public async Task Update(AddCustomerRequest updateCustomer)
+    {
+        var Customer = new Customer()
+        {
+            Email = updateCustomer.Email,
+            FirstName = updateCustomer.FirstName,
+            LastName = updateCustomer.LastName,
+            Address = updateCustomer.Address,
+            PhoneNumber = updateCustomer.PhoneNumber,
+        };
+
+        await customerService.Update(Customer);
+    }
 }
 
 
