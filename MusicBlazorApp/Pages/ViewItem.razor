@@ -356,6 +356,12 @@ else
 
     public async Task SubmitReview()
     {
+        if(ReviewRating > 5 || ReviewRating < 1)
+        {
+            ShowPopup = false;
+            await Task.CompletedTask;
+            return;
+        }
         var request = new AddReviewRequest(Item.Id, CurrentUserId, DateOnly.FromDateTime(DateTime.Now), ReviewTxt, ReviewRating);
         var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/review/{request}", request);
 
