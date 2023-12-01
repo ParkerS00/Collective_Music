@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using MusicBlazorApp.Data;
+using MusicApi.Data;
 
-namespace MusicApi.Data;
+namespace MusicApi.Dtos;
 
 public class ItemDto
 {
@@ -15,7 +15,7 @@ public class ItemDto
 
     public decimal? SellPrice { get; set; }
 
-    public decimal? SuggestedRentalPrice { get; set;}
+    public decimal? SuggestedRentalPrice { get; set; }
 
     public List<string>? ImageFilePaths { get; set; } = new List<string>();
 
@@ -23,7 +23,7 @@ public class ItemDto
 
     public List<string>? ItemStatuses { get; set; }
 
-    public int? Quantity { get; set; } 
+    public int? Quantity { get; set; }
 
     public List<string>? ItemCategories { get; set; }
 
@@ -38,11 +38,11 @@ public class ItemDto
         SuggestedRentalPrice = item.SuggestedRentalPrice;
         SerialNumber = item.SerialNumber;
 
-        
-        if (item.ItemStatuses != null)
+
+        if (item.Inventories != null)
         {
-            ItemStatuses = item.ItemStatuses.Select(x => x.Status.StatusName).ToList();
-            Quantity = item.ItemStatuses.Sum(x => x.Quantity);
+            ItemStatuses = item.Inventories.Select(x => x.Status.StatusName).ToList();
+            Quantity = item.Inventories.GroupBy(i => i.ItemId).Count();
         }
 
         if (item.ItemCategories != null)

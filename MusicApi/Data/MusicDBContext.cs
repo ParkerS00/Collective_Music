@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace MusicBlazorApp.Data;
+namespace MusicApi.Data;
 
-public partial class MusicDbContext : IdentityDbContext
+public class MusicDbContext : IdentityDbContext
 {
     public MusicDbContext()
     {
@@ -16,6 +16,7 @@ public partial class MusicDbContext : IdentityDbContext
     {
     }
 
+
     public virtual DbSet<Brand> Brands { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
@@ -24,6 +25,8 @@ public partial class MusicDbContext : IdentityDbContext
 
     public virtual DbSet<Employee> Employees { get; set; }
 
+    public virtual DbSet<Inventory> Inventories { get; set; }
+
     public virtual DbSet<Item> Items { get; set; }
 
     public virtual DbSet<ItemCategory> ItemCategories { get; set; }
@@ -31,8 +34,6 @@ public partial class MusicDbContext : IdentityDbContext
     public virtual DbSet<ItemImage> ItemImages { get; set; }
 
     public virtual DbSet<ItemRental> ItemRentals { get; set; }
-
-    public virtual DbSet<ItemStatus> ItemStatuses { get; set; }
 
     public virtual DbSet<Purchase> Purchases { get; set; }
 
@@ -50,12 +51,15 @@ public partial class MusicDbContext : IdentityDbContext
 
     public virtual DbSet<Status> Statuses { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseNpgsql("Name=MusicDB");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder
-        //    .HasPostgresExtension("pg_catalog", "azure")
-        //    .HasPostgresExtension("pg_catalog", "pgaadauth")
-        //    .HasPostgresExtension("pg_cron");
+       /* modelBuilder
+            .HasPostgresExtension("pg_catalog", "azure")
+            .HasPostgresExtension("pg_catalog", "pgaadauth")
+            .HasPostgresExtension("pg_cron");*/
 
         modelBuilder.Entity<Brand>(entity =>
         {
@@ -114,6 +118,8 @@ public partial class MusicDbContext : IdentityDbContext
 
             entity.ToTable("employee");
 
+            entity.HasIndex(e => e.ManagerId, "IX_employee_manager_id");
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Address)
                 .HasMaxLength(300)
@@ -137,11 +143,38 @@ public partial class MusicDbContext : IdentityDbContext
                 .HasConstraintName("employee_manager_id_fkey");
         });
 
+        modelBuilder.Entity<Inventory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("item_status_pkey");
+
+            entity.ToTable("inventory");
+
+            entity.HasIndex(e => e.ItemId, "IX_item_status_item_id");
+
+            entity.HasIndex(e => e.StatusId, "IX_item_status_status_id");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IsPurchased).HasColumnName("is_purchased");
+            entity.Property(e => e.IsRentable).HasColumnName("is_rentable");
+            entity.Property(e => e.ItemId).HasColumnName("item_id");
+            entity.Property(e => e.StatusId).HasColumnName("status_id");
+
+            entity.HasOne(d => d.Item).WithMany(p => p.Inventories)
+                .HasForeignKey(d => d.ItemId)
+                .HasConstraintName("item_status_item_id_fkey");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Inventories)
+                .HasForeignKey(d => d.StatusId)
+                .HasConstraintName("item_status_status_id_fkey");
+        });
+
         modelBuilder.Entity<Item>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("item_pkey");
 
             entity.ToTable("item");
+
+            entity.HasIndex(e => e.BrandId, "IX_item_brand_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.BrandId).HasColumnName("brand_id");
@@ -170,6 +203,10 @@ public partial class MusicDbContext : IdentityDbContext
 
             entity.ToTable("item_category");
 
+            entity.HasIndex(e => e.CategoryId, "IX_item_category_category_id");
+
+            entity.HasIndex(e => e.ItemId, "IX_item_category_item_id");
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.ItemId).HasColumnName("item_id");
@@ -189,6 +226,8 @@ public partial class MusicDbContext : IdentityDbContext
 
             entity.ToTable("item_image");
 
+            entity.HasIndex(e => e.ItemId, "IX_item_image_item_id");
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Filepath).HasColumnName("filepath");
             entity.Property(e => e.IsPrimary).HasColumnName("is_primary");
@@ -205,45 +244,28 @@ public partial class MusicDbContext : IdentityDbContext
 
             entity.ToTable("item_rental");
 
+            entity.HasIndex(e => e.InventoryId, "IX_item_rental_item_id");
+
+            entity.HasIndex(e => e.RentalId, "IX_item_rental_rental_id");
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.FinalRentalPrice)
                 .HasColumnType("money")
                 .HasColumnName("final_rental_price");
-            entity.Property(e => e.ItemId).HasColumnName("item_id");
+            entity.Property(e => e.InventoryId).HasColumnName("inventory_id");
             entity.Property(e => e.OutCondition).HasColumnName("out_condition");
             entity.Property(e => e.RentalId).HasColumnName("rental_id");
             entity.Property(e => e.ReturnDate)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("return_date");
 
-            entity.HasOne(d => d.Item).WithMany(p => p.ItemRentals)
-                .HasForeignKey(d => d.ItemId)
-                .HasConstraintName("item_rental_item_id_fkey");
+            entity.HasOne(d => d.Inventory).WithMany(p => p.ItemRentals)
+                .HasForeignKey(d => d.InventoryId)
+                .HasConstraintName("item_rental_inventory_id_fkey");
 
             entity.HasOne(d => d.Rental).WithMany(p => p.ItemRentals)
                 .HasForeignKey(d => d.RentalId)
                 .HasConstraintName("item_rental_rental_id_fkey");
-        });
-
-        modelBuilder.Entity<ItemStatus>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("item_status_pkey");
-
-            entity.ToTable("item_status");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.IsRentable).HasColumnName("is_rentable");
-            entity.Property(e => e.ItemId).HasColumnName("item_id");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
-            entity.Property(e => e.StatusId).HasColumnName("status_id");
-
-            entity.HasOne(d => d.Item).WithMany(p => p.ItemStatuses)
-                .HasForeignKey(d => d.ItemId)
-                .HasConstraintName("item_status_item_id_fkey");
-
-            entity.HasOne(d => d.Status).WithMany(p => p.ItemStatuses)
-                .HasForeignKey(d => d.StatusId)
-                .HasConstraintName("item_status_status_id_fkey");
         });
 
         modelBuilder.Entity<Purchase>(entity =>
@@ -251,6 +273,10 @@ public partial class MusicDbContext : IdentityDbContext
             entity.HasKey(e => e.Id).HasName("purchase_pkey");
 
             entity.ToTable("purchase");
+
+            entity.HasIndex(e => e.CustomerId, "IX_purchase_customer_id");
+
+            entity.HasIndex(e => e.EmployeeId, "IX_purchase_employee_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
@@ -272,16 +298,19 @@ public partial class MusicDbContext : IdentityDbContext
 
             entity.ToTable("purchase_item");
 
+            entity.HasIndex(e => e.InventoryId, "IX_purchase_item_item_id");
+
+            entity.HasIndex(e => e.PurchaseId, "IX_purchase_item_purchase_id");
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.FinalPrice)
                 .HasColumnType("money")
                 .HasColumnName("final_price");
-            entity.Property(e => e.ItemId).HasColumnName("item_id");
+            entity.Property(e => e.InventoryId).HasColumnName("inventory_id");
             entity.Property(e => e.PurchaseId).HasColumnName("purchase_id");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
 
-            entity.HasOne(d => d.Item).WithMany(p => p.PurchaseItems)
-                .HasForeignKey(d => d.ItemId)
+            entity.HasOne(d => d.Inventory).WithMany(p => p.PurchaseItems)
+                .HasForeignKey(d => d.InventoryId)
                 .HasConstraintName("purchase_item_item_id_fkey");
 
             entity.HasOne(d => d.Purchase).WithMany(p => p.PurchaseItems)
@@ -294,6 +323,10 @@ public partial class MusicDbContext : IdentityDbContext
             entity.HasKey(e => e.Id).HasName("rental_pkey");
 
             entity.ToTable("rental");
+
+            entity.HasIndex(e => e.CustomerId, "IX_rental_customer_id");
+
+            entity.HasIndex(e => e.EmployeeId, "IX_rental_employee_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
@@ -314,6 +347,10 @@ public partial class MusicDbContext : IdentityDbContext
             entity.HasKey(e => e.Id).HasName("review_pkey");
 
             entity.ToTable("review");
+
+            entity.HasIndex(e => e.CustomerId, "IX_review_customer_id");
+
+            entity.HasIndex(e => e.ItemId, "IX_review_item_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
@@ -337,6 +374,8 @@ public partial class MusicDbContext : IdentityDbContext
 
             entity.ToTable("room");
 
+            entity.HasIndex(e => e.RoomTypeId, "IX_room_room_type_id");
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.MaxCapacity).HasColumnName("max_capacity");
             entity.Property(e => e.RoomName)
@@ -354,6 +393,10 @@ public partial class MusicDbContext : IdentityDbContext
             entity.HasKey(e => e.Id).HasName("room_rental_pkey");
 
             entity.ToTable("room_rental");
+
+            entity.HasIndex(e => e.RentalId, "IX_room_rental_rental_id");
+
+            entity.HasIndex(e => e.RoomId, "IX_room_rental_room_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ActualPrice)
@@ -403,6 +446,8 @@ public partial class MusicDbContext : IdentityDbContext
                 .HasMaxLength(100)
                 .HasColumnName("status_name");
         });
+        modelBuilder.HasSequence("jobid_seq", "cron");
+        modelBuilder.HasSequence("runid_seq", "cron");
 
         base.OnModelCreating(modelBuilder);
     }

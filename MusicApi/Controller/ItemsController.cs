@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicApi.Data;
+using MusicApi.Dtos;
 using MusicApi.FrontFacingData;
 using MusicApi.Services;
-using MusicBlazorApp.Data;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MusicApi.Controllers;

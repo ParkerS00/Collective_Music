@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicBlazorApp.Data;
+using MusicApi.Data;
 
 namespace MusicApi.Services;
 

@@ -1,4 +1,4 @@
-﻿namespace MusicApi.Data;
+﻿namespace MusicApi.Dtos;
 
 public class ItemStatusDto
 {

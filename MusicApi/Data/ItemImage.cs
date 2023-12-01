@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MusicBlazorApp.Data;
+namespace MusicApi.Data;
 
 public partial class ItemImage
 {

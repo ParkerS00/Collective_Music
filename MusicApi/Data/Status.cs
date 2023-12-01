@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MusicBlazorApp.Data;
+namespace MusicApi.Data;
 
 public partial class Status
 {
@@ -9,5 +9,5 @@ public partial class Status
 
     public string? StatusName { get; set; }
 
-    public virtual ICollection<ItemStatus> ItemStatuses { get; set; } = new List<ItemStatus>();
+    public virtual ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
 }

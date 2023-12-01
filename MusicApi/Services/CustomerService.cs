@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
-using MusicBlazorApp.Data;
+using MusicApi.Data;
 
 namespace MusicApi.Services;
 

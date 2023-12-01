@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicApi.Controllers;
+
+using MusicApi.Data;
 using MusicApi.Request;
 using MusicApi.Services;
-using MusicBlazorApp.Data;
 
 [Route("[controller]")]
 [ApiController]

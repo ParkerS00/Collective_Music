@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MusicBlazorApp.Data;
+using MusicApi.Data;
 
 namespace MusicApi.Services;
 

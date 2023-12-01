@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MusicBlazorApp.Data;
+using MusicApi.Data;
 
 namespace MusicApi.Services;
 
@@ -19,14 +19,13 @@ public class ItemService : IItemService<Item>
     {
         var context = contextFactory.CreateDbContext();
         return await context.Items
-            .Include(i => i.ItemStatuses)
+            .Include(i => i.Inventories)
                 .ThenInclude(iStat => iStat.Status)
             .Include(c => c.ItemCategories)
                 .ThenInclude(c => c.Category)
             .Include(i => i.ItemImages)
             .Include(i => i.Reviews)
                 .ThenInclude(r => r.Customer)
-            .Include(s => s.ItemStatuses)
             .Where(i => i.Id == id)
             .FirstOrDefaultAsync();
     }
@@ -35,13 +34,13 @@ public class ItemService : IItemService<Item>
     {
         var context = contextFactory.CreateDbContext();
         return await context.Items
-            .Include(i => i.ItemStatuses)
+            .Include(i => i.Inventories)
                 .ThenInclude(itemStat => itemStat.Status)
             .Include(i => i.ItemCategories)
                 .ThenInclude(ic => ic.Category)
             .Include(i => i.ItemImages)
-            //.Include(r => r.Reviews)
-            //     .ThenInclude(r => r.Customer)
+            .Include(r => r.Reviews)
+                 .ThenInclude(r => r.Customer)
             .ToListAsync();
     }
 

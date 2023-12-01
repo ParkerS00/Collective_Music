@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using MusicApi.Services;
-using MusicBlazorApp.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
 using System.Configuration;
+using MusicApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

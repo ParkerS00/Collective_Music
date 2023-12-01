@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MusicBlazorApp.Data;
+namespace MusicApi.Data;
 
 public partial class RoomRental
 {
@@ -20,5 +20,4 @@ public partial class RoomRental
     public virtual Rental? Rental { get; set; }
 
     public virtual Room? Room { get; set; }
-
 }

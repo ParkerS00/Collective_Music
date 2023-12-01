@@ -3,7 +3,6 @@ using MusicApi.Data;
 using MusicApi.FrontFacingData;
 using MusicApi.Request;
 using MusicApi.Services;
-using MusicBlazorApp.Data;
 
 namespace MusicApi.Controllers;
 

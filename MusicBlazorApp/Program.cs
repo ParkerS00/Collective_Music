@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using MusicBlazorApp.Data;
 using MusicApi;
 using Microsoft.AspNetCore.Identity;
 using MusicBlazorApp.State;
+using MusicApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

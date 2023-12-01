@@ -1,6 +1,6 @@
-﻿using MusicBlazorApp.Data;
+﻿using MusicApi.Data;
 
-namespace MusicApi.Data;
+namespace MusicApi.Dtos;
 
 public class RoomDto
 {
@@ -17,7 +17,7 @@ public class RoomDto
 
     public RoomDto(Room room, DateOnly date)
     {
-        var rentalsFromDate = room.RoomRentals.Where(rr => (DateOnly.FromDateTime((DateTime)rr.StartTime)) == date);
+        var rentalsFromDate = room.RoomRentals.Where(rr => DateOnly.FromDateTime((DateTime)rr.StartTime) == date);
         List<TimeAvailability> timeAvailability = new List<TimeAvailability>();
         //i = opring time
         //22 is close
@@ -25,18 +25,18 @@ public class RoomDto
         var TimeIncrement = 2;
         for (int i = 8; i < 22; i += TimeIncrement)
         {
-            timeAvailability.Add(new TimeAvailability(new DateTime(date.Year, date.Month, date.Day, i, 0, 0), new DateTime(date.Year, date.Month, date.Day, i+TimeIncrement, 0, 0), true));
+            timeAvailability.Add(new TimeAvailability(new DateTime(date.Year, date.Month, date.Day, i, 0, 0), new DateTime(date.Year, date.Month, date.Day, i + TimeIncrement, 0, 0), true));
         }
         if (rentalsFromDate is not null)
         {
-            foreach(var rental in  rentalsFromDate)
+            foreach (var rental in rentalsFromDate)
             {
                 var takenTime = timeAvailability.Where(t => t.startTime == rental.StartTime).First();
-                timeAvailability.Remove( takenTime );
+                timeAvailability.Remove(takenTime);
                 takenTime.isAvailable = false;
                 timeAvailability.Add(takenTime);
             }
-            
+
         }
         Id = room.Id;
         TimeFrames = timeAvailability;
@@ -48,6 +48,6 @@ public class RoomDto
 
     public RoomDto()
     {
-        
+
     }
 }

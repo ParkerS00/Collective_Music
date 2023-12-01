@@ -2,7 +2,7 @@
 using FluentAssertions.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MusicBlazorApp.Data;
+using MusicApi.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

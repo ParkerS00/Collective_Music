@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicApi.Data;
 using MusicApi.Services;
-using MusicBlazorApp.Data;
 
 namespace MusicApi.Controllers;
 

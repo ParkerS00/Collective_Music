@@ -1,4 +1,4 @@
-﻿using MusicApi.Data;
+﻿using MusicApi.Dtos;
 
 namespace MusicBlazorApp.State
 {

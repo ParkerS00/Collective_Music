@@ -1,6 +1,5 @@
-﻿using MusicBlazorApp.Data;
-
-namespace MusicApi.Data;
+﻿
+namespace MusicApi.Dtos;
 
 public class RoomRentalDto
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicApi.Data;
+using MusicApi.Dtos;
 using MusicApi.Services;
 
 

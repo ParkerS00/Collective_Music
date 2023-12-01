@@ -1,5 +1,4 @@
 ﻿using MusicApi.Data;
-using MusicBlazorApp.Data;
 
 namespace MusicApi.Services;
 
