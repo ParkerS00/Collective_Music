@@ -8,6 +8,8 @@
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
+@inject NavigationManager NavManager;
+
 
 
 
@@ -62,7 +64,6 @@
                 </form>
                 <button class="btn btn-primary" @onclick="TogglePopUp">Submit</button>
             </div>
-
         </div>
     }
     <div class="row main-container">
@@ -102,7 +103,7 @@
                     @if (ItemAverageRating >= i)
                     {
                         <i class="fa fa-star rating-color"></i>
-                    }
+                    } 
                     else
                     {
                         <i class="fa fa-star"></i>
@@ -168,7 +169,7 @@
                     }
                     else
                     {
-                        <div class="red-button"><h5><a href="/#">Rent</a></h5></div>
+                        <div class="red-button"><h5><a @onclick="() => HandleRentClick(Item.Id)">Rent</a></h5></div>
                     }
                 </div>
             </div>
@@ -320,5 +321,10 @@ else
         var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/review/{request}", request);
 
         TogglePopUp();  // close popup
+    }
+
+    public void HandleRentClick(int ItemId)
+    {
+        NavManager.NavigateTo($"/Rent-Item/{ItemId}");
     }
 }

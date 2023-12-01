@@ -1,0 +1,68 @@
+﻿@page "/Rent-Item/{ItemId:int}"
+
+@using MusicApi.Data;
+@using MusicApi.Request;
+@using MusicBlazorApp.Data;
+@using MusicApi.FrontFacingData;
+@inject UserManager<IdentityUser> userManager;
+@inject IConfiguration config;
+@inject HttpClient httpClient;
+@inject AuthenticationStateProvider auth;
+@inject IHostEnvironment Environment;
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+</style>
+
+<div style="max-width: 800px; margin-left: auto; margin-right: auto;">
+<h3>Schedule Your Rental</h3>
+
+@if (Item is not null)
+{
+    <h1>@Item.ItemName</h1>
+
+    <label for="selectdate">Select a Pick Up Date</label>
+    <input id="selectdate" type="date" @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" />
+
+    <p>@Date</p>
+}
+</div>
+
+@code {
+    [Parameter]
+    public int ItemId { get; set; }
+    public ItemDto Item { get; set; }
+
+    public int CurrentUserId { get; set; }
+    public string CurrentUserName { get; set; }
+
+    public DateOnly? Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Item = await httpClient.GetFromJsonAsync<ItemDto>($"{config[Constants.ApiEndpoint]}/Items/{ItemId}");
+
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var name = user.Identity.Name;
+
+        var allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
+
+        foreach (var cust in allCustomers)
+        {
+            if (cust.Email == name)
+            {
+                CurrentUserId = cust.Id;
+                CurrentUserName = cust.FirstName;
+            }
+        }
+    }
+
+
+    private async Task UpdateDate(DateOnly date)
+    {
+        Date = date;
+    }
+
+}

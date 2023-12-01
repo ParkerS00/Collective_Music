@@ -4,6 +4,8 @@
 @inject IConfiguration config;
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
+@inject NavigationManager NavManager;
+
 
 <style>
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -22,29 +24,31 @@
 
     <h3 class="mt-5">Step One: Select a Room</h3>
 
-    <label for="selectedrm" class="form-label">Select Room</label>
-    <p>@SelectedRoomId</p>
-    @if (SelectedRoom is not null)
-    {
-        
-    <p>RoomName: @SelectedRoom.RoomName</p>
-    }
 
-    <select class="select-element" @bind="SelectedRoomId" >
+    <label for="selectedrm" class="form-label">Select Room</label>
+    <select class="select-element" @bind="SelectedRoomId">
         @foreach (var rm in Rooms)
         {
             <option value="@rm.Id" @onclick="() => UpdateRoom(rm.Id)">@rm.RoomName</option>
         }
     </select>
+    @if (SelectedRoom is not null)
+    {
+        <p><strong>RoomName:</strong> @SelectedRoom.RoomName</p>
+        <p><strong>Room Type:</strong> @SelectedRoom.RoomTypeName</p>
+        <p><strong>Max Capacity:</strong> @SelectedRoom.MaxCapacity</p>
+    }
 
     <h3 class="mt-5">Step Two: Select a Date</h3>
-    <input type="date"  @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" />
+    <input type="date" @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" />
 
     <h3 class="mt-5">Step Three: Select Time</h3>
     <label for="starttime">Start Time</label>
     <input type="time" @bind-value="StartTime" id="starttime" />
     <label for="endtime">End Time</label>
     <input type="time" @bind-value="EndTime" id="endtime" />
+
+    <h3>Choose an Available Time</h3>
     <ul>
         @if (SelectedRoom is not null)
         {
@@ -53,17 +57,23 @@
             {
                 @if (timeframe.isAvailable)
                 {
-                    <li>@timeframe.startTime to @timeframe.endTime</li>
+                    <button class="m-5 d-block" @onclick="() => UpdateSelectedTimeBlock(timeframe)">
+                    <li>@timeframe.startTime to @timeframe.endTime</li></button>
                 }
                 else
                 {
-                    <li style="text-decoration: overline; color: gray;">@timeframe.startTime to @timeframe.endTime</li>
-
+                    <button class="disabled m-5 d-block">
+                    <li style="text-decoration: overline; color: gray;">@timeframe.startTime to @timeframe.endTime</li></button>
                 }
             }
         }
-      
     </ul>
+
+    @if (SelectedTimeBlock is not null && SelectedRoom is not null && Date is not null)
+    {
+        <p>Confirm your selection</p>
+        <p>@SelectedRoom.RoomName for @Date from @SelectedTimeBlock.startTime.TimeOfDay to @SelectedTimeBlock.endTime.TimeOfDay</p>
+    }
 </div>
 
 @code {
@@ -80,6 +90,8 @@
     public RoomDto SelectedRoom { get; set; }
 
     public int SelectedRoomId { get; set; } = 1;
+
+    public TimeAvailability? SelectedTimeBlock { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,18 +110,21 @@
 
     }
 
-    private void UpdateRoom (int id)
+    private void UpdateRoom(int id)
     {
         SelectedRoomId = id;
         SelectedRoom = Rooms.Where(r => r.Id == SelectedRoomId).FirstOrDefault();
-
     }
 
     private async Task UpdateDate(DateOnly date)
     {
-
         Date = date;
         Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{Date?.Month}/{Date?.Day}/{Date?.Year}");
+    }
+
+    private async Task UpdateSelectedTimeBlock(TimeAvailability timeblock)
+    {
+        SelectedTimeBlock = timeblock;
     }
 }
 
