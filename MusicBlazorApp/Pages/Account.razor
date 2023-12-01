@@ -3,12 +3,14 @@
 @using MusicApi.Request;
 @using MusicBlazorApp.Data;
 @using MusicApi.FrontFacingData;
+@using MusicBlazorApp.State;
 @inject UserManager<IdentityUser> userManager;
 @inject IConfiguration config;
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
 @inject NavigationManager nav;
+@inject UrlState urlState;
 <script src="https://kit.fontawesome.com/6f306315c2.js" crossorigin="anonymous"></script>
 
 <style>
@@ -79,14 +81,19 @@
     public string? phoneNumber { get; set; }
     public IEnumerable<Customer> allCustomers { get; set; }
     public string? name { get; set; }
-    public string? url { get; set; } = "/#";
+    public string? url { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         name = user.Identity.Name;
-        //webState.UrlRedirect 
+
+        if(urlState.Url is not null)
+        {
+            url = urlState.Url;
+            urlState.Url = null;
+        }
         allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
     }
 
@@ -96,8 +103,8 @@
         {
             if (cust.Email == name)
             {
-                //var request = new AddCustomerRequest(cust.Email, firstName, lastName, address, phoneNumber);
-                //var response = await httpClient.PatchAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
+                var request = new AddCustomerRequest(cust.Email, firstName, lastName, address, phoneNumber);
+                var response = await httpClient.PatchAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
             }
         }
     }

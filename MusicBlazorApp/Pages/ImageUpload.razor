@@ -3,6 +3,7 @@
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject IConfiguration config;
+@inject NavigationManager nav
 @using MusicApi.Data;
 @using MusicApi.FrontFacingData;
 
@@ -210,5 +211,6 @@
         await SaveImage();
         selectedItem = null;
         image = null;
+        nav.NavigateTo(nav.Uri, forceLoad: true);
     }
 }
