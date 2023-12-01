@@ -86,7 +86,7 @@
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         name = user.Identity.Name;
-        webState.UrlRedirect 
+        //webState.UrlRedirect 
         allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
     }
 
@@ -96,8 +96,8 @@
         {
             if (cust.Email == name)
             {
-                var request = new AddCustomerRequest(cust.Email, firstName, lastName, address, phoneNumber);
-                var response = await httpClient.PatchAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
+                //var request = new AddCustomerRequest(cust.Email, firstName, lastName, address, phoneNumber);
+                //var response = await httpClient.PatchAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
             }
         }
     }

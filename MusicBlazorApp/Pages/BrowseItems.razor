@@ -42,10 +42,15 @@
                     <hr />
                     <h4>Category</h4>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Guitars
-                        </label>
+                        @foreach (var category in CategoryStrings)
+                        {
+                            <div>
+                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" @onclick="() => FilterItems(category)">
+                                <label class="form-check-label" for="flexCheckDefault"  >
+                                    @category
+                                </label>
+                            </div>
+                        }
                     </div>
                     <hr />
                     <h4>Price</h4>
@@ -105,8 +110,7 @@
                         <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
                         <div class="card-body">
                             <p class="card-text"><strong>$@item.SellPrice</strong></p>
-                            <div class="d-flex justify-content-end">
-                            </div>
+                         
                         </div>
                     </div>
                 }
@@ -126,7 +130,7 @@
 @code {
     public string? SearchQuery { get; set; }
 
-    public List<ItemDto>? Items { get; set; }
+    public IEnumerable<ItemDto>? Items { get; set; }
 
     public bool FilterNew { get; set; } = true;
 
@@ -140,6 +144,10 @@
     [Parameter]
     public bool Filter50to100 { get; set; }
 
+    public List<string> CategoryStrings = new();
+
+    public List<(string, bool)> SelectedCategories = new List<(string, bool)>();
+
     protected override async Task OnInitializedAsync()
     {
         Items = new List<ItemDto>();
@@ -149,6 +157,8 @@
         {
             item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
         }
+        CompileCategories();
+
     }
 
     public void HandleClick(int id)
@@ -156,8 +166,9 @@
         NavManager.NavigateTo($"/View-Item/{id}");
     }
 
-    public void FilterItems()
+    public async Task FilterItems()
     {
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
         if (FilterLt50)
         {
             Items = Items.Where(i => i.SellPrice <= 50).ToList();
@@ -166,5 +177,62 @@
         {
             Items = Items.Where(i => i.SellPrice >= 50).ToList();
         }
+        // if (CategoryStrings.Count > 0)
+        // {
+        //     foreach (var str in CategoryStrings)
+        //     {
+        //         Items = Items.Where(i => i.ItemCategories.Contains(str));
+        //     }
+        // }
+
     }
+
+    public async Task FilterItems(string categoryName)
+    {
+        Items = Items.Where(i => i.ItemCategories.Contains(categoryName));
+    }
+
+    public async Task CompileCategories()
+    {
+        foreach (var item in Items)
+        {
+            if (item.ItemCategories.Count > 0)
+            {
+                foreach (var cat in item.ItemCategories)
+                {
+                    if (!CategoryStrings.Contains(cat))
+                    {
+                        CategoryStrings.Add(cat);
+                    }
+                }
+            }
+        }
+    }
+
+    public void UpdateSelectedCategories(string selectedCategory)
+    {
+        // foreach (var tup in SelectedCategories)
+        // {
+        //     // if the category names match, and the item is already selected, remove :)
+        //     if (tup.Item1 == selectedCategory && tup.Item2 == true)
+        //     {
+        //         SelectedCategories.RemoveAll(item => item.Item1 == selectedCategory);
+        //     }
+        //     else if (tup.Item1 == selectedCategory && tup.Item2 == false)
+        //     {
+        //         SelectedCategories.RemoveAll(item => item.Item1 == selectedCategory);
+        //     }
+        // }
+
+        if (SelectedCategories.Any(m => m.Item1 == selectedCategory))
+        {
+            SelectedCategories.Add((selectedCategory, true));
+        }
+        else
+        {
+            SelectedCategories.RemoveAll(item => item.Item1 == selectedCategory);
+        }
+
+    }
+
 }
