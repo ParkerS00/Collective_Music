@@ -229,6 +229,9 @@ else
     [Parameter]
     public int ItemId { get; set; }
 
+    [Parameter]
+    public string Value { get; set; }
+
     public IEnumerable<ReviewDto>? Reviews { get; set; }
 
     public ItemDto Item { get; set; }
@@ -256,6 +259,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Value = nav.Uri;
+
         Item = await httpClient.GetFromJsonAsync<ItemDto>($"{config[Constants.ApiEndpoint]}/Items/{ItemId}");
 
         if (Item is not null)
