@@ -3,11 +3,13 @@
 @using MusicApi.Request;
 @using MusicBlazorApp.Data;
 @using MusicApi.FrontFacingData;
+@using MusicBlazorApp.State;
 @inject UserManager<IdentityUser> userManager;
 @inject IConfiguration config;
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
+@inject CartState cartState;
 
 <script src="https://kit.fontawesome.com/6f306315c2.js" crossorigin="anonymous"></script>
 <PageTitle>Collaborative Music - Home</PageTitle>
@@ -16,7 +18,10 @@
     @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
 
-
+@foreach(var item in cartState.SelectedItems)
+{
+    <div>@item.ItemName</div>
+}
 
 <!-- Hero -->
 <div class="hero-bar row align-items-center">
