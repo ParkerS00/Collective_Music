@@ -8,7 +8,7 @@
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
-@inject NavigationManager NavManager;
+@inject NavigationManager nav;
 
 
 
@@ -326,6 +326,6 @@ else
 
     public void HandleRentClick(int ItemId)
     {
-        NavManager.NavigateTo($"/Rent-Item/{ItemId}");
+        nav.NavigateTo($"/Rent-Item/{ItemId}");
     }
 }
