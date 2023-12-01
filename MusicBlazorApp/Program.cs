@@ -28,6 +28,7 @@ services.AddAuthentication().AddGoogle(googleOptions =>
 builder.Services.AddDbContext<MusicDbContext>(config => config.UseNpgsql(builder.Configuration["MusicDB"]));
 
 builder.Services.AddScoped<CartState>();
+builder.Services.AddScoped<UrlState>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>
     (options => options.SignIn.RequireConfirmedAccount = true)
     .AddDefaultUI()
