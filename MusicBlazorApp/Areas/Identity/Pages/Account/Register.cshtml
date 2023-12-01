@@ -20,15 +20,56 @@
     }
 
     #registerSubmit {
-        outline:none;
+        outline: none;
         background-color: #6F1218;
         color: white;
     }
 
-    .btn-primary{
-        border-color:black;
+    .btn-primary {
+        border-color: black;
     }
 
+    #footer {
+        background-color: #19222D;
+        color: white;
+        padding: 20px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+    }
+
+    .content {
+        text-align: left;
+    }
+
+    .name,
+    .address {
+        margin-left: 15em;
+    }
+
+    .login-with-google-btn {
+        transition: background-color .3s, box-shadow .3s;
+        padding: 12px 16px 12px 42px;
+        border: none;
+        border-radius: 3px;
+        box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+        color: #757575;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+        background-color: white;
+        background-repeat: no-repeat;
+        background-position: 12px 11px;
+    }
+
+    @@media (max-width: 800px) {
+        #footer {
+            display: none;
+            visibility: hidden;
+        }
+    }
 </style>
 
 <div class="nav_home">
@@ -58,26 +99,26 @@
                     <h2>Create a new account.</h2>
                     <hr />
                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-@*                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name" @bind-value="" />
-                        <label>First Name</label>
+                    @*                     <div class="form-floating mb-3">
+                    <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name" @bind-value="" />
+                    <label>First Name</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name" />
-                        <label>Last Name</label>
+                    <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name" />
+                    <label>Last Name</label>
                     </div> *@
                     <div class="form-floating mb-3">
                         <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                         <label asp-for="Input.Email">Email</label>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
-@*                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Address" />
-                        <label >Address</label>
+                    @*                     <div class="form-floating mb-3">
+                    <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Address" />
+                    <label >Address</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" />
-                        <label >Phone Number</label>
+                    <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" />
+                    <label >Phone Number</label>
                     </div> *@
                     <div class="form-floating mb-3">
                         <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
@@ -91,36 +132,47 @@
                     </div>
                     <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
                 </form>
-                    @{
-                        if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                        {
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                            <p>
+                                There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                    article
+                                    about setting up this ASP.NET application to support logging in via external services
+                                </a>.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <h2>Log In With External Account.</h2>
+                            <hr />
                             <div>
                                 <p>
-                                    There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                        article
-                                        about setting up this ASP.NET application to support logging in via external services
-                                    </a>.
+                                    @foreach (var provider in Model.ExternalLogins!)
+                                    {
+                                        <button type="submit" class="login-with-google-btn" name="provider" value="@provider.Name">Sign in with Google</button>
+                                    }
                                 </p>
                             </div>
-                        }
-                        else
-                        {
-                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                            <h2>Use another service to register.</h2>
-                            <hr />
-                                <div>
-                                    <p>
-                                        @foreach (var provider in Model.ExternalLogins!)
-                                        {
-                                            <button id="registerSubmit" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                        }
-                                    </p>
-                                </div>
-                            </form>
-                        }
+                        </form>
                     }
+                }
             </div>
         </center>
+    </div>
+    <div id="footer">
+        <div class="row g-0">
+            <div class="name col my-5" style="border-right: solid 1px white;">
+                <h2 class="name2"><strong>Collaborative <br />Music <a href="/imageupload" style="text-decoration:none; color:white;">©</a> </strong></h2>
+
+            </div>
+            <div class="address col my-5">
+                <p>54 N Main St<br />Ephraim, Utah<br />84337<br />(435) 111-1234</p>
+            </div>
+        </div>
     </div>
 </body>
 
