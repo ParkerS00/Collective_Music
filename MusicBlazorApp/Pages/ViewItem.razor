@@ -11,6 +11,7 @@
 @inject IHostEnvironment Environment;
 @inject NavigationManager nav;
 @inject CartState cartState;
+@inject UrlState urlState;
 
 
 
@@ -117,7 +118,7 @@
                 }
                 else if (CurrentUserName is null)
                 {
-                    <span class="mx-3"><a href="/Account">Finish Setting Up Your Account To Leave A Review</a></span>
+                    <span class="mx-3" @onclick="() => urlState.Url = CurrentUrl"><a href="/Account">Finish Setting Up Your Account To Leave A Review</a></span>
                 }
                 else if (ItemAverageRating != 0)
                 {
@@ -139,11 +140,11 @@
                     {
                         @if (CurrentUserId == 0)
                         {
-                            <div class="red-button"><h5><a href="/Identity/Account/Login">Purchase</a></h5></div>
+                            <div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Identity/Account/Login">Purchase</a></h5></div>
                         }
                         else
                         {
-                            <div class="red-button"><h5><a href="/Account">Purchase</a></h5></div>
+                            <div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Account">Purchase</a></h5></div>
                         }
                     }
                     else
@@ -258,8 +259,8 @@ else
     [Parameter]
     public int ItemId { get; set; }
 
-    [Parameter]
-    public string Value { get; set; }
+
+    public string? CurrentUrl { get; set; }
 
     public IEnumerable<ReviewDto>? Reviews { get; set; }
 
@@ -292,7 +293,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Value = nav.Uri;
+        CurrentUrl = nav.Uri;
 
         Item = await httpClient.GetFromJsonAsync<ItemDto>($"{config[Constants.ApiEndpoint]}/Items/{ItemId}");
 
