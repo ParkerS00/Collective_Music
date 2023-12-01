@@ -5,25 +5,26 @@
 
 <h3>Cart</h3>
 
-@foreach(var thing in ItemsThatShouldLookGood)
+@foreach(var itemResult in ItemResults)
 {
-    <p>@thing.item.ItemName</p>
-    <p>@thing.Quantity</p>
+    <div><img src="@Path.Combine("css", "images", "itemImages", $"{itemResult.item.PrimaryImagePath}")"></div>
+    <p>@itemResult.item.ItemName</p>
+    <p>@itemResult.Quantity</p>
 }
 
 
 @code {
 
-    public IEnumerable<ItemResults> ItemsThatShouldLookGood { get; set; }
+    public IEnumerable<ItemResult> ItemResults { get; set; }
 
     protected override Task OnInitializedAsync()
     {
         var Items = cartState.SelectedItems.GroupBy(s => s.Id).Select(s =>
-               new ItemResults(item: s.First(), Quantity: s.Count()));
-        ItemsThatShouldLookGood = Items;
+               new ItemResult(item: s.First(), Quantity: s.Count()));
+        ItemResults = Items;
         return base.OnInitializedAsync();
     }
 
-    public record ItemResults(ItemDto item, int Quantity);
+    public record ItemResult(ItemDto item, int Quantity);
 }
 
