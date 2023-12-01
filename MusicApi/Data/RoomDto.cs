@@ -4,6 +4,7 @@ namespace MusicApi.Data;
 
 public class RoomDto
 {
+    public int Id { get; set; }
     public string RoomName { get; set; }
 
     public int MaxCapacity { get; set; }
@@ -37,6 +38,7 @@ public class RoomDto
             }
             
         }
+        Id = room.Id;
         TimeFrames = timeAvailability;
         RoomName = room.RoomName;
         MaxCapacity = (int)room.MaxCapacity;
