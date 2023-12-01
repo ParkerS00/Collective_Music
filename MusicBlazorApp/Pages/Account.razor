@@ -8,6 +8,7 @@
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
+@inject NavigationManager nav;
 <script src="https://kit.fontawesome.com/6f306315c2.js" crossorigin="anonymous"></script>
 
 <style>
@@ -61,7 +62,7 @@
                         <input type="text" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" @bind-value="phoneNumber"/>
                         <label>Phone Number</label>
                     </div>
-                    <a href="javascript:window.history.back();"><button type="submit" class="w-100 btn btn-lg btn-primary" @onclick="SubmitUser">Save</button></a>
+                    <a href="@url"><button type="submit" class="w-100 btn btn-lg btn-primary" @onclick="SubmitUser">Save</button></a>
                 </form>
 
             </div>
@@ -78,13 +79,14 @@
     public string? phoneNumber { get; set; }
     public IEnumerable<Customer> allCustomers { get; set; }
     public string? name { get; set; }
+    public string? url { get; set; } = "/#";
 
     protected override async Task OnInitializedAsync()
     {
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         name = user.Identity.Name;
-
+        webState.UrlRedirect 
         allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
     }
 
@@ -99,5 +101,4 @@
             }
         }
     }
-
 }
