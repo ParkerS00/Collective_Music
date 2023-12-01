@@ -1,0 +1,29 @@
+﻿@page "/cart"
+@using MusicApi.Data;
+@using MusicBlazorApp.State;
+@inject CartState cartState
+
+<h3>Cart</h3>
+
+@foreach(var thing in ItemsThatShouldLookGood)
+{
+    <p>@thing.item.ItemName</p>
+    <p>@thing.Quantity</p>
+}
+
+
+@code {
+
+    public IEnumerable<ItemResults> ItemsThatShouldLookGood { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        var Items = cartState.SelectedItems.GroupBy(s => s.Id).Select(s =>
+               new ItemResults(item: s.First(), Quantity: s.Count()));
+        ItemsThatShouldLookGood = Items;
+        return base.OnInitializedAsync();
+    }
+
+    public record ItemResults(ItemDto item, int Quantity);
+}
+
