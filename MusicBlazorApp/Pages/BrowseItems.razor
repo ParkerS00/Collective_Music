@@ -81,19 +81,26 @@
 
         <div class="p-4 d-flex flex-wrap flex-row" style="background-color: #EEEEEE; margin-right: 100px;">
             <!-- ITEMS -->
-            @if (Items is not null && Items.Count() > 0)
+            @if (Items is not null)
             {
                 @foreach (var item in Items)
                 {
                     <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;" @onclick="() => HandleClick(item.Id)">
-                        @if(item.Quantity == 0)
+                        @if (item.PrimaryImagePath != "css\\images\\itemImages")
                         {
-                            <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0);">
-                            <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
+                            @if (item.Quantity == 0)
+                            {
+                                <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0);">
+                                <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
+                            }
+                            else
+                            {
+                                <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px;">
+                            }
                         }
                         else
                         {
-                            <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px;"> 
+                            <img class="card-img-top" src="https://dummyimage.com/400x500/595959/fff&text=no_image" alt="@item.ItemName" style="border-radius: 0px;">
                         }
                         <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
                         <div class="card-body">
