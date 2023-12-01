@@ -8,6 +8,7 @@
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
+@inject NavigationManager nav;
 
 
 
@@ -320,5 +321,6 @@ else
         var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/review/{request}", request);
 
         TogglePopUp();  // close popup
+        nav.NavigateTo(nav.Uri, forceLoad: true);
     }
 }
