@@ -33,3 +33,24 @@
 
 </body>
 </html>
+
+<!-- Load Font Awesome -->
+<script src="https://kit.fontawesome.com/6f306315c2.js" crossorigin="anonymous"></script>
+
+<!-- Initialize Font Awesome -->
+<script>
+    window.onload = function () {
+        // Initialize Font Awesome after the window loads
+        // Replace "your-kit-code" with your actual Kit Code
+        window.FontAwesomeKitConfig = {
+            kitId: 'your-kit-code',
+            scriptTimeout: 3000, // adjust this value if needed
+            async: true
+        };
+        // Initialize Font Awesome
+        const script = document.createElement('script');
+        script.src = 'https://kit.fontawesome.com/your-kit-code.js';
+        script.defer = true;
+        document.head.appendChild(script);
+    };
+</script>
