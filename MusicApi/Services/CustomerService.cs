@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using MusicBlazorApp.Data;
 
 namespace MusicApi.Services;
@@ -26,4 +27,24 @@ public class CustomerService : ICustomerService<Customer>
         await context.SaveChangesAsync();
         return customer;
     }
+    
+    public async Task<Customer> Update(Customer customer)
+    {
+        //Get item from db
+        var context = _contextFactory.CreateDbContext();
+        var cuc = await context.Customers.Where(c => c.Email == customer.Email).FirstOrDefaultAsync();
+
+        //alter item from db
+        cuc.FirstName = customer.FirstName;
+        cuc.LastName = customer.LastName;
+        cuc.Address = customer.Address;
+        cuc.PhoneNumber = customer.PhoneNumber;
+
+        //Put back in the database
+        context.Customers.Update(cuc);
+        await context.SaveChangesAsync();
+
+        return cuc;
+    }
+
 }
