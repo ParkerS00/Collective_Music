@@ -365,4 +365,9 @@ else
         }
         ShowPopup = false;
     }
+
+    public void HandleRentClick(int ItemId)
+    {
+        nav.NavigateTo($"/Rent-Item/{ItemId}");
+    }
 }
