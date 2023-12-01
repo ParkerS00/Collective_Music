@@ -23,6 +23,8 @@ public class ItemDto
 
     public List<string>? ItemStatuses { get; set; }
 
+    public int? Quantity { get; set; } 
+
     public List<string>? ItemCategories { get; set; }
 
     public IEnumerable<ReviewDto>? Reviews { get; set; }
@@ -40,12 +42,14 @@ public class ItemDto
         if (item.ItemStatuses != null)
         {
             ItemStatuses = item.ItemStatuses.Select(x => x.Status.StatusName).ToList();
+            Quantity = item.ItemStatuses.Sum(x => x.Quantity);
         }
 
         if (item.ItemCategories != null)
         {
             ItemCategories = item.ItemCategories.Select(x => x.Category.CategoryName).ToList();
         }
+
 
         if (item.Reviews != null)
         {

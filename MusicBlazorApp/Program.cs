@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MusicBlazorApp.Data;
 using MusicApi;
 using Microsoft.AspNetCore.Identity;
+using MusicBlazorApp.State;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ services.AddAuthentication().AddGoogle(googleOptions =>
 
 builder.Services.AddDbContext<MusicDbContext>(config => config.UseNpgsql(builder.Configuration["MusicDB"]));
 
+builder.Services.AddScoped<CartState>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>
     (options => options.SignIn.RequireConfirmedAccount = true)
     .AddDefaultUI()
