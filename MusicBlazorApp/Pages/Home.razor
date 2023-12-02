@@ -96,6 +96,11 @@
 
 @code
 {
+    public string userEmailAddress { get; set; }
+    public bool notFound { get; set; } = false;
+
+    public IEnumerable<ItemDto>? Items { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var authstate = await auth.GetAuthenticationStateAsync();
