@@ -100,6 +100,8 @@
     public string userEmailAddress { get; set; }
     public bool notFound { get; set; } = false;
 
+    public IEnumerable<ItemDto>? Items { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var authstate = await auth.GetAuthenticationStateAsync();
@@ -131,4 +133,22 @@
             }
         }
     }
+
+    // public void GetAverageRating()
+    // {
+    //     if (Item.Reviews.Count() > 0)
+    //     {
+    //         decimal sum = 0;
+    //         foreach (var rating in Item.Reviews)
+    //         {
+    //             sum += (decimal)rating.Rating;
+    //         }
+
+    //         ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
+    //     }
+    //     else
+    //     {
+    //         ItemAverageRating = 0;
+    //     }
+    // }
 }
