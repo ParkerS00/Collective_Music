@@ -1,4 +1,10 @@
-﻿
+﻿@using MusicApi.Data;
+@using MusicBlazorApp.State;
+@inject CartState cartState;
+@inject HttpClient httpClient;
+@inject AuthenticationStateProvider auth;
+@inject IConfiguration config;
+
 <div class="nav_home">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -30,5 +36,27 @@
 </div>
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        if (cartState.SelectedItems is null)
+        {
+            var authstate = await auth.GetAuthenticationStateAsync();
+            var user = authstate.User;
+            var name = user.Identity?.Name;
 
+            if (name is null)
+            {
+                cartState.SelectedItems = new List<MusicApi.Dtos.CartItemDto>();
+                return;
+            }
+
+            var customer = await httpClient.GetFromJsonAsync<Customer?>($"{config[Constants.ApiEndpoint]}/customer/{name}");
+
+            if (customer is not null)
+            {
+                cartState.SelectedItems = await httpClient.GetFromJsonAsync<List<MusicApi.Dtos.CartItemDto>>($"{config[Constants.ApiEndpoint]}/cart/{name}");
+                //var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
+            }
+        }
+    }
 }

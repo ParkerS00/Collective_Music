@@ -13,7 +13,6 @@
 @inject NavigationManager NavManager;
 
 
-
 <PageTitle>Collaborative Music - Home</PageTitle>
 
 <!-- Hero -->
@@ -195,39 +194,20 @@
 
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
-        var name = user.Identity.Name;
+        var name = user.Identity?.Name;
 
-        var allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
-
-        foreach (var item in Items)
+        if (name is null)
         {
-            item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
+            return;
         }
 
-        foreach (var cust in allCustomers)
-        {
-            if (cust.Email == name)
-            {
-                notFound = false;
-                return;
-            }
-            else
-            {
-                userEmailAddress = name;
-                notFound = true;
-            }
+        var customer = await httpClient.GetFromJsonAsync<Customer?>($"{config[Constants.ApiEndpoint]}/customer/{name}");
 
-        }
-        if (notFound)
+        if (customer is null)
         {
-            if (userEmailAddress is not null)
-            {
-                var request = new AddCustomerRequest(userEmailAddress);
-                var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
-            }
+            var request = new AddCustomerRequest(name);
+            var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
         }
-
-        OrderByRating();
     }
 
 
