@@ -29,6 +29,8 @@ public class ItemDto
 
     public IEnumerable<ReviewDto>? Reviews { get; set; }
 
+    public decimal? AverageItemRating { get; set; }
+
     public ItemDto(Item item)
     {
         Id = item.Id;
@@ -69,6 +71,18 @@ public class ItemDto
                 PrimaryImagePath = path.Filepath.ToString();
             }
             ImageFilePaths.Add(path.Filepath.ToString());
+        }
+
+
+        if (item.Reviews.Count() > 0 && Quantity > 0)
+        {
+            decimal sum = 0;
+            foreach (var rating in item.Reviews)
+            {
+                sum += (decimal)rating.Rating;
+            }
+
+            AverageItemRating = Math.Round((sum / (decimal)item.Reviews.Count()), 1);
         }
     }
 

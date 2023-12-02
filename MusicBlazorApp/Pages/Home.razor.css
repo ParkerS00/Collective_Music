@@ -100,3 +100,16 @@
     color: black;
     margin-right: 175px;
 }
+
+
+.card-container {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent items from wrapping */
+    max-width: 100%; /* Limit width to parent container */
+}
+
+.card {
+    /* Your existing card styles */
+}
+
+
