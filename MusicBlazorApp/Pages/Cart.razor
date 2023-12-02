@@ -3,29 +3,50 @@
 @using MusicBlazorApp.State;
 @using MusicApi.Dtos;
 @inject CartState cartState
+@inject AuthenticationStateProvider auth;
 
 <h3>Cart</h3>
 
-@foreach(var itemResult in ItemResults)
+@if(cartState.SelectedItems is not null)
 {
-    <div><img src="@Path.Combine("css", "images", "itemImages", $"{itemResult.item.Item.PrimaryImagePath}")"></div>
-    <p>@itemResult.item.Item.ItemName</p>
-    <p>@itemResult.Quantity</p>
+    @if(cartState.SelectedItems.Count == 0)
+    {
+        <p>No Items</p>
+        <img src="https://i.imgflip.com/6cvg21.jpg" />
+    }
+    else
+    {
+        @foreach (var itemResult in cartState.SelectedItems)
+        {
+            <div><img src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")"></div>
+            <p>@itemResult.Item.ItemName</p>
+            <p>@itemResult.Quantity</p>
+        }    
+    }
 }
+
+
+
 
 
 @code {
 
-    public IEnumerable<ItemResult> ItemResults { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        var Items = cartState.SelectedItems.GroupBy(s => s.Item.Id).Select(s =>
-               new ItemResult(item: s.First(), Quantity: s.Count()));
-        ItemResults = Items;
-        return base.OnInitializedAsync();
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var name = user.Identity.Name;
+
+        if(name is null)
+        {
+            name = "";
+        }
+        //TODO: CHANGE THIS TO BE THE USERS EMAIL 
+        await cartState.RefreshCart(name);
+        //var Items = cartState.SelectedItems;
+        //ItemResults = Items;
     }
 
-    public record ItemResult(CartItemDto item, int Quantity);
 }
 

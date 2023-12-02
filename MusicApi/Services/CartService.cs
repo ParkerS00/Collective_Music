@@ -22,7 +22,8 @@ public class CartService
 
         List<Inventory> invItems = await context.Inventories
             .Include(i => i.Status)
-            .Where(i => i.ItemId == request.ItemId && i.Status.StatusName == request.StatusName)
+            .Include(i => i.CartItem)
+            .Where(i => i.ItemId == request.ItemId && i.Status.StatusName == request.StatusName && i.CartItem == null)
             .ToListAsync();
 
         int customerId = await context.Customers
@@ -35,6 +36,7 @@ public class CartService
             return false;
         }
 
+        
         for(int i = 0; i < request.Quantity; i++)
         {
             var newCartItem = new CartItem()

@@ -250,7 +250,7 @@ else
                 <!-- Edit form for the current user -->
                 <div class="modal-body">
                     <!-- Only show Id if not a new user -->
-                    <div><input class="form-check-input" type="number" @bind="quantity"></div>
+                    <div><input class="form-check-input" placeholder="Quantity" type="number" @bind="quantity"></div>
                     <select @bind=selectedStatus>
                         @foreach(string status in Item.ItemStatuses)
                         {
@@ -337,6 +337,11 @@ else
                 CurrentUserId = cust.Id;
                 CurrentUserName = cust.FirstName;
             }
+        }
+
+        if(Item is not null)
+        {
+            selectedStatus = Item.ItemStatuses.First();
         }
     }
 

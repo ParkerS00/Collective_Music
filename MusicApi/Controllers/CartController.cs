@@ -29,24 +29,23 @@ public class CartController : Controller
     {
         var cartItems = await cartService.GetCartItems(email);
 
-        var quantity = cartItems.GroupBy(c => c.ItemId).Select(c => c.Count());
+        var quantities = cartItems.GroupBy(c => new { c.ItemId, c.StatusId }).Select(c => c.Count());
 
-
-        int count = 0;
         List<CartItemDto> cartItemDtos = new List<CartItemDto>();
-        var inventoryItems = cartItems.GroupBy(c => c.ItemId).FirstOrDefault();
+        var inventoryItems = cartItems.GroupBy(c => new { c.ItemId, c.StatusId }).ToList();
         if(inventoryItems is null) 
         {
             return new List<CartItemDto>();
         }
-        foreach (var cartItem in inventoryItems) 
+
+        int count = 0;
+        foreach(var sum in quantities)
         {
             cartItemDtos.Add(new CartItemDto()
             {
-                Quantity = quantity.ElementAt(count),
-                StatusName = cartItem.Status.StatusName,
-                Item = cartItem.Item.ToItemDto(),
-
+                Quantity = sum,
+                StatusName = inventoryItems.ElementAt(count).First().Status.StatusName,
+                Item = inventoryItems.ElementAt(count).First().Item.ToItemDto()
             });
             count++;
         }
