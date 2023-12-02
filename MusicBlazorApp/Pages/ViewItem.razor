@@ -16,7 +16,7 @@
 
 @if (Item is not null)
 {
-    @if (PopupVisible)
+    @if (ShowReviewPopup)
     {
         <div class="modal" tabindex="-1" style="display:block" role="dialog">
             <div class="modal-dialog">
@@ -31,6 +31,8 @@
                     </div>
                     <!-- Edit form for the current user -->
                     <div class="modal-body">
+
+                   
                         <p>Rating out of 5</p>
                         <input type="number" min="1" max="5" @bind-value="ReviewRating" />
                         <p>Review Text</p>
@@ -43,13 +45,16 @@
                         </button>
 
                         <br />
-                        <span style="color:red">@strError</span>
+                        @if(strError.Length > 0)
+                        {
+                            <span style="color:red">@strError</span>
+                        }
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="overlay d-none" style="background-attachment: fixed; position: absolute; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.5);">
+        @* <div class="overlay d-none" style="background-attachment: fixed; position: absolute; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.5);">
             <div class="p-5" style="position: absolute; height: 500px; width: 600px; background-color: rgba(255, 255, 255, 1); top: 35%; left: 30%; z-index: 1; border-radius: 10px;">
                 <h2>Review Item</h2>
                 <form>
@@ -57,10 +62,14 @@
                     <input type="number" min="1" max="5" />
                     <p>Review Text</p>
                     <input type="text" />
+                    @if(!ValidRevRating)
+                    {
+                        <div class="alert alert-danger">Please enter a valid rating 1-5</div>
+                    }
                 </form>
                 <button class="btn btn-primary" @onclick="TogglePopUp">Submit</button>
             </div>
-        </div>
+        </div> *@
     }
     <div class="row main-container">
         <div class="col-md-6">
@@ -142,7 +151,7 @@
                     }
                     else
                     {
-                        <div class="red-button"><h5 @onclick="() => ShowPopup = true">Purchase</h5></div>
+                        <div class="red-button"><h5 @onclick="() => ShowPurchasePopup = true">Purchase</h5></div>
                     }
                 </div>
             </div>
@@ -187,7 +196,6 @@
                                 @if (rev.Rating >= i)
                                 {
                                     <i class="fa fa-star rating-color"></i>
-
                                 }
                                 else
                                 {
@@ -195,8 +203,6 @@
 
                                 }
                             }
-
-
                             <span class="px-3">@rev.Rating rating out of 5</span>
                         </div>
                         <p class="m-3">@rev.Text</p>
@@ -220,7 +226,7 @@ else
     </div>
 }
 
-@if (ShowPopup)
+@if (ShowPurchasePopup)
 {
     <div class="modal" tabindex="-1" style="display:block" role="dialog">
         <div class="modal-dialog">
@@ -229,7 +235,7 @@ else
                     <h3 class="modal-title">Add New Item</h3>
                     <!-- Button to close the popup -->
                     <button type="button" class="close"
-                    @onclick="() => ShowPopup = false">
+                    @onclick="() => ShowPurchasePopup = false">
                         <span aria-hidden="true">X</span>
                     </button>
                 </div>
@@ -238,7 +244,7 @@ else
                     <!-- Only show Id if not a new user -->
                     <input type="number" @bind="quantity">
                     <button class="btn btn-primary" @onclick="() => AddItemToCart(Item)">Submit</button>
-                    <button class="btn btn-primary" @onclick="() => {ShowPopup = false; quantity = 0;}">Cancel</button>
+                    <button class="btn btn-primary" @onclick="() => {ShowPurchasePopup = false; quantity = 0;}">Cancel</button>
                     <br />
                     @* <span style="color:red">@strError</span> *@
                 </div>
@@ -266,15 +272,15 @@ else
     // Review Stuff
     public decimal? ItemAverageRating { get; set; }
 
-    bool PopupVisible { get; set; }
+    bool ShowReviewPopup { get; set; }
 
-    public string strError { get; set; }
+    public string strError = "";
 
     public string ReviewTxt { get; set; }
 
     public int ReviewRating { get; set; }
 
-    public bool ShowPopup { get; set; }
+    public bool ShowPurchasePopup { get; set; }
 
     public int quantity { get; set; }
 
@@ -283,6 +289,10 @@ else
 
     public int CurrentUserId { get; set; }
     public string CurrentUserName { get; set; }
+
+    public bool ValidRevRating { get; set; }
+
+    public ReviewDto NewReview { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -344,14 +354,16 @@ else
 
     public void TogglePopUp()
     {
-        PopupVisible = !PopupVisible;
+        ShowReviewPopup = !ShowReviewPopup;
     }
 
     public async Task SubmitReview()
     {
+        strError = "";
         if(ReviewRating > 5 || ReviewRating < 1)
         {
-            ShowPopup = false;
+            //ShowReviewPopup = false;
+            strError = "Please enter a valid rating (1 through 5)";
             await Task.CompletedTask;
             return;
         }
@@ -368,7 +380,7 @@ else
         {
             cartState.SelectedItems.Add(itemDto);
         }
-        ShowPopup = false;
+        ShowPurchasePopup = false;
     }
 
     public void HandleRentClick(int ItemId)
