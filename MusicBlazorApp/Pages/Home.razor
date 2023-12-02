@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using MusicApi.Data;
+@using MusicApi.Dtos;
 @using MusicApi.Request;
 @using MusicApi.FrontFacingData;
 @using MusicBlazorApp.State;
@@ -120,4 +121,22 @@
             var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
         }
     }
+
+    //public void GetAverageRating()
+    // {
+    //     if (Item.Reviews.Count() > 0)
+    //     {
+    //         decimal sum = 0;
+    //         foreach (var rating in Item.Reviews)
+    //         {
+    //             sum += (decimal)rating.Rating;
+    //         }
+
+    //         ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
+    //     }
+    //     else
+    //     {
+    //         ItemAverageRating = 0;
+    //     }
+    // }
 }
