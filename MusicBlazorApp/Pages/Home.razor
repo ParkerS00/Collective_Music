@@ -11,7 +11,6 @@
 @inject CartState cartState;
 
 
-
 <PageTitle>Collaborative Music - Home</PageTitle>
 
 <!-- Hero -->
@@ -97,38 +96,23 @@
 
 @code
 {
-    public string userEmailAddress { get; set; }
-    public bool notFound { get; set; } = false;
-
     protected override async Task OnInitializedAsync()
     {
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
-        var name = user.Identity.Name;
+        var name = user.Identity?.Name;
 
-        var allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
-
-        foreach (var cust in allCustomers)
+        if (name is null)
         {
-            if (cust.Email == name)
-            {
-                notFound = false;
-                return;
-            }
-            else
-            {
-                userEmailAddress = name;
-                notFound = true;
-            }
-
+            return;
         }
-        if (notFound)
+
+        var customer = await httpClient.GetFromJsonAsync<Customer?>($"{config[Constants.ApiEndpoint]}/customer/{name}");
+
+        if (customer is null)
         {
-            if (userEmailAddress is not null)
-            {
-                var request = new AddCustomerRequest(userEmailAddress);
-                var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
-            }
+            var request = new AddCustomerRequest(name);
+            var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
         }
     }
 }

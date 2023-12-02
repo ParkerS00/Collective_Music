@@ -8,8 +8,8 @@
 
 @foreach(var itemResult in ItemResults)
 {
-    <div><img src="@Path.Combine("css", "images", "itemImages", $"{itemResult.item.PrimaryImagePath}")"></div>
-    <p>@itemResult.item.ItemName</p>
+    <div><img src="@Path.Combine("css", "images", "itemImages", $"{itemResult.item.Item.PrimaryImagePath}")"></div>
+    <p>@itemResult.item.Item.ItemName</p>
     <p>@itemResult.Quantity</p>
 }
 
@@ -20,12 +20,12 @@
 
     protected override Task OnInitializedAsync()
     {
-        var Items = cartState.SelectedItems.GroupBy(s => s.Id).Select(s =>
+        var Items = cartState.SelectedItems.GroupBy(s => s.Item.Id).Select(s =>
                new ItemResult(item: s.First(), Quantity: s.Count()));
         ItemResults = Items;
         return base.OnInitializedAsync();
     }
 
-    public record ItemResult(ItemDto item, int Quantity);
+    public record ItemResult(CartItemDto item, int Quantity);
 }
 

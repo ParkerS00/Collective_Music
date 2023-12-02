@@ -242,7 +242,13 @@ else
                 <!-- Edit form for the current user -->
                 <div class="modal-body">
                     <!-- Only show Id if not a new user -->
-                    <input type="number" @bind="quantity">
+                    <input class="form-check-input" type="number" @bind="quantity">
+                    <select >
+                        @foreach(string status in Item.ItemStatuses)
+                        {
+                            <option @bind="selectedStatus">@status</option>
+                        }
+                    </select>
                     <button class="btn btn-primary" @onclick="() => AddItemToCart(Item)">Submit</button>
                     <button class="btn btn-primary" @onclick="() => {ShowPurchasePopup = false; quantity = 0;}">Cancel</button>
                     <br />
@@ -258,6 +264,7 @@ else
     [Parameter]
     public int ItemId { get; set; }
 
+    public string selectedStatus { get; set; }
 
     public string? CurrentUrl { get; set; }
 
@@ -368,18 +375,29 @@ else
             return;
         }
         var request = new AddReviewRequest(Item.Id, CurrentUserId, DateOnly.FromDateTime(DateTime.Now), ReviewTxt, ReviewRating);
-        var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/review/{request}", request);
+        var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/review/{request}/", request);
 
         TogglePopUp();  // close popup
         nav.NavigateTo(nav.Uri, forceLoad: true);
     }
 
-    public void AddItemToCart(ItemDto itemDto)
+    public async Task AddItemToCart(ItemDto itemDto)
     {
-        for(int i = 0; i < quantity; i ++)
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var name = user.Identity.Name;
+
+        AddItemToCartRequest request = new AddItemToCartRequest()
         {
-            cartState.SelectedItems.Add(itemDto);
-        }
+            userEmail = name,
+            ItemId = itemDto.Id,
+            StatusName = selectedStatus,
+            Quantity = quantity
+        };
+        
+        
+
+
         ShowPurchasePopup = false;
     }
 

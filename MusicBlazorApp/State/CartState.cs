@@ -4,6 +4,6 @@ namespace MusicBlazorApp.State
 {
     public class CartState
     {
-        public List<ItemDto> SelectedItems { get; set; } = new List<ItemDto>();
+        public List<CartItemDto>? SelectedItems { get; set; } = null;
     }
 }

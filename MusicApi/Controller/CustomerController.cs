@@ -3,6 +3,8 @@
 using MusicApi.Data;
 using MusicApi.Request;
 using MusicApi.Services;
+using System.Net.Http;
+using System.Runtime.InteropServices;
 
 [Route("[controller]")]
 [ApiController]
@@ -15,6 +17,21 @@ public class CustomerController : Controller
     {
         this.logger = logger;
         this.customerService = customerService;
+    }
+
+    [HttpGet("{email}")]
+    public async Task<Customer?> Get(string name)
+    {
+        var allCustomers = await customerService.GetAll();
+
+        try
+        {
+            return allCustomers.Where(a => a.Email == name).First();
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     [HttpGet()]
