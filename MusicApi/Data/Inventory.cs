@@ -15,6 +15,8 @@ public partial class Inventory
 
     public bool? IsPurchased { get; set; }
 
+    public virtual CartItem? CartItem { get; set; }
+
     public virtual Item? Item { get; set; }
 
     public virtual ICollection<ItemRental> ItemRentals { get; set; } = new List<ItemRental>();

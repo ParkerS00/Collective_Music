@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MusicApi.Data;
 
-public class MusicDbContext : IdentityDbContext
+public partial class MusicDbContext : IdentityDbContext
 {
     public MusicDbContext()
     {
@@ -18,6 +18,8 @@ public class MusicDbContext : IdentityDbContext
 
 
     public virtual DbSet<Brand> Brands { get; set; }
+
+    public virtual DbSet<CartItem> CartItems { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
 
@@ -56,10 +58,12 @@ public class MusicDbContext : IdentityDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-       /* modelBuilder
+        /*modelBuilder
             .HasPostgresExtension("pg_catalog", "azure")
             .HasPostgresExtension("pg_catalog", "pgaadauth")
             .HasPostgresExtension("pg_cron");*/
+
+        
 
         modelBuilder.Entity<Brand>(entity =>
         {
@@ -72,6 +76,27 @@ public class MusicDbContext : IdentityDbContext
             entity.Property(e => e.BrandName)
                 .HasMaxLength(50)
                 .HasColumnName("brand_name");
+        });
+
+        modelBuilder.Entity<CartItem>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("cart_items_pkey");
+
+            entity.ToTable("cart_items");
+
+            entity.HasIndex(e => e.InventoryId, "cart_items_inventory_id_key").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.InventoryId).HasColumnName("inventory_id");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.CartItems)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("cart_items_customer_id_fkey");
+
+            entity.HasOne(d => d.Inventory).WithOne(p => p.CartItem)
+                .HasForeignKey<CartItem>(d => d.InventoryId)
+                .HasConstraintName("cart_items_inventory_id_fkey");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -451,4 +476,5 @@ public class MusicDbContext : IdentityDbContext
 
         base.OnModelCreating(modelBuilder);
     }
+
 }

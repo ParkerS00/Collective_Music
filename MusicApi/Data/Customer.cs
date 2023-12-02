@@ -19,6 +19,8 @@ public partial class Customer
 
     public int? RewardPoints { get; set; }
 
+    public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+
     public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
 
     public virtual ICollection<Rental> Rentals { get; set; } = new List<Rental>();
