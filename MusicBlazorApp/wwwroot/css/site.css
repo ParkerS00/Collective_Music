@@ -38,6 +38,14 @@ a, .btn-link {
     color: red;
 }
 
+.fa-star {
+    color: grey;
+}
+
+.rating-color {
+    color: goldenrod;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

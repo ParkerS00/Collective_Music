@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using MusicApi.Data;
+@using MusicApi.Dtos;
 @using MusicApi.Request;
 @using MusicApi.FrontFacingData;
 @using MusicBlazorApp.State;
@@ -9,6 +10,7 @@
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
 @inject CartState cartState;
+@inject NavigationManager NavManager;
 
 
 
@@ -24,13 +26,92 @@
         <div class="d-flex flex-column align-items-lg-center">
             <h1>Collaborative Music</h1>
             <h3>The one-stop music shop</h3>
+            @* <p>Shop Now</p> *@
         </div>
     </div>
     <div class="col-md-3"></div>
 </div>
 
+<h2>Our Highest Rated Items</h2>
+<div class="p-4">
+   @*  style="overflow-x: auto;" *@
+    <div class="d-flex flex-wrap flex-row">
+        @if (Items is not null)
+        {
+            @foreach (var item in TopRatedItems)
+            {
+                <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px; box-shadow: 3px 3px 10px lightgray;" @onclick="() => HandleClick(item.Id)">
+                    @if (item.PrimaryImagePath != "css\\images\\itemImages")
+                    {
+                        @if (item.Quantity == 0)
+                        {
+                            <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0);">
+                            <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px;">
+                        }
+                    }
+                    else
+                    {
+                        <img class="card-img-top" src="https://dummyimage.com/400x500/595959/fff&text=no_image" alt="@item.ItemName" style="border-radius: 0px;">
+                    }
+
+                    <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
+                    <div class="card-body">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            @if (item.AverageItemRating >= i)
+                            {
+                                <i class="fa fa-star rating-color"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-star"></i>
+                            }
+                        }
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>$@item.SellPrice</strong></p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+<!-- Rent a recording studio -->
+<div class="" style="background-color: #11151D;">
+    <div class="row m-5">
+        <div class="col-md-6 p-5">
+            <img class="img-fluid img" src="css/images/Recording-Studio.jpg" style="max-width: 600px" />
+            <img class="img-fluid img" src="css/images/Recording-Studio2.jpg" style="max-width: 600px;" />
+        </div>
+        <div class="col-md-6 p-5" style="color: white;">
+            <h3>Rent a Collaborative Music Space </h3>
+            <p>We offer many options for renting spaces</p>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="d-none" style="background: linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.5)), url(css/images/Recording-Studio.jpg); height: 450px; background-position: 50% 75%;">
+    <br />
+    <center class="mt-5"><h1 style="color: white;">Rent a Recording Studio</h1></center>
+    <center>
+        <div class="mt-4" style="background-color: black; color: white; width: 85%; padding: 100px;">
+            <p>Collaborate and Practice music together</p>
+        </div>
+    </center>
+
+</div>
+
+
 <!-- Three Button Section -->
-<div class="button-section mx-5">
+<div class="button-section mx-5 d-none">
     <center class="service-tag">
         <h2>Services</h2>
     </center>
@@ -55,15 +136,18 @@
                 <center><i class="ikons fa-solid fa-microphone-lines mt-4"></i></center>
             </div>
         </a>
-
     </div>
 </div>
+
+<!-- About Us -->
+<center><h1>About</h1></center>
+<p class="lead" style="max-width: 80%; text-align: center;">Collaborative music is the one stop shop to creating a collaborative space idk blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec massa in neque maximus egestas. Cras semper, justo eu sagittis rhoncus, est augue accumsan lorem, vel ultricies urna sem id augue. Donec eleifend eleifend ornare. Aliquam eu vestibulum mauris. Vestibulum fermentum sit amet dolor eget consequat. Sed vitae nisl erat. Sed vitae magna venenatis, luctus magna ut, facilisis turpis. Aenean facilisis sit amet lacus id accumsan. Aenean erat nisi, consequat sit amet lobortis non, sagittis blandit justo. Duis tortor erat, placerat a libero varius, scelerisque ornare ante. Duis ultricies finibus tortor, lacinia efficitur magna tempus et. Donec sit amet lectus nunc. Nulla sed nisi ut elit vestibulum egestas. Donec nec neque ipsum. Ut vitae pretium velit. Quisque vel arcu non metus sodales luctus sed non nunc.</p>
 
 <!-- How to Rent -->
 <div>
     <div class="rent-bar w-100">
         <center>
-            <h2 class="how-to-rent">How to Rent</h2>
+            <h2 class="how-to-rent">How to Rent Items</h2>
         </center>
         <div class="how-to-rent-wrapper d-flex flex-row justify-content-around flex-sm-wrap">
             <div class="rent-descriptions m-2 p-5">
@@ -100,15 +184,25 @@
     public string userEmailAddress { get; set; }
     public bool notFound { get; set; } = false;
 
-    public IEnumerable<ItemDto>? Items { get; set; }
+    public IEnumerable<ItemDto>? Items = new List<ItemDto>();
+
+    public IEnumerable<ItemDto>? TopRatedItems = new List<ItemDto>();
 
     protected override async Task OnInitializedAsync()
     {
+
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
+
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         var name = user.Identity.Name;
 
         var allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
+
+        foreach (var item in Items)
+        {
+            item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
+        }
 
         foreach (var cust in allCustomers)
         {
@@ -132,23 +226,21 @@
                 var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
             }
         }
+
+        OrderByRating();
     }
 
-    // public void GetAverageRating()
-    // {
-    //     if (Item.Reviews.Count() > 0)
-    //     {
-    //         decimal sum = 0;
-    //         foreach (var rating in Item.Reviews)
-    //         {
-    //             sum += (decimal)rating.Rating;
-    //         }
 
-    //         ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
-    //     }
-    //     else
-    //     {
-    //         ItemAverageRating = 0;
-    //     }
-    // }
+
+    public void OrderByRating()
+    {
+        Items = Items.OrderByDescending(i => i.AverageItemRating);
+        TopRatedItems = Items.Take(5);
+
+    }
+
+    public void HandleClick(int id)
+    {
+        NavManager.NavigateTo($"/View-Item/{id}");
+    }
 }

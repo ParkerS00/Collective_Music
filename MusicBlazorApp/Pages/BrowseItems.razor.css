@@ -1,2 +1,8 @@
 ﻿body {
 }
+.fa-star {
+    color: grey;
+}
+.rating-color {
+    color: goldenrod;
+}

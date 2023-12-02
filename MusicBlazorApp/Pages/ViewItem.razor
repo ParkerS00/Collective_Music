@@ -103,32 +103,40 @@
             <h1>@Item.ItemName</h1>
             <p><strong>$@Item.SellPrice</strong></p>
             <div class="ratings my-5">
-                @for (int i = 1; i <= 5; i++)
+                @if(Item.AverageItemRating != 0)
                 {
-                    @if (ItemAverageRating >= i)
+                    @for (int i = 1; i <= 5; i++)
                     {
-                        <i class="fa fa-star rating-color"></i>
-                    } 
-                    else
-                    {
-                        <i class="fa fa-star"></i>
+                        @if (Item.AverageItemRating >= i)
+                        {
+                            <i class="fa fa-star rating-color"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-star"></i>
+                        }
                     }
-                }
-                @if (CurrentUserId == 0)
-                {
-                    <span class="mx-3"><a href="/Identity/Account/Login">Login to leave a review!</a></span>
-                }
-                else if (CurrentUserName is null)
-                {
-                    <span class="mx-3" @onclick="() => urlState.Url = CurrentUrl"><a href="/Account">Finish Setting Up Your Account To Leave A Review</a></span>
-                }
-                else if (ItemAverageRating != 0)
-                {
-                    <span class="mx-3">@ItemAverageRating rating out of 5<br /><a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a></span>
+                    <span class="mx-3">@Item.AverageItemRating rating out of 5</span>
                 }
                 else
                 {
-                    <span class="mx-3">There are no reviews yet<a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a></span>
+                    <p>No reviews yet</p>
+                }
+                @if (CurrentUserId == 0) // not logged in
+                {
+                    <a href="/Identity/Account/Login"><br />Login to leave a review!</a>
+                }
+                else
+                {
+                    @if (CurrentUserName is null) // they are logged in but have no name yet
+                    {
+                        <br /><a href="/Account">Finish Setting Up Your Account To Leave A Review</a>
+                    }
+                    else // they are logged in with correct account settings
+                    {
+                        <br /><a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a>
+                        
+                    }
                 }
             </div>
             <h5><strong>Description</strong></h5>
@@ -323,9 +331,6 @@ else
                 CurrentUserName = cust.FirstName;
             }
         }
-
-
-        GetAverageRating();
     }
 
     public static string UpdateIsFirstImg(bool IsFirstImg)
@@ -334,23 +339,23 @@ else
         return "";
     }
 
-    public void GetAverageRating()
-    {
-        if (Item.Reviews.Count() > 0)
-        {
-            decimal sum = 0;
-            foreach (var rating in Item.Reviews)
-            {
-                sum += (decimal)rating.Rating;
-            }
+    // public void GetAverageRating()
+    // {
+    //     if (Item.Reviews.Count() > 0)
+    //     {
+    //         decimal sum = 0;
+    //         foreach (var rating in Item.Reviews)
+    //         {
+    //             sum += (decimal)rating.Rating;
+    //         }
 
-            ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
-        }
-        else
-        {
-            ItemAverageRating = 0;
-        }
-    }
+    //         ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
+    //     }
+    //     else
+    //     {
+    //         ItemAverageRating = 0;
+    //     }
+    // }
 
     public void TogglePopUp()
     {

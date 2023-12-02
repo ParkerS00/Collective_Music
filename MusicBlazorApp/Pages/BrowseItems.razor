@@ -106,6 +106,20 @@
                         }
                         <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
                         <div class="card-body">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                @if (item.AverageItemRating >= i)
+                                {
+                                    <i class="fa fa-star rating-color"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-star"></i>
+                                }
+                            }
+                        </div>
+
+                        <div class="card-body">
                             <p class="card-text"><strong>$@item.SellPrice</strong></p>
                          
                         </div>
