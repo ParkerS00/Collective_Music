@@ -48,4 +48,20 @@ public class CartService
         await context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<IEnumerable<Inventory>> GetCartItems(string userEmail)
+    {
+        var context = contextFactory.CreateDbContext();
+
+        var selection = await context.Inventories
+            .Include(i => i.Status)
+            .Include(i => i.Item)
+             .ThenInclude(i => i.ItemImages)
+            .Include(i => i.CartItem)
+                .ThenInclude(ct => ct.Customer)
+            .Where(i => i.CartItem.Customer.Email == userEmail)
+            .ToListAsync();
+
+        return selection;
+    }
 }

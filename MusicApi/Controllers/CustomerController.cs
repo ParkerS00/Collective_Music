@@ -19,13 +19,13 @@ public class CustomerController : Controller
     }
 
     [HttpGet("{email}")]
-    public async Task<Customer?> Get(string name)
+    public async Task<Customer?> Get(string email)
     {
         var allCustomers = await customerService.GetAll();
 
         try
         {
-            return allCustomers.Where(a => a.Email == name).First();
+            return allCustomers.Where(a => a.Email == email).First();
         }
         catch
         {

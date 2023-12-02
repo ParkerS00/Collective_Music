@@ -242,11 +242,11 @@ else
                 <!-- Edit form for the current user -->
                 <div class="modal-body">
                     <!-- Only show Id if not a new user -->
-                    <input class="form-check-input" type="number" @bind="quantity">
-                    <select >
+                    <div><input class="form-check-input" type="number" @bind="quantity"></div>
+                    <select @bind=selectedStatus>
                         @foreach(string status in Item.ItemStatuses)
                         {
-                            <option @bind="selectedStatus">@status</option>
+                            <option value="@status">@status</option>
                         }
                     </select>
                     <button class="btn btn-primary" @onclick="() => AddItemToCart(Item)">Submit</button>
@@ -395,7 +395,7 @@ else
             Quantity = quantity
         };
         
-        
+        var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/cart/{request}/", request);
 
 
         ShowPurchasePopup = false;
