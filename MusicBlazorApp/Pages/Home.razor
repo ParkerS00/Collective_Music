@@ -33,7 +33,7 @@
 
 <h2>Our Highest Rated Items</h2>
 <div class="p-4">
-   @*  style="overflow-x: auto;" *@
+   @*style="overflow-x: auto;" *@
     <div class="d-flex flex-wrap flex-row">
         @if (Items is not null)
         {
@@ -196,6 +196,13 @@
         var user = authstate.User;
         var name = user.Identity?.Name;
 
+        OrderByRating();
+
+        foreach (var item in Items)
+        {
+            item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
+        }
+
         if (name is null)
         {
             return;
@@ -216,7 +223,6 @@
     {
         Items = Items.OrderByDescending(i => i.AverageItemRating);
         TopRatedItems = Items.Take(5);
-
     }
 
     public void HandleClick(int id)
