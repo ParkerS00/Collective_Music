@@ -112,4 +112,33 @@
     /* Your existing card styles */
 }
 
+.container {
+    padding: 100px 30px;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.image-stack::after {
+    content: ' ';
+    display: table;
+    clear: both;
+}
+
+.image-stack__item--top {
+
+    float: left;
+    width: 75%;
+}
+
+.image-stack__item--bottom {
+    float: right;
+    width: 66%;
+    margin-left: -100%;
+    padding-top: 15%;
+    // arbitrary position: relative;
+    z-index: 1;
+}
+
+
 
