@@ -1,46 +1,88 @@
 ﻿@page "/my-account"
+@using MusicApi.Data;
+@using MusicApi.Request;
+@using MusicApi.FrontFacingData;
+@using MusicBlazorApp.State;
+@inject UserManager<IdentityUser> userManager;
+@inject IConfiguration config;
+@inject HttpClient httpClient;
+@inject AuthenticationStateProvider auth;
+@inject IHostEnvironment Environment;
+@inject NavigationManager nav;
+@inject UrlState urlState;
 
-<div style="max-width: 1000px; margin-left: auto; margin-right: auto;">
-    <h1>Hello </h1>
+@if (Customer is not null)
+{
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="border" style="border: solid 1px gray; border-radius: 15px; padding: 50px;">
-                <h3>Your Upcoming Rentals</h3>
-                <div style="background-color: #ededed; border-radius: 15px; padding: 40px;">
-                    <h5>Item Name</h5>
-                    <p>Checked Out Date and Time</p>
-                    <p>Due Date and Time</p>
+    <div style="max-width: 1000px; margin-left: auto; margin-right: auto;">
+        <h1>Hello @Customer.FirstName</h1>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="border" style="border: solid 1px gray; border-radius: 15px; padding: 50px;">
+                    <h3>Your Upcoming Rentals</h3>
+                    <div style="background-color: #ededed; border-radius: 15px; padding: 40px;">
+                        <h5>Item Name</h5>
+                        <p>Checked Out Date and Time</p>
+                        <p>Due Date and Time</p>
+                    </div>
+                </div>
+                <div class="border my-5" style="border: solid 1px gray; border-radius: 15px; padding: 50px;">
+                    <h3>Previous Purchases</h3>
+                    <div style="background-color: #ededed; border-radius: 15px; padding: 40px;">
+                        <h5>Purchase Date</h5>
+                        <p>Pickup Date</p>
+                        <p>Purchase Total</p>
+                        <ul>
+                            <li>Item One</li>
+                            <li>Item Two</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="border my-5" style="border: solid 1px gray; border-radius: 15px; padding: 50px;">
-                <h3>Previous Purchases</h3>
-                <div style="background-color: #ededed; border-radius: 15px; padding: 40px;">
-                    <h5>Purchase Date</h5>
-                    <p>Pickup Date</p>
-                    <p>Purchase Total</p>
-                    <ul>
-                        <li>Item One</li>
-                        <li>Item Two</li>
-                    </ul>
+            <div class="col-md-4">
+                <div style="border: solid 1px gray; border-radius: 30px; height: 200px; padding: 20px; background-color: darkred; color: white;">
+                    <h3>Customer Points</h3>
+                   @*  <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="ratio" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar" style=" background-color: darkred;"></div>
+                    </div> *@
+                    <div class="d-flex justify-content-center text-align-center">
+                        <strong>@Customer.RewardPoints points</strong>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div style="border: solid 1px gray; border-radius: 30px; height: 200px; padding: 20px;">
-                <h3>Customer Points</h3>
-                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar" style="width: 20%; background-color: darkred;"></div>
+                <div class="my-3" style="border: solid 1px gray; border-radius: 30px; height: 100px; padding: 20px;">
+                    <h3>Configure your Profile</h3>
                 </div>
-                <p># until your next free purchase!</p>
-            </div>
-            <div class="my-3" style="border: solid 1px gray; border-radius: 30px; height: 100px; padding: 20px;">
-                <h3>Configure your Profile</h3>
             </div>
         </div>
     </div>
-</div>
+}
 
 @code {
+    public int cutomerID { get; set; }
+    public string? firstName { get; set; }
+    public string? lastName { get; set; }
+    public string? address { get; set; }
+    public string? phoneNumber { get; set; }
+    public Customer Customer { get; set; }
+    public string? name { get; set; }
+    public string? url { get; set; }
+    public int ratio { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        name = user.Identity.Name;
+
+        if (urlState.Url is not null)
+        {
+            url = urlState.Url;
+            urlState.Url = null;
+        }
+        Customer = await httpClient.GetFromJsonAsync<Customer>($"{config[Constants.ApiEndpoint]}/customer/{name}");
+
+        ratio = (int)(Customer?.RewardPoints / 100);
+    }
 
 }
