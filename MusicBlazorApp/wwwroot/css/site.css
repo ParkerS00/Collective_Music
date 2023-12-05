@@ -57,6 +57,7 @@ a, .btn-link {
 
     .red-button:hover {
         background-color: #6F1218;
+        cursor: pointer;
     }
 
     .red-button * {

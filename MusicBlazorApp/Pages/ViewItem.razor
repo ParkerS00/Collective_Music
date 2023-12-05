@@ -55,6 +55,14 @@
         </div>
 
     }
+    @if (ShowAddedToCartPopup)
+    {
+        <div style="background-color: white; position: fixed; z-index: 1; bottom: 20px; right: 20px; padding: 30px; border-radius: 10px; box-shadow: -10px 10px 10px 10px lightgray;">
+            <h3>Successfully Added</h3>
+            <div class="red-button"><h5><a href="/cart">View Your Cart</a></h5></div>
+        </div>
+
+    }
     <div class="row main-container">
         <div class="col-md-6">
             <div class="d-flex flex-column">
@@ -234,6 +242,7 @@
             }
         </div>
     </div>
+   
 }
 else
 {
@@ -243,39 +252,6 @@ else
         </div>
     </div>
 }
-
-@* @if (ShowPurchasePopup)
-{
-    <div class="modal" tabindex="-1" style="display:block" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Add New Item</h3>
-                    <!-- Button to close the popup -->
-                    <button type="button" class="close"
-                    @onclick="() => ShowPurchasePopup = false">
-                        <span aria-hidden="true">X</span>
-                    </button>
-                </div>
-                <!-- Edit form for the current user -->
-                <div class="modal-body">
-                    <!-- Only show Id if not a new user -->
-                    <div><input class="form-check-input" placeholder="Quantity" type="number" @bind="quantity"></div>
-                    <select @bind=selectedStatus>
-                        @foreach (var status in Item.ItemStatuses)
-                        {
-                            <option value="@status">@status.Name : @status.Quantity</option>
-                        }
-                    </select>
-                    <button class="btn btn-primary" @onclick="() => AddItemToCart(Item)">Submit</button>
-                    <button class="btn btn-primary" @onclick="() => {ShowPurchasePopup = false; quantity = 0;}">Cancel</button>
-                    <br />
-                     <span style="color:red">@strError</span>
-                </div>
-            </div>
-        </div>
-    </div>
-} *@
 
 
 @code {
@@ -305,7 +281,7 @@ else
 
     public int ReviewRating { get; set; }
 
-    public bool ShowPurchasePopup { get; set; }
+    public bool ShowAddedToCartPopup { get; set; }
 
     public int quantity { get; set; }
 
@@ -401,8 +377,10 @@ else
 
         var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/cart/{request}/", request);
 
-
-        ShowPurchasePopup = false;
+        if (response.IsSuccessStatusCode)
+        {
+            ShowAddedToCartPopup = true;
+        }
     }
 
     public void HandleRentClick(int ItemId)
