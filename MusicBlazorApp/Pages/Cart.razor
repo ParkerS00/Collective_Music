@@ -9,9 +9,9 @@
 
 <h1>Your Cart</h1>
 
-@if(cartState.SelectedItems is not null)
+@if (cartState.SelectedItems is not null)
 {
-    @if(cartState.SelectedItems.Count == 0)
+    @if (cartState.SelectedItems.Count == 0)
     {
         <div class="main-container" style="height: 90vh;">
             <p>You have no items in your cart</p>
@@ -20,42 +20,56 @@
     }
     else
     {
-        @foreach (var itemResult in cartState.SelectedItems)
-        {
+        <div class="main-container">
             <div class="row">
-                <div class="col-xl-4">
-                    <img width="300" class="img-fluid img" src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")">
-                </div>
-                <div class="col-xl-8">
-                    <div class="justify-content-center">
-                        <h3><strong>@itemResult.Item.ItemName</strong></h3>
-                        <p>Condition: @itemResult.StatusName</p>
+                <div class="col-md-9">
+                    <div class="row">
+                        @foreach (var itemResult in cartState.SelectedItems)
+                        {
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    <img width="300" class="img-fluid img" src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")">
+                                </div>
+                                <div class="col-xl-8">
+                                    <div class="justify-content-center">
+                                        <h3><strong>@itemResult.Item.ItemName</strong></h3>
+                                        <p>Condition: @itemResult.StatusName</p>
+                                    </div>
+                                    <table class="table table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">each</th>
+                                                <th scope="col">qty</th>
+                                                <th scope="col">total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>@itemResult.Item.SellPrice</td>
+                                                <td><input type="number" min="0" @bind="@itemResult.Item.Quantity" @onclick="CalculateCartTotal" /></td>
+                                                <td>$@(itemResult.Item.Quantity * itemResult.Item.SellPrice)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p @onclick="() => HandleDelete(itemResult.Item.Id, itemResult.StatusName)" style="color: cadetblue; text-decoration: underline;">Delete</p>
+                                </div>
+                            </div>
+                            <hr />
+                        }
                     </div>
-                    <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th scope="col">each</th>
-                                <th scope="col">qty</th>
-                                <th scope="col">total</th>  
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>@itemResult.Item.SellPrice</td>
-                                <td><input type="number" min="0" @bind="@itemResult.Item.Quantity" @onclick="CalculateCartTotal"/></td>
-                                <td>$@(itemResult.Item.Quantity * itemResult.Item.SellPrice)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p @onclick="() => HandleDelete(itemResult.Item.Id, itemResult.StatusName)" style="color: cadetblue; text-decoration: underline;">Delete</p>
                 </div>
+                <div class="col-md-3">
+                    <div class="total-area p-3 position-fixed px-5">
+                        <h2>Cart Total</h2>
+                        <h4>$@CartTotal</h4>
+                        <p>Estimated Tax: </p>
+                        <h5 class="red-button p-1 pt-3 m-3">Checkout</h5>
+                    </div>
+                    
+                </div>
+
             </div>
-
-            <hr />
-
-        }    
-        <h2>Cart Total</h2>
-        <p>$@CartTotal</p>
+        </div>
     }
 }
 
@@ -70,11 +84,11 @@
         var user = authstate.User;
         var name = user.Identity.Name;
 
-        if(name is null)
+        if (name is null)
         {
             name = "";
         }
-        //TODO: CHANGE THIS TO BE THE USERS EMAIL 
+        //TODO: CHANGE THIS TO BE THE USERS EMAIL
         await cartState.RefreshCart(name);
         UserEmail = name;
 
