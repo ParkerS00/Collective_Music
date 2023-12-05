@@ -145,12 +145,11 @@
                 <div>
                     @foreach (var status in Item.ItemStatuses)
                     {
-                        <button class="button button4" value="@status" @onclick="() => ChangeStatusChoice(status)">@status.Name</button>
+                        <button class="button button4 @(statusClicked == status.Name ? "selected" : "")" @onclick="() => ChangeStatusChoice(status)">@status.Name</button>
                     }
                     <br />
 
                 </div>
-
 
                 <div class="d-flex flex-row justify-content-between" style="padding-top:25px;">
                     <select class="dropdown" style="border-style: solid; height:50px;">
@@ -242,7 +241,6 @@
             }
         </div>
     </div>
-   
 }
 else
 {
@@ -296,6 +294,8 @@ else
     public ReviewDto NewReview { get; set; }
 
     public string borderStyle { get; set; }
+
+    private string statusClicked { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -391,6 +391,7 @@ else
     public void ChangeStatusChoice(StatusDto sdto)
     {
         selectedStatus = sdto;
+        statusClicked = sdto.Name;
     }
 
     public void ChangeQuantity(int inty)

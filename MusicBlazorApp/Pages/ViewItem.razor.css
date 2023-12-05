@@ -19,19 +19,19 @@
     transition: background-color .2s;
 }
 
-.red-button:hover {
-    background-color: #6F1218;
-}
+    .red-button:hover {
+        background-color: #6F1218;
+    }
 
-.red-button * {
-    color: white;
-    text-decoration: none;
-    padding-top: 12px;
-}
+    .red-button * {
+        color: white;
+        text-decoration: none;
+        padding-top: 12px;
+    }
 
 .button {
-    border-style:dashed;
-    border-color:black;
+    border-style: dashed;
+    border-color: black;
     border-radius: 8px;
     color: black;
     padding: 15px 32px;
@@ -43,9 +43,15 @@
 }
 
 
-.button:focus {
-    border-style: solid;
-    /* Add other styles as needed */
+    .button:focus {
+        border-style: solid;
+        /* Add other styles as needed */
+    }
+
+.selected {
+    border-style:solid;
+    background-color: #5B0D13;
+    color: white;
 }
 
 .dropdown {
@@ -77,6 +83,7 @@
         text-decoration: none;
         display: block;
     }
+
         .dropdown-content a:hover {
             background-color: #ddd;
         }
@@ -88,4 +95,3 @@
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
-
