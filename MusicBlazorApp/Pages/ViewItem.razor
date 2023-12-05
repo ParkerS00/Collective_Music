@@ -54,22 +54,6 @@
             </div>
         </div>
 
-        @* <div class="overlay d-none" style="background-attachment: fixed; position: absolute; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.5);">
-            <div class="p-5" style="position: absolute; height: 500px; width: 600px; background-color: rgba(255, 255, 255, 1); top: 35%; left: 30%; z-index: 1; border-radius: 10px;">
-                <h2>Review Item</h2>
-                <form>
-                    <p>Rating out of 5</p>
-                    <input type="number" min="1" max="5" />
-                    <p>Review Text</p>
-                    <input type="text" />
-                    @if(!ValidRevRating)
-                    {
-                        <div class="alert alert-danger">Please enter a valid rating 1-5</div>
-                    }
-                </form>
-                <button class="btn btn-primary" @onclick="TogglePopUp">Submit</button>
-            </div>
-        </div> *@
     }
     <div class="row main-container">
         <div class="col-md-6">
@@ -339,7 +323,7 @@ else
             }
         }
 
-        if(Item is not null)
+        if (Item is not null)
         {
             selectedStatus = Item.ItemStatuses.First();
         }
@@ -350,24 +334,6 @@ else
         IsFirstImg = false;
         return "";
     }
-
-    // public void GetAverageRating()
-    // {
-    //     if (Item.Reviews.Count() > 0)
-    //     {
-    //         decimal sum = 0;
-    //         foreach (var rating in Item.Reviews)
-    //         {
-    //             sum += (decimal)rating.Rating;
-    //         }
-
-    //         ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
-    //     }
-    //     else
-    //     {
-    //         ItemAverageRating = 0;
-    //     }
-    // }
 
     public void TogglePopUp()
     {
