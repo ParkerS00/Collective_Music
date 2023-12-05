@@ -8,3 +8,7 @@
     background-color: #ededed;
 
 }
+
+.delete-btn:hover {
+    cursor: pointer;
+}

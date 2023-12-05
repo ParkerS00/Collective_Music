@@ -4,7 +4,8 @@
 @using MusicApi.Dtos;
 @inject HttpClient httpClient;
 @inject IConfiguration config;
-@inject CartState cartState
+@inject CartState cartState;
+@inject NavigationManager NavManager;
 @inject AuthenticationStateProvider auth;
 
 <h1>Your Cart</h1>
@@ -46,12 +47,12 @@
                                         <tbody>
                                             <tr>
                                                 <td>@itemResult.Item.SellPrice</td>
-                                                <td><input type="number" min="0" @bind="@itemResult.Item.Quantity" @onclick="CalculateCartTotal" /></td>
+                                                <td><input type="number" min="0" @bind="@itemResult.Quantity" @onclick="CalculateCartTotal" /></td>
                                                 <td>$@(itemResult.Item.Quantity * itemResult.Item.SellPrice)</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <p @onclick="() => HandleDelete(itemResult.Item.Id, itemResult.StatusName)" style="color: cadetblue; text-decoration: underline;">Delete</p>
+                                    <p @onclick="() => HandleDelete(itemResult.Item.Id, itemResult.StatusName)" style="color: cadetblue; text-decoration: underline;" class="delete-btn">Delete</p>
                                 </div>
                             </div>
                             <hr />
@@ -101,6 +102,7 @@
     public async Task HandleDelete(int itemId, string status)
     {
         var response = await httpClient.DeleteAsync($"{config[Constants.ApiEndpoint]}/cart/{CustomerId}/{itemId}/{status}");
+        NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
     }
 
     public void CalculateCartTotal()
