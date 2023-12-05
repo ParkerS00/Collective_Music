@@ -32,7 +32,7 @@
                     <!-- Edit form for the current user -->
                     <div class="modal-body">
 
-                   
+
                         <p>Rating out of 5</p>
                         <input type="number" min="1" max="5" @bind-value="ReviewRating" />
                         <p>Review Text</p>
@@ -45,7 +45,7 @@
                         </button>
 
                         <br />
-                        @if(strError.Length > 0)
+                        @if (strError.Length > 0)
                         {
                             <span style="color:red">@strError</span>
                         }
@@ -103,7 +103,7 @@
             <h1>@Item.ItemName</h1>
             <p><strong>$@Item.SellPrice</strong></p>
             <div class="ratings my-5">
-                @if(Item.AverageItemRating != 0)
+                @if (Item.AverageItemRating != 0)
                 {
                     @for (int i = 1; i <= 5; i++)
                     {
@@ -130,38 +130,61 @@
                 {
                     @if (CurrentUserName is null) // they are logged in but have no name yet
                     {
-                        <br /><a href="/Account">Finish Setting Up Your Account To Leave A Review</a>
+                        <br />
+
+                        <a href="/Account">Finish Setting Up Your Account To Leave A Review</a>
                     }
                     else // they are logged in with correct account settings
                     {
-                        <br /><a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a>
-                        
+                        <br />
+
+                        <a style="color: blue; text-decoration: underline;" @onclick="TogglePopUp">Leave a Review</a>
+
                     }
                 }
             </div>
             <h5><strong>Description</strong></h5>
             <p>@Item.Description</p>
-            <h5>Purchase Information</h5>
-            <hr>
+
             <div class="row">
-                <div class="col-md-6"><p>Purchase new or used and pick up in store. </p></div>
-                <div class="col-md-6">
-                    @if (CurrentUserName is null)
+                <h5>Purchase Information</h5>
+                <hr>
+                <div class="col-md-6"><p>Purchase new or used and pick up in store. </p></div> <br />
+                <div>
+                    @foreach (var status in Item.ItemStatuses)
                     {
-                        @if (CurrentUserId == 0)
+                        <button class="button button4" value="@status" @onclick="() => ChangeStatusChoice(status)">@status.Name</button>
+                    }
+
+                    <select name="dog-names" class="dropdown" style="border-style: solid;">
+                        @foreach (int i in Enumerable.Range(1, selectedStatus.Quantity))
                         {
-                            <div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Identity/Account/Login">Purchase</a></h5></div>
+                            <option @onclick="() => ChangeQuantity(i)">@i</option>
+                        }
+
+                    </select>
+                </div>
+
+                <center>
+                    <div class="col-md-6" style="padding-bottom: 100px;">
+                        @if (CurrentUserName is null)
+                        {
+                            @if (CurrentUserId == 0)
+                            {
+                                <center><div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Identity/Account/Login">Purchase</a></h5></div></center>
+                            }
+                            else
+                            {
+                                <center><div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Account">Purchase</a></h5></div></center>
+                            }
                         }
                         else
                         {
-                            <div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Account">Purchase</a></h5></div>
+                            <div class="red-button"><h5 @onclick="() => AddItemToCart(Item)">Add to Cart</h5></div>
                         }
-                    }
-                    else
-                    {
-                        <div class="red-button"><h5 @onclick="() => ShowPurchasePopup = true">Purchase</h5></div>
-                    }
-                </div>
+                    </div>
+                </center>
+
             </div>
 
             <h5>Rental Information</h5>
@@ -234,7 +257,7 @@ else
     </div>
 }
 
-@if (ShowPurchasePopup)
+@* @if (ShowPurchasePopup)
 {
     <div class="modal" tabindex="-1" style="display:block" role="dialog">
         <div class="modal-dialog">
@@ -252,27 +275,27 @@ else
                     <!-- Only show Id if not a new user -->
                     <div><input class="form-check-input" placeholder="Quantity" type="number" @bind="quantity"></div>
                     <select @bind=selectedStatus>
-                        @foreach(string status in Item.ItemStatuses)
+                        @foreach (var status in Item.ItemStatuses)
                         {
-                            <option value="@status">@status</option>
+                            <option value="@status">@status.Name : @status.Quantity</option>
                         }
                     </select>
                     <button class="btn btn-primary" @onclick="() => AddItemToCart(Item)">Submit</button>
                     <button class="btn btn-primary" @onclick="() => {ShowPurchasePopup = false; quantity = 0;}">Cancel</button>
                     <br />
-                    @* <span style="color:red">@strError</span> *@
+                     <span style="color:red">@strError</span> 
                 </div>
             </div>
         </div>
     </div>
-}
+} *@ 
 
 
 @code {
     [Parameter]
     public int ItemId { get; set; }
 
-    public string selectedStatus { get; set; }
+    public StatusDto selectedStatus { get; set; }
 
     public string? CurrentUrl { get; set; }
 
@@ -309,6 +332,8 @@ else
 
     public ReviewDto NewReview { get; set; }
 
+    public string borderStyle { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         CurrentUrl = nav.Uri;
@@ -339,7 +364,7 @@ else
             }
         }
 
-        if(Item is not null)
+        if (Item is not null)
         {
             selectedStatus = Item.ItemStatuses.First();
         }
@@ -377,7 +402,7 @@ else
     public async Task SubmitReview()
     {
         strError = "";
-        if(ReviewRating > 5 || ReviewRating < 1)
+        if (ReviewRating > 5 || ReviewRating < 1)
         {
             //ShowReviewPopup = false;
             strError = "Please enter a valid rating (1 through 5)";
@@ -398,13 +423,13 @@ else
         var name = user.Identity.Name;
 
         AddItemToCartRequest request = new AddItemToCartRequest()
-        {
-            userEmail = name,
-            ItemId = itemDto.Id,
-            StatusName = selectedStatus,
-            Quantity = quantity
-        };
-        
+            {
+                userEmail = name,
+                ItemId = itemDto.Id,
+                StatusName = selectedStatus.Name,
+                Quantity = quantity
+            };
+
         var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/cart/{request}/", request);
 
 
@@ -414,5 +439,15 @@ else
     public void HandleRentClick(int ItemId)
     {
         nav.NavigateTo($"/Rent-Item/{ItemId}");
+    }
+
+    public void ChangeStatusChoice(StatusDto sdto)
+    {
+        selectedStatus = sdto;
+    }
+
+    public void ChangeQuantity(int inty)
+    {
+        quantity = inty;
     }
 }
