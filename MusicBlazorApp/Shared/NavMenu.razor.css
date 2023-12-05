@@ -1,3 +1,8 @@
+.navbar-nav{
+    justify-content: right;
+}
+
+
 .navbar-toggler {
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -58,6 +63,7 @@
     .collapse {
         /* Never collapse the sidebar for wide screens */
         display: block;
+        justify-content:right;
     }
     
     .nav-scrollable {
