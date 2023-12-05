@@ -57,7 +57,7 @@
     }
     @if (ShowAddedToCartPopup)
     {
-        <div style="background-color: white; position: fixed; z-index: 1; bottom: 20px; right: 20px; padding: 30px; border-radius: 10px; box-shadow: -10px 10px 10px 10px lightgray;">
+        <div style="background-color: white; position: fixed; z-index: 1; bottom: 20px; right: 20px; padding: 30px; border-radius: 10px; box-shadow: -5px 5px 5px 10px lightgray;">
             <h3>Successfully Added</h3>
             <div class="red-button"><h5><a href="/cart">View Your Cart</a></h5></div>
         </div>
@@ -137,20 +137,17 @@
             </div>
             <h5><strong>Description</strong></h5>
             <p>@Item.Description</p>
-
-            <div class="row" style="padding-top: 50px;">
+            <div  style="padding-top: 50px;">
                 <h5>Purchase Information</h5>
                 <hr>
-                <div class="col-md-6"><p>Purchase new or used and pick up in store. </p></div> <br />
+                <p>Purchase new or used and pick up in store. </p>
                 <div>
                     @foreach (var status in Item.ItemStatuses)
                     {
-                        <button class="button button4" value="@status" @onclick="() => ChangeStatusChoice(status)">@status.Name</button>
+                        <button class="button button4 @(statusClicked == status.Name ? "selected" : "")" @onclick="() => ChangeStatusChoice(status)">@status.Name</button>
                     }
                     <br />
-
                 </div>
-
 
                 <div class="d-flex flex-row justify-content-between" style="padding-top:25px;">
                     <select class="dropdown" style="border-style: solid; height:50px;">
@@ -178,8 +175,10 @@
                         }
                     </div>
                 </div>
-
-
+                @if (AddToCartError.Length > 0)
+                {
+                    <div class="alert alert-danger">@AddToCartError</div>
+                }
             </div>
 
             <h5>Rental Information</h5>
@@ -209,7 +208,7 @@
         <div>
             <h3>Reviews</h3>
             <hr />
-            @if (Reviews is not null)
+            @if (Reviews.Any())
             {
                 @foreach (var rev in Reviews)
                 {
@@ -238,11 +237,9 @@
             else
             {
                 <p>No Reviews for this item yet</p>
-                <a href="#">Leave a Review</a>
             }
         </div>
     </div>
-   
 }
 else
 {
@@ -262,8 +259,6 @@ else
 
     public string? CurrentUrl { get; set; }
 
-    public IEnumerable<ReviewDto>? Reviews { get; set; }
-
     public ItemDto Item { get; set; }
 
     public List<string> ImgFilePaths { get; set; } = new();
@@ -271,31 +266,41 @@ else
     public bool IsFirstImg = true;
 
     // Review Stuff
+    public IEnumerable<ReviewDto>? Reviews { get; set; }
+
     public decimal? ItemAverageRating { get; set; }
 
     bool ShowReviewPopup { get; set; }
-
-    public string strError = "";
 
     public string ReviewTxt { get; set; }
 
     public int ReviewRating { get; set; }
 
-    public bool ShowAddedToCartPopup { get; set; }
-
-    public int quantity { get; set; }
-
-    // User Stuff
-    public IdentityUser objUser = new();
-
-    public int CurrentUserId { get; set; }
-    public string CurrentUserName { get; set; }
+    public int quantity = 1;
 
     public bool ValidRevRating { get; set; }
 
     public ReviewDto NewReview { get; set; }
 
+    // User 
+    public IdentityUser objUser = new();
+
+    public int CurrentUserId { get; set; }
+
+    public string CurrentUserName { get; set; }
+
     public string borderStyle { get; set; }
+
+    // Popups
+    public bool ShowAddedToCartPopup { get; set; }
+
+    // Errors
+    public string AddToCartError = "";
+
+    public string strError = "";
+
+
+    private string statusClicked { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -363,23 +368,44 @@ else
 
     public async Task AddItemToCart(ItemDto itemDto)
     {
+        AddToCartError = "";
+
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         var name = user.Identity.Name;
 
-        AddItemToCartRequest request = new AddItemToCartRequest()
-            {
-                userEmail = name,
-                ItemId = itemDto.Id,
-                StatusName = selectedStatus.Name,
-                Quantity = quantity
-            };
-
-        var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/cart/{request}/", request);
-
-        if (response.IsSuccessStatusCode)
+        if (name.Length > 0)
         {
-            ShowAddedToCartPopup = true;
+            // TODO: DUSTY - When they select too many items and those items are in other peoples carts, say no!
+            @* if (quantity <= itemDto.Quantity)
+            { *@
+                AddItemToCartRequest request = new AddItemToCartRequest()
+                    {
+                        userEmail = name,
+                        ItemId = itemDto.Id,
+                        StatusName = selectedStatus.Name,
+                        Quantity = quantity
+                    };
+
+                var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/cart/{request}/", request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    ShowAddedToCartPopup = true;
+                }
+                else
+                {
+                    AddToCartError = "There was a problem adding this item to you cart.";
+                }
+            @* }
+            else
+            {
+                AddToCartError = "Error when adding to cart. Not enough stock for your selection.";
+            } *@
+        }
+        else
+        {
+            AddToCartError = "Error when adding to cart. You are not logged in";
         }
     }
 
@@ -391,6 +417,7 @@ else
     public void ChangeStatusChoice(StatusDto sdto)
     {
         selectedStatus = sdto;
+        statusClicked = sdto.Name;
     }
 
     public void ChangeQuantity(int inty)
