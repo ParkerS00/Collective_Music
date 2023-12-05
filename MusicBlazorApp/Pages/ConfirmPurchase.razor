@@ -1,0 +1,93 @@
+﻿@using MusicApi.Data;
+@using MusicBlazorApp.State;
+@using MusicApi.Dtos;
+@inject HttpClient httpClient;
+@inject IConfiguration config;
+@inject CartState cartState;
+@inject NavigationManager NavManager;
+@inject AuthenticationStateProvider auth;
+
+
+<h3>Confirm Your Purchase</h3>
+
+
+<div class="col-md-9">
+    <div class="row">
+        @foreach (var itemResult in cartState.SelectedItems)
+        {
+            <div class="row">
+                <div class="col-xl-4">
+                    <img width="150" class="img-fluid img" src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")">
+                </div>
+                <div class="col-xl-8">
+                    <div class="justify-content-center">
+                        <h3><strong>@itemResult.Item.ItemName</strong></h3>
+                        <p>Condition: @itemResult.StatusName</p>
+                    </div>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">each</th>
+                                <th scope="col">qty</th>
+                                <th scope="col">total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@itemResult.Item.SellPrice</td>
+                                <td><input type="number" min="0" @bind="@itemResult.Quantity" @onclick="CalculateCartTotal" /></td>
+                                <td>$@(itemResult.Item.Quantity * itemResult.Item.SellPrice)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+</div>
+
+
+@code {
+    public decimal? CartTotal = 0;
+    public string UserEmail { get; set; }
+    public int CustomerId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var name = user.Identity.Name;
+
+        if (name is null)
+        {
+            name = "";
+        }
+        //TODO: CHANGE THIS TO BE THE USERS EMAIL
+        await cartState.RefreshCart(name);
+        UserEmail = name;
+
+        var dbCustomer = await httpClient.GetFromJsonAsync<Customer>($"{config[Constants.ApiEndpoint]}/customer/{name}");
+        CustomerId = dbCustomer.Id;
+
+        CalculateCartTotal();
+    }
+
+    public async Task HandleDelete(int itemId, string status)
+    {
+        var response = await httpClient.DeleteAsync($"{config[Constants.ApiEndpoint]}/cart/{CustomerId}/{itemId}/{status}");
+        NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+    }
+
+    public void CalculateCartTotal()
+    {
+        foreach (var itemResult in cartState.SelectedItems)
+        {
+            int? qty = itemResult.Item.Quantity;
+            decimal? sprice = itemResult.Item.SellPrice;
+            CartTotal += (qty * sprice);
+        }
+    }
+
+}
