@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicApi.Data;
+using MusicApi.Dtos;
 using MusicApi.Request;
 
 namespace MusicApi.Services;
 
 public class CartService
 {
-
     private readonly ILogger<CartService> logger;
     private IDbContextFactory<MusicDbContext> contextFactory;
 
@@ -93,14 +93,16 @@ public class CartService
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteItem(int customerId, int itemId)
+    public async Task DeleteItem(int customerId, int itemId, string status)
     {
         var context = contextFactory.CreateDbContext();
 
         var selection = await context.CartItems
             .Include(i => i.Customer)
             .Include(i => i.Inventory)
-            .Where(i => i.Inventory.Item.Id == itemId)
+                .ThenInclude(i => i.Item)
+            .Include(i => i.Inventory.Status)
+            .Where(i => i.Inventory.Item.Id == itemId && i.Inventory.Status.StatusName == status)
             .ToListAsync();
 
         foreach (var item in selection)
