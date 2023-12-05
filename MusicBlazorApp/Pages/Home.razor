@@ -34,9 +34,10 @@
 
 <!--Highest Rated Items-->
 <h2>Our Highest Rated Items</h2>
+
 <div class="p-4">
    @*style="overflow-x: auto;" *@
-    <div class="d-flex flex-wrap flex-row">
+    <div class="d-flex flex-wrap flex-row justify-content-around">
         @if (Items is not null)
         {
             @foreach (var item in TopRatedItems)
