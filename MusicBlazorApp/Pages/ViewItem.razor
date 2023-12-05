@@ -144,7 +144,7 @@
                 <div>
                     @foreach (var status in Item.ItemStatuses)
                     {
-                        <button class="button button4" value="@status" @onclick="() => ChangeStatusChoice(status)">@status.Name</button>
+                        <button class="button button4 @(statusClicked == status.Name ? "selected" : "")" @onclick="() => ChangeStatusChoice(status)">@status.Name</button>
                     }
                     <br />
                 </div>
@@ -240,7 +240,6 @@
             }
         </div>
     </div>
-   
 }
 else
 {
@@ -300,6 +299,8 @@ else
 
     public string strError = "";
 
+
+    private string statusClicked { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -416,6 +417,7 @@ else
     public void ChangeStatusChoice(StatusDto sdto)
     {
         selectedStatus = sdto;
+        statusClicked = sdto.Name;
     }
 
     public void ChangeQuantity(int inty)
