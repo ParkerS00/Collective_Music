@@ -53,15 +53,15 @@ public class CartController : Controller
         return cartItemDtos;
     }
 
-    [HttpDelete("{email}/{id}/{quantity}")]
-    public async Task Delete(string email, int id, int quantity)
-    {
-        await cartService.DeleteItem(email, id, quantity);
-    }
+    //[HttpDelete("{email}/{id}/{quantity}")]
+    //public async Task Delete(string email, int id, int quantity)
+    //{
+    //    await cartService.DeleteItem(email, id, quantity);
+    //}
 
-    [HttpDelete("{customerId}/{itemId}")]
-    public async Task DeleteWholeItem(int customerId, int itemId)
+    [HttpDelete("{customerId}/{itemId}/{status}")]
+    public async Task DeleteWholeItem(int customerId, int itemId, string status)
     {
-        await cartService.DeleteItem(customerId, itemId);
+        await cartService.DeleteItem(customerId, itemId, status);
     }
 }

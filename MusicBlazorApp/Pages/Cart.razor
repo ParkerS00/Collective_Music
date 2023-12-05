@@ -29,6 +29,7 @@
                 <div class="col-xl-8">
                     <div class="justify-content-center">
                         <h3><strong>@itemResult.Item.ItemName</strong></h3>
+                        <p>Condition: @itemResult.StatusName</p>
                     </div>
                     <table class="table table-borderless">
                         <thead>
@@ -46,15 +47,15 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p @onclick="() => HandleDelete(itemResult.Item.Id)" style="color: cadetblue; text-decoration: underline;">Delete</p>
+                    <p @onclick="() => HandleDelete(itemResult.Item.Id, itemResult.StatusName)" style="color: cadetblue; text-decoration: underline;">Delete</p>
                 </div>
             </div>
 
             <hr />
-            <h2>Cart Total</h2>
-            <p>$@CartTotal</p>
 
         }    
+        <h2>Cart Total</h2>
+        <p>$@CartTotal</p>
     }
 }
 
@@ -83,10 +84,9 @@
         CalculateCartTotal();
     }
 
-    public async Task HandleDelete(int itemId)
+    public async Task HandleDelete(int itemId, string status)
     {
-        var response = await httpClient.DeleteAsync($"{config[Constants.ApiEndpoint]}/cart/{CustomerId}/{itemId}");
-
+        var response = await httpClient.DeleteAsync($"{config[Constants.ApiEndpoint]}/cart/{CustomerId}/{itemId}/{status}");
     }
 
     public void CalculateCartTotal()
