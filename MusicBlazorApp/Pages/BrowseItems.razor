@@ -78,7 +78,7 @@
         <h1>Browse Instruments</h1>
         <div class="my-5 mx-3 d-flex justify-content-end">
             <InputText @bind-Value="SearchQuery"></InputText>
-            <button type="submit">Search</button>
+            <button @onclick="SearchItems" type="submit">Search</button>
         </div>
 
         <div class="p-4 d-flex flex-wrap flex-row" style="background-color: #EEEEEE; margin-right: 100px;">
@@ -205,6 +205,11 @@
     public async Task FilterItems(string categoryName)
     {
         Items = Items.Where(i => i.ItemCategories.Contains(categoryName));
+    }
+
+    public async Task SearchItems()
+    {
+        Items = Items.Where(i => i.ItemName.ToLower().Contains(SearchQuery));
     }
 
     public async Task CompileCategories()
