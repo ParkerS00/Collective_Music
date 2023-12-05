@@ -64,7 +64,7 @@
                         <h2>Cart Total</h2>
                         <h4>$@CartTotal</h4>
                         <p>Estimated Tax: </p>
-                        <h5 class="red-button p-1 pt-3 m-3">Checkout</h5>
+                        <h5 class="red-button p-1 pt-3 m-3" @onclick="HandleCheckout">Checkout</h5>
                     </div>
                 </div>
             </div>
@@ -111,6 +111,11 @@
             decimal? sprice = itemResult.Item.SellPrice;
             CartTotal += (qty * sprice);
         }
+    }
+
+    public async Task HandleCheckout()
+    {
+        
     }
 }
 
