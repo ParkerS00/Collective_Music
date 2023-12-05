@@ -130,7 +130,7 @@
             <h5><strong>Description</strong></h5>
             <p>@Item.Description</p>
 
-            <div class="row">
+            <div class="row" style="padding-top: 50px;">
                 <h5>Purchase Information</h5>
                 <hr>
                 <div class="col-md-6"><p>Purchase new or used and pick up in store. </p></div> <br />
@@ -139,18 +139,20 @@
                     {
                         <button class="button button4" value="@status" @onclick="() => ChangeStatusChoice(status)">@status.Name</button>
                     }
+                    <br />
 
-                    <select name="dog-names" class="dropdown" style="border-style: solid;">
+                </div>
+
+
+                <div class="d-flex flex-row justify-content-between" style="padding-top:25px;">
+                    <select class="dropdown" style="border-style: solid; height:50px;">
                         @foreach (int i in Enumerable.Range(1, selectedStatus.Quantity))
                         {
                             <option @onclick="() => ChangeQuantity(i)">@i</option>
                         }
 
                     </select>
-                </div>
-
-                <center>
-                    <div class="col-md-6" style="padding-bottom: 100px;">
+                    <div class="col-md-6" style="padding-top: 5px; padding-bottom: 50px;">
                         @if (CurrentUserName is null)
                         {
                             @if (CurrentUserId == 0)
@@ -167,7 +169,8 @@
                             <div class="red-button"><h5 @onclick="() => AddItemToCart(Item)">Add to Cart</h5></div>
                         }
                     </div>
-                </center>
+                </div>
+
 
             </div>
 
@@ -267,12 +270,12 @@ else
                     <button class="btn btn-primary" @onclick="() => AddItemToCart(Item)">Submit</button>
                     <button class="btn btn-primary" @onclick="() => {ShowPurchasePopup = false; quantity = 0;}">Cancel</button>
                     <br />
-                     <span style="color:red">@strError</span> 
+                     <span style="color:red">@strError</span>
                 </div>
             </div>
         </div>
     </div>
-} *@ 
+} *@
 
 
 @code {
