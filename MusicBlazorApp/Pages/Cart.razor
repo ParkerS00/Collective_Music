@@ -9,7 +9,7 @@
 @inject AuthenticationStateProvider auth;
 
 
-@if (cartState.SelectedItems is not null)
+@if (cartState.SelectedItems is not null && !NoUser)
 {
     @if (cartState.SelectedItems.Count == 0)
     {
@@ -76,6 +76,7 @@
     public decimal? CartTotal = 0;
     public string UserEmail { get; set; }
     public int CustomerId { get; set; }
+    public bool NoUser { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -86,6 +87,8 @@
         if (name is null)
         {
             name = "";
+            NoUser = true;
+            return;
         }
         //TODO: CHANGE THIS TO BE THE USERS EMAIL
         await cartState.RefreshCart(name);
