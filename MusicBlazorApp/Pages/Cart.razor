@@ -5,32 +5,58 @@
 @inject CartState cartState
 @inject AuthenticationStateProvider auth;
 
-<h3>Cart</h3>
+<h1>Your Cart</h1>
 
 @if(cartState.SelectedItems is not null)
 {
     @if(cartState.SelectedItems.Count == 0)
     {
-        <p>No Items</p>
-@*         <img src="https://i.imgflip.com/6cvg21.jpg" />
- *@    }
+        <div class="main-container" style="height: 90vh;">
+            <p>You have no items in your cart</p>
+            <div class="red-button"><h5><a href="/Account">Rent</a></h5></div>
+        </div>
+    }
     else
     {
         @foreach (var itemResult in cartState.SelectedItems)
         {
-            <div><img src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")"></div>
-            <p>@itemResult.Item.ItemName</p>
-            <p>@itemResult.Quantity</p>
+            <div class="row">
+                <div class="col-xl-4">
+                    <img width="300" class="img-fluid img" src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")">
+                </div>
+                <div class="col-xl-8">
+                    <div class="justify-content-center">
+                        <h3><strong>@itemResult.Item.ItemName</strong></h3>
+                    </div>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col">each</th>
+                                <th scope="col">qty</th>
+                                <th scope="col">total</th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@itemResult.Item.SellPrice</td>
+                                <td><input @onclick="() => CalculateRowTtl(itemResult.Item.Quantity, itemResult.Item.SellPrice)"  type="number" min="0" @bind="@itemResult.Item.Quantity"/></td>
+                                <td>@rowTtl</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p @onclick="() => HandleDelete(itemResult.Item.Id)" style="color: lightblue; text-decoration: underline;">Delete</p>
+                </div>
+            </div>
+
+            <hr />
+            <h2>Cart Total</h2>
+
         }    
     }
 }
 
-
-
-
-
 @code {
-
+    public decimal? rowTtl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,5 +74,16 @@
         //ItemResults = Items;
     }
 
+    public decimal? CalculateRowTtl(int? qty, decimal? sellprice)
+    {
+        rowTtl = qty * sellprice;
+        return qty * sellprice;
+    }
+
+    public void HandleDelete(int itemId)
+    {
+        var ruc = cartState.SelectedItems.Where(i => i.Item.Id == itemId).FirstOrDefault();
+        cartState.SelectedItems.Remove(ruc);
+    }
 }
 

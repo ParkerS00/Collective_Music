@@ -52,4 +52,11 @@ public class CartController : Controller
 
         return cartItemDtos;
     }
+
+    [HttpDelete("{email}/id")]
+    public async Task Delete(string email)
+    {
+        var cartItems = await cartService.GetCartItems(email);
+
+    }
 }

@@ -46,6 +46,26 @@ a, .btn-link {
     color: goldenrod;
 }
 
+.red-button {
+    background-color: #5B0D13;
+    color: white;
+    border-radius: 25px;
+    height: 50px;
+    text-align: center;
+    transition: background-color .2s;
+}
+
+    .red-button:hover {
+        background-color: #6F1218;
+    }
+
+    .red-button * {
+        color: white;
+        text-decoration: none;
+        padding-top: 12px;
+    }
+
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
