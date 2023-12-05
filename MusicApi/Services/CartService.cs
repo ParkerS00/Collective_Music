@@ -66,4 +66,47 @@ public class CartService
 
         return selection;
     }
+
+    public async Task DeleteItem(string email, int itemId, int quantity)
+    {
+        var context = contextFactory.CreateDbContext();
+
+        var selection = await context.Inventories
+            .Include(i => i.Status)
+            .Include(i => i.Item)
+             .ThenInclude(i => i.ItemImages)
+            .Include(i => i.CartItem)
+                .ThenInclude(ct => ct.Customer)
+            .Where(i => i.CartItem.Customer.Email == email)
+            .Where(i => i.ItemId == itemId)
+            .ToListAsync();
+
+        if(quantity > selection.Count()) 
+        {
+            return;
+        }
+
+        foreach( var item in selection )
+        {
+            context.Inventories.Remove(item);
+        }
+        await context.SaveChangesAsync();
+    }
+
+    public async Task DeleteItem(int customerId, int itemId)
+    {
+        var context = contextFactory.CreateDbContext();
+
+        var selection = await context.CartItems
+            .Include(i => i.Customer)
+            .Include(i => i.Inventory)
+            .Where(i => i.Inventory.Item.Id == itemId)
+            .ToListAsync();
+
+        foreach (var item in selection)
+        {
+            context.CartItems.Remove(item);
+        }
+        await context.SaveChangesAsync();
+    }
 }

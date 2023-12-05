@@ -20,5 +20,31 @@ namespace MusicApi.Services
                 .Include(r => r.Room)
                 .ToListAsync();
         }
+
+        public async Task<RoomRental?> Add(RoomRental roomRental, string email)
+        {
+            var context = contextFactory.CreateDbContext();
+
+            var customer = context.Customers.Where(x => x.Email == email).FirstOrDefault();
+            if(customer == default(Customer) )
+            {
+                return null;
+            }
+            var rental = new Rental()
+            {
+                RentalDate = DateOnly.FromDateTime(DateTime.Now),
+                CustomerId = customer.Id,
+                //EmployeeId = 3
+            };
+
+            context.Rentals.Add(rental);
+            await context.SaveChangesAsync();
+
+            roomRental.RentalId = rental.Id;
+
+            context.RoomRentals.Add(roomRental);
+            await context.SaveChangesAsync();
+            return roomRental;
+        }
     }
 }

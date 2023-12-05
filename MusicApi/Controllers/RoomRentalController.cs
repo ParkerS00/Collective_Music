@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicApi.Data;
+using MusicApi.Request;
 using MusicApi.Services;
 
 namespace MusicApi.Controllers;
@@ -21,4 +22,19 @@ public class RoomRentalController : Controller
     {
         return await roomRentalService.GetAll();
     }
+
+    [HttpPost("{request}")]
+    public async Task Post([FromBody] AddRoomRentalRequest request)
+    {
+        var roomRental = new RoomRental()
+        {
+            RoomId = request.RoomId,
+            ActualPrice = request.ActualPrice,
+            StartTime = request.StartTime,
+            EndTime = request.EndTime,
+        };
+
+        await roomRentalService.Add(roomRental, request.userEmail);
+    }
+
 }

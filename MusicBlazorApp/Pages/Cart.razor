@@ -2,35 +2,66 @@
 @using MusicApi.Data;
 @using MusicBlazorApp.State;
 @using MusicApi.Dtos;
+@inject HttpClient httpClient;
+@inject IConfiguration config;
 @inject CartState cartState
 @inject AuthenticationStateProvider auth;
 
-<h3>Cart</h3>
+<h1>Your Cart</h1>
 
 @if(cartState.SelectedItems is not null)
 {
     @if(cartState.SelectedItems.Count == 0)
     {
-        <p>No Items</p>
-@*         <img src="https://i.imgflip.com/6cvg21.jpg" />
- *@    }
+        <div class="main-container" style="height: 90vh;">
+            <p>You have no items in your cart</p>
+            <div class="red-button"><h5><a href="/browse-instruments">Browse Items</a></h5></div>
+        </div>
+    }
     else
     {
         @foreach (var itemResult in cartState.SelectedItems)
         {
-            <div><img src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")"></div>
-            <p>@itemResult.Item.ItemName</p>
-            <p>@itemResult.Quantity</p>
+            <div class="row">
+                <div class="col-xl-4">
+                    <img width="300" class="img-fluid img" src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")">
+                </div>
+                <div class="col-xl-8">
+                    <div class="justify-content-center">
+                        <h3><strong>@itemResult.Item.ItemName</strong></h3>
+                    </div>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col">each</th>
+                                <th scope="col">qty</th>
+                                <th scope="col">total</th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@itemResult.Item.SellPrice</td>
+                                <td><input type="number" min="0" @bind="@itemResult.Item.Quantity" @onclick="CalculateCartTotal"/></td>
+                                <td>$@(itemResult.Item.Quantity * itemResult.Item.SellPrice)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p @onclick="() => HandleDelete(itemResult.Item.Id)" style="color: cadetblue; text-decoration: underline;">Delete</p>
+                </div>
+            </div>
+
+            <hr />
+            <h2>Cart Total</h2>
+            <p>$@CartTotal</p>
+
         }    
     }
 }
 
-
-
-
-
 @code {
-
+    public decimal? CartTotal = 0;
+    public string UserEmail { get; set; }
+    public int CustomerId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -44,9 +75,28 @@
         }
         //TODO: CHANGE THIS TO BE THE USERS EMAIL 
         await cartState.RefreshCart(name);
-        //var Items = cartState.SelectedItems;
-        //ItemResults = Items;
+        UserEmail = name;
+
+        var dbCustomer = await httpClient.GetFromJsonAsync<Customer>($"{config[Constants.ApiEndpoint]}/customer/{name}");
+        CustomerId = dbCustomer.Id;
+
+        CalculateCartTotal();
     }
 
+    public async Task HandleDelete(int itemId)
+    {
+        var response = await httpClient.DeleteAsync($"{config[Constants.ApiEndpoint]}/cart/{CustomerId}/{itemId}");
+
+    }
+
+    public void CalculateCartTotal()
+    {
+        foreach (var itemResult in cartState.SelectedItems)
+        {
+            int? qty = itemResult.Item.Quantity;
+            decimal? sprice = itemResult.Item.SellPrice;
+            CartTotal += (qty * sprice);
+        }
+    }
 }
 
