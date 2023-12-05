@@ -53,10 +53,15 @@ public class CartController : Controller
         return cartItemDtos;
     }
 
-    [HttpDelete("{email}/id")]
-    public async Task Delete(string email)
+    [HttpDelete("{email}/{id}/{quantity}")]
+    public async Task Delete(string email, int id, int quantity)
     {
-        var cartItems = await cartService.GetCartItems(email);
+        await cartService.DeleteItem(email, id, quantity);
+    }
 
+    [HttpDelete("{customerId}/{itemId}")]
+    public async Task DeleteWholeItem(int customerId, int itemId)
+    {
+        await cartService.DeleteItem(customerId, itemId);
     }
 }

@@ -2,6 +2,8 @@
 @using MusicApi.Data;
 @using MusicBlazorApp.State;
 @using MusicApi.Dtos;
+@inject HttpClient httpClient;
+@inject IConfiguration config;
 @inject CartState cartState
 @inject AuthenticationStateProvider auth;
 
@@ -13,7 +15,7 @@
     {
         <div class="main-container" style="height: 90vh;">
             <p>You have no items in your cart</p>
-            <div class="red-button"><h5><a href="/Account">Rent</a></h5></div>
+            <div class="red-button"><h5><a href="/browse-instruments">Browse Items</a></h5></div>
         </div>
     }
     else
@@ -39,24 +41,27 @@
                         <tbody>
                             <tr>
                                 <td>@itemResult.Item.SellPrice</td>
-                                <td><input @onclick="() => CalculateRowTtl(itemResult.Item.Quantity, itemResult.Item.SellPrice)"  type="number" min="0" @bind="@itemResult.Item.Quantity"/></td>
-                                <td>@rowTtl</td>
+                                <td><input type="number" min="0" @bind="@itemResult.Item.Quantity" @onclick="CalculateCartTotal"/></td>
+                                <td>$@(itemResult.Item.Quantity * itemResult.Item.SellPrice)</td>
                             </tr>
                         </tbody>
                     </table>
-                    <p @onclick="() => HandleDelete(itemResult.Item.Id)" style="color: lightblue; text-decoration: underline;">Delete</p>
+                    <p @onclick="() => HandleDelete(itemResult.Item.Id)" style="color: cadetblue; text-decoration: underline;">Delete</p>
                 </div>
             </div>
 
             <hr />
             <h2>Cart Total</h2>
+            <p>$@CartTotal</p>
 
         }    
     }
 }
 
 @code {
-    public decimal? rowTtl { get; set; }
+    public decimal? CartTotal = 0;
+    public string UserEmail { get; set; }
+    public int CustomerId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,20 +75,28 @@
         }
         //TODO: CHANGE THIS TO BE THE USERS EMAIL 
         await cartState.RefreshCart(name);
-        //var Items = cartState.SelectedItems;
-        //ItemResults = Items;
+        UserEmail = name;
+
+        var dbCustomer = await httpClient.GetFromJsonAsync<Customer>($"{config[Constants.ApiEndpoint]}/customer/{name}");
+        CustomerId = dbCustomer.Id;
+
+        CalculateCartTotal();
     }
 
-    public decimal? CalculateRowTtl(int? qty, decimal? sellprice)
+    public async Task HandleDelete(int itemId)
     {
-        rowTtl = qty * sellprice;
-        return qty * sellprice;
+        var response = await httpClient.DeleteAsync($"{config[Constants.ApiEndpoint]}/cart/{CustomerId}/{itemId}");
+
     }
 
-    public void HandleDelete(int itemId)
+    public void CalculateCartTotal()
     {
-        var ruc = cartState.SelectedItems.Where(i => i.Item.Id == itemId).FirstOrDefault();
-        cartState.SelectedItems.Remove(ruc);
+        foreach (var itemResult in cartState.SelectedItems)
+        {
+            int? qty = itemResult.Item.Quantity;
+            decimal? sprice = itemResult.Item.SellPrice;
+            CartTotal += (qty * sprice);
+        }
     }
 }
 

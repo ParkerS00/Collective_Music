@@ -323,7 +323,7 @@ else
             }
         }
 
-        if(Item is not null)
+        if (Item is not null)
         {
             selectedStatus = Item.ItemStatuses.First();
         }
@@ -334,24 +334,6 @@ else
         IsFirstImg = false;
         return "";
     }
-
-    // public void GetAverageRating()
-    // {
-    //     if (Item.Reviews.Count() > 0)
-    //     {
-    //         decimal sum = 0;
-    //         foreach (var rating in Item.Reviews)
-    //         {
-    //             sum += (decimal)rating.Rating;
-    //         }
-
-    //         ItemAverageRating = Math.Round((sum / (decimal)Item.Reviews.Count()), 1);
-    //     }
-    //     else
-    //     {
-    //         ItemAverageRating = 0;
-    //     }
-    // }
 
     public void TogglePopUp()
     {
