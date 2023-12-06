@@ -305,7 +305,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         CurrentUrl = nav.Uri;
-        statusClicked = "Like New";
 
         Item = await httpClient.GetFromJsonAsync<ItemDto>($"{config[Constants.ApiEndpoint]}/Items/{ItemId}");
 
@@ -336,6 +335,7 @@ else
         if (Item is not null)
         {
             selectedStatus = Item.ItemStatuses.First();
+            statusClicked = selectedStatus.Name;
         }
     }
 
