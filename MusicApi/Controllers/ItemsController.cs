@@ -70,8 +70,7 @@ public class ItemsController : Controller
             {
                 await itemService.RemovePrimaries(request.Id);
             }
-            await itemService.AddImageFilePath(request.ImageFilePath, item.Id, request.IsPrimary);
+            await itemService.AttemptAddImageFilePath(request.ImageFilePath, item.Id, request.IsPrimary);
         }
     }
-
 }

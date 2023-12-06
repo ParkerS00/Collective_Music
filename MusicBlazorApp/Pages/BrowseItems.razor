@@ -18,25 +18,7 @@
             <nav id="filter-sidebar" class="collapse d-lg-block sidebar collapse bg-white">
                 <div class=" mx-3">
                     <h4>Filter</h4>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Purchase New
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="used" id="flexCheckDefault" @bind="FilterUsed">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Purchase Used
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="rent" id="flexCheckDefault" @bind="FilterRent">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Rent
-                        </label>
-                    </div>
-                    <hr />
+                    
                     <h4>Category</h4>
                     <div class="form-check">
                         @foreach (var category in CategoryStrings)

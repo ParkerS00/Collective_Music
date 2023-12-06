@@ -46,5 +46,45 @@ namespace MusicTests
             //Assert
             mockItemService.Verify(f => f.GetFromDatabase(It.IsAny<int>()), Times.Never);
         }
+
+        [Fact]
+        public async Task TestingCorrectImagefilePathUpload()
+        {
+            //Assert
+            var mockItemService = new Mock<ItemService>();
+            mockItemService.Setup(f => f.AddImageFilePath(It.IsAny<ItemImage>())).Verifiable();
+
+            string attempted = "thisIsAFilePath.jpg";
+            int attemptedItemId = 1;
+            bool attemptedBool = false;
+
+            //Act
+            await mockItemService.Object.AttemptAddImageFilePath(attempted, attemptedItemId, attemptedBool);
+
+            //Assert
+            mockItemService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task TestingIncorrectImagefilePathUpload()
+        {
+            //Assert
+            var mockItemService = new Mock<ItemService>();
+
+            string goodPath = "thisIsAFilePath.jpg";
+            int goodId = 1;
+            bool goodBool = false;
+
+            string badPath = "";
+            int badId = -1;
+
+            //Act
+            await mockItemService.Object.AttemptAddImageFilePath(goodPath, badId, goodBool);
+            await mockItemService.Object.AttemptAddImageFilePath(badPath, goodId, goodBool);
+
+
+            //Assert
+            mockItemService.Verify(f => f.AddImageFilePath(It.IsAny<ItemImage>()), Times.Never);
+        }
     }
 }
