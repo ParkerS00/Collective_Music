@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MusicApi.Data;
@@ -32,8 +33,8 @@ public class BlazorIntegrationTestContext : WebApplicationFactory<Program>, IAsy
     {
         builder.ConfigureTestServices(services =>
         {
-            services.RemoveAll(typeof(DbContextOptions<MusicDbContext>));
-            services.AddDbContext<MusicDbContext>(options => options.UseNpgsql(_dbContainer.GetConnectionString()));
+            services.RemoveAll(typeof(DbContextOptionsBuilder<MusicDbContext>));
+            services.AddDbContextFactory<MusicDbContext>(options => options.UseNpgsql(_dbContainer.GetConnectionString()));
         });
     }
 
@@ -41,7 +42,8 @@ public class BlazorIntegrationTestContext : WebApplicationFactory<Program>, IAsy
     {
         await _dbContainer.StartAsync();
 
-        var dbContext = Services.GetRequiredService<MusicDbContext>();
+        var factory = Services.GetRequiredService<IDbContextFactory<MusicDbContext>>();
+        var dbContext = factory.CreateDbContext();
         await dbContext.Database.MigrateAsync();
     }
 
