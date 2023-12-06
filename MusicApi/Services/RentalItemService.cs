@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicApi.Data;
+using MusicApi.Request;
 
 namespace MusicApi.Services;
 
@@ -22,11 +23,19 @@ public class RentalItemService
             .ToListAsync();
     }
 
-    public async Task<ItemRental?> Add(ItemRental itemRental, string email)
+    public async Task<ItemRental?> Add(AddItemRentalRequest request)
     {
         var context = contextFactory.CreateDbContext();
 
-        var customer = context.Customers.Where(x => x.Email == email).FirstOrDefault();
+        var inventoryItem = await context.Inventories
+            .Include(i => i.CartItem)
+            .Where(i => i.IsRentable == true)
+            .Where(i => i.IsPurchased == false)
+            .Where(i => i.CartItem == null)
+            .Where(i => i.ItemId == request.ItemId)
+            .FirstOrDefaultAsync(); 
+
+        var customer = context.Customers.Where(x => x.Email == request.UserEmail).FirstOrDefault();
         if (customer == default(Customer)) 
         {
             return null;
@@ -40,7 +49,12 @@ public class RentalItemService
         context.Rentals.Add(rental);
         await context.SaveChangesAsync();
 
-        itemRental.RentalId = rental.Id;
+        var itemRental = new ItemRental()
+        {
+            FinalRentalPrice = request.FinalRentalPrice,
+            RentalId = rental.Id,
+            InventoryId = inventoryItem.Id
+        };
 
         context.ItemRentals.Add(itemRental);
         await context.SaveChangesAsync();

@@ -72,19 +72,27 @@
 
         <p>@Date</p>
 
-        <p class="red-button">Confirm your rental pickup</p>
+        <p class="red-button" @onclick="ConfirmRental">Confirm your rental pickup</p>
     }
 </div>
 
 @code {
     [Parameter]
     public int ItemId { get; set; }
+
     public ItemDto Item { get; set; }
 
     public int CurrentUserId { get; set; }
+
     public string CurrentUserName { get; set; }
 
+    public string CurrentUserEmail { get; set; }
+
     public DateOnly? Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
+    public string StrError = "";
+
+    public string SuccessMessage = "";
 
 
     protected override async Task OnInitializedAsync()
@@ -94,7 +102,7 @@
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         var name = user.Identity.Name;
-        CurrentUserName = name;
+        CurrentUserEmail = name;
 
         var allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
 
@@ -116,10 +124,21 @@
 
     private async Task ConfirmRental()
     {
+        StrError = "";
+        SuccessMessage = "";
         if(CurrentUserName is null)
         {
             return;
         }
-        //var request = AddItemRentalRequest(CurrentUserName, )
+        var request = new AddItemRentalRequest(Item.Id, (decimal)Item.SuggestedRentalPrice, CurrentUserEmail);
+        var response = await httpClient.PostAsJsonAsync<AddItemRentalRequest>($"{config[Constants.ApiEndpoint]}/RentalItem/{request}", request);
+        if (!response.IsSuccessStatusCode)
+        {
+            StrError = "Something went wrong with your request. Please ensure you have selected a room, a date, and a time.";
+        }
+        else
+        {
+            SuccessMessage = "Successfully created rental";
+        }
     }
 }

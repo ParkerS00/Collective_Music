@@ -27,13 +27,8 @@ public class RentalItemController : Controller
     [HttpPost("{request}")]
     public async Task Post([FromBody] AddItemRentalRequest request)
     {
-        var itemRental = new ItemRental()
-        {
-            InventoryId = request.InventoryId,
-            FinalRentalPrice = request.FinalRentalPrice,
-            OutCondition = request.OutCondition,
-        };
+        
 
-        await rentalItemService.Add(itemRental, request.UserEmail);
+        await rentalItemService.Add(request);
     }
 }

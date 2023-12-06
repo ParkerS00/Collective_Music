@@ -4,21 +4,18 @@
     {
         public string? UserEmail { get; set; }  
 
-        public int? InventoryId { get; set; }
+        public int? ItemId { get; set; }
         public decimal? FinalRentalPrice { get; set; }
-
-        public string? OutCondition { get; set; }
 
         public AddItemRentalRequest() 
         {
         
         }
 
-        public AddItemRentalRequest(int inventoryId, decimal finalRentalPrice, string outCondition, string userEmail)
+        public AddItemRentalRequest(int itemId, decimal finalRentalPrice, string userEmail)
         {
-            InventoryId = inventoryId;
+            ItemId = itemId;
             FinalRentalPrice = finalRentalPrice;
-            OutCondition = outCondition;
             UserEmail = userEmail;
         }
     }
