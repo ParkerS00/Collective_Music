@@ -1,3 +1,5 @@
+create role azure_pg_admin;
+create role codebras;
 --
 -- PostgreSQL database dump
 --
@@ -20,7 +22,7 @@ SET row_security = off;
 -- Name: public; Type: SCHEMA; Schema: -; Owner: azure_pg_admin
 --
 
-CREATE SCHEMA public;
+--CREATE SCHEMA public;
 
 
 ALTER SCHEMA public OWNER TO azure_pg_admin;
