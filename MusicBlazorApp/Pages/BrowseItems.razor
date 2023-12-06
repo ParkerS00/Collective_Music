@@ -149,12 +149,12 @@ else
     </div>
 }
 
-
-
 @code {
     public string? SearchQuery { get; set; }
 
     public IEnumerable<ItemDto>? Items { get; set; }
+
+    public IEnumerable<ItemDto>? AllItemsNoFilter { get; set; }
 
     public bool FilterNew { get; set; } = true;
 
@@ -174,10 +174,14 @@ else
 
     public List<(string, bool)> SelectedCategories = new List<(string, bool)>();
 
+
+
     protected override async Task OnInitializedAsync()
     {
         Items = new List<ItemDto>();
         Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
+
+        AllItemsNoFilter = Items;
 
         foreach (var item in Items)
         {
@@ -226,11 +230,7 @@ else
     {
         UpdateSelectedCategories(categoryName);
 
-        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
-        foreach (var item in Items)
-        {
-            item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
-        }
+        Items = AllItemsNoFilter;
 
         foreach (var cat in SelectedCategories)
         {
@@ -238,11 +238,7 @@ else
         }
         if (SelectedCategories.Count == 0)
         {
-            Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
-            foreach (var item in Items)
-            {
-                item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
-            }
+            Items = AllItemsNoFilter;
         }
 
     }
