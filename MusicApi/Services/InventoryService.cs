@@ -27,8 +27,26 @@ public class InventoryService : IInventoryService<Inventory>
         var cartItems = await context.CartItems
             .Include(x => x.Customer)
             .Include(x => x.Inventory)
+                .ThenInclude(x => x.Item)
             .Where(x => x.Customer.Email == email)
             .ToListAsync();
+
+        var customer = context.Customers.Where(x => x.Email == email).FirstOrDefault();
+        if (customer == default(Customer))
+        {
+            return false ;
+        }
+
+        var purchase = new Purchase()
+        {
+            PurchaseDate = DateOnly.FromDateTime(DateTime.Now),
+            CustomerId = customer.Id,
+        };
+
+        context.Purchases.Add(purchase);
+        await context.SaveChangesAsync();
+
+
 
         foreach (var cuc in cartItems)
         {
@@ -38,7 +56,13 @@ public class InventoryService : IInventoryService<Inventory>
             }*/
             cuc.Inventory.IsPurchased = true;
             context.Inventories.Update(cuc.Inventory);
-
+            var piuc = new PurchaseItem()
+            {
+                PurchaseId = purchase.Id,
+                InventoryId = (int)cuc.InventoryId,
+                FinalPrice = cuc.Inventory.Item.SellPrice
+            };
+            context.PurchaseItems.Add(piuc);
             context.CartItems.Remove(cuc);
         }
 

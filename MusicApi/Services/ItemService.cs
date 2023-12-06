@@ -65,11 +65,6 @@ public class ItemService : IItemService<Item>
         return item1;
     }
 
-    public Task<Item> Delete(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Item> Update(Item item)
     {
         //Get item from db

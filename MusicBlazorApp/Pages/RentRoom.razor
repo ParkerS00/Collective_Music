@@ -68,6 +68,10 @@
             {
                 <div class="alert alert-danger">@StrError</div>
             }
+            @if(SuccessMessage.Length > 0)
+            {
+                <div class="alert alert-success">@SuccessMessage</div>
+            }
         }
     </div>
 </center>
@@ -92,6 +96,8 @@
     public String DateError { get; set; }
 
     public string StrError = "";
+
+    public string SuccessMessage = "";
 
 
     protected override async Task OnInitializedAsync()
@@ -142,6 +148,7 @@
     private async Task SaveRental()
     {
         StrError = "";
+        SuccessMessage = "";
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         var name = user.Identity.Name;
@@ -154,6 +161,10 @@
         if (!response.IsSuccessStatusCode)
         {
             StrError = "Something went wrong with your request. Please ensure you have selected a room, a date, and a time.";
+        }
+        else
+        {
+            SuccessMessage = "Successfully created rental";
         }
         NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
     }
