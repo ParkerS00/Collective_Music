@@ -1,10 +1,10 @@
-name: Build and deploy .NET Core application to Web App MusicApi20231118154059
+name: Build and deploy .NET Core application to Web App MusicApi2023
 on:
   push:
     branches:
     - main
 env:
-  AZURE_WEBAPP_NAME: MusicApi20231118154059
+  AZURE_WEBAPP_NAME: MusicApi2023
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.MusicApi20231118154059_364B }}
+        publish-profile: ${{ secrets.MusicApi2023_4ED4 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

@@ -11,7 +11,7 @@
 @inject IConfiguration config;
 
 
-<div class="row">   
+<div class="row">
     <div class="col-lg-2 col-md-3">
         <div class="sticky-top" style="top: 75px;">
             <!-- Filter Section -->
@@ -19,7 +19,7 @@
                 <div class=" mx-3">
                     <h4>Filter</h4>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" >
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault">
                         <label class="form-check-label" for="flexCheckDefault">
                             Purchase New
                         </label>
@@ -42,8 +42,8 @@
                         @foreach (var category in CategoryStrings)
                         {
                             <div>
-                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" @onclick="() => FilterItems(category)">
-                                <label class="form-check-label" for="flexCheckDefault"  >
+                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" @onclick="() => FilterItemsByCategory(category)">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     @category
                                 </label>
                             </div>
@@ -64,9 +64,9 @@
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" @bind-value="@Filter100Plus" @bind-value:after="FilterItems">
                         <label class="form-check-label" for="flexCheckDefault">
-                            $100.00 - $200.00
+                            $100.00 +
                         </label>
                     </div>
                 </div>
@@ -78,32 +78,34 @@
         <h1>Browse Instruments</h1>
         <div class="my-5 mx-3 d-flex justify-content-end">
             <InputText @bind-Value="SearchQuery"></InputText>
-            <button type="submit">Search</button>
+            <button @onclick="SearchItems" type="submit">Search</button>
         </div>
 
         <div class="p-4 d-flex flex-wrap flex-row" style="background-color: #EEEEEE; margin-right: 100px;">
             <!-- ITEMS -->
-            @if (Items is not null)
+            @if (Items.Count() != 0)
             {
                 @foreach (var item in Items)
                 {
                     <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px;" @onclick="() => HandleClick(item.Id)">
-                        @if (item.PrimaryImagePath != "css\\images\\itemImages")
-                        {
-                            @if (item.Quantity == 0)
+                        <div style="height:297px;">
+                            @if (item.PrimaryImagePath != "css\\images\\itemImages")
                             {
-                                <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0);">
-                                <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
+                                @if (item.Quantity == 0)
+                                {
+                                    <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0);">
+                                    <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
+                                }
+                                else
+                                {
+                                    <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px;">
+                                }
                             }
                             else
                             {
-                                <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px;">
+                                <img class="card-img-top" src="https://dummyimage.com/400x500/595959/fff&text=no_image" alt="@item.ItemName" style="border-radius: 0px;">
                             }
-                        }
-                        else
-                        {
-                            <img class="card-img-top" src="https://dummyimage.com/400x500/595959/fff&text=no_image" alt="@item.ItemName" style="border-radius: 0px;">
-                        }
+                        </div>
                         <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
                         <div class="card-body">
                             @for (int i = 1; i <= 5; i++)
@@ -118,30 +120,47 @@
                                 }
                             }
                         </div>
-
                         <div class="card-body">
                             <p class="card-text"><strong>$@item.SellPrice</strong></p>
-                         
+
                         </div>
                     </div>
                 }
             }
             else
             {
-                <div class="text-center">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                for (int i = 0; i < 10; i++)
+                {
+                    <div class="card m-4" style="width: 18rem;border: none; border-radius: 0px; box-shadow: 3px 3px 10px lightgray;">
+                        <img class="card-img-top" alt="  " style="height:250px;">
+                        <div class="card-body">
+                            <h5 class="card-title placeholder-glow">
+                                <span class="placeholder col-6"></span>
+                            </h5>
+                            <p class="card-text placeholder-glow">
+                                <span class="placeholder col-7"></span>
+                                <span class="placeholder col-4"></span>
+                                <span class="placeholder col-4"></span>
+                                <span class="placeholder col-6"></span>
+                                <span class="placeholder col-8"></span>
+                            </p>
+                            <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+                        </div>
                     </div>
-                </div>
+                }
             }
         </div>
     </div>
 </div>
+}
+
 
 @code {
     public string? SearchQuery { get; set; }
 
     public IEnumerable<ItemDto>? Items { get; set; }
+
+    public IEnumerable<ItemDto>? AllItemsNoFilter { get; set; }
 
     public bool FilterNew { get; set; } = true;
 
@@ -155,16 +174,22 @@
     [Parameter]
     public bool Filter50to100 { get; set; }
 
+    public bool Filter100Plus { get; set; }
+
     public List<string> CategoryStrings = new();
 
     public List<(string, bool)> SelectedCategories = new List<(string, bool)>();
+
+
 
     protected override async Task OnInitializedAsync()
     {
         Items = new List<ItemDto>();
         Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
 
-        foreach(var item in Items)
+        AllItemsNoFilter = Items;
+
+        foreach (var item in Items)
         {
             item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
         }
@@ -180,13 +205,22 @@
     public async Task FilterItems()
     {
         Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
+        foreach (var item in Items)
+        {
+            item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
+        }
+
         if (FilterLt50)
         {
             Items = Items.Where(i => i.SellPrice <= 50).ToList();
         }
         if (Filter50to100)
         {
-            Items = Items.Where(i => i.SellPrice >= 50).ToList();
+            Items = Items.Where(i => (i.SellPrice >= 50 && i.SellPrice < 100)).ToList();
+        }
+        if (Filter100Plus)
+        {
+            Items = Items.Where(i => i.SellPrice > 100).ToList();
         }
         // if (CategoryStrings.Count > 0)
         // {
@@ -198,9 +232,26 @@
 
     }
 
-    public async Task FilterItems(string categoryName)
+    public async Task FilterItemsByCategory(string categoryName)
     {
-        Items = Items.Where(i => i.ItemCategories.Contains(categoryName));
+        UpdateSelectedCategories(categoryName);
+
+        Items = AllItemsNoFilter;
+
+        foreach (var cat in SelectedCategories)
+        {
+            Items = Items.Where(i => i.ItemCategories.Contains(cat.Item1));
+        }
+        if (SelectedCategories.Count == 0)
+        {
+            Items = AllItemsNoFilter;
+        }
+
+    }
+
+    public async Task SearchItems()
+    {
+        Items = Items.Where(i => i.ItemName.ToLower().Contains(SearchQuery));
     }
 
     public async Task CompileCategories()
@@ -235,7 +286,7 @@
         //     }
         // }
 
-        if (SelectedCategories.Any(m => m.Item1 == selectedCategory))
+        if (!SelectedCategories.Any(m => m.Item1 == selectedCategory))
         {
             SelectedCategories.Add((selectedCategory, true));
         }

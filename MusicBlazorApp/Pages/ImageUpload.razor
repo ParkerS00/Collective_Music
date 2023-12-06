@@ -9,127 +9,133 @@
 @using MusicApi.Data;
 @using MusicApi.FrontFacingData;
 
-<h1>ImageUpload</h1>
-
-<div>
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">SKU</th>
-                <th scope="col">Item Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">$Sell Price</th>
-                <th scope="col">$Suggested Rental Price</th>
-                <th scope="col">Image Upload</th>
-                <th scope="col"><button class="btn btn-success" @onclick="() => showPopup = true">Add</button></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Items)
-            {
-                <tr>
-                    <td>@item.SerialNumber</td>
-                    @if (selectedItem != item)
+<AuthorizeView Roles="@Constants.AdminRole">
+    <Authorized>
+        <h1>ImageUpload</h1>
+        <div>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">SKU</th>
+                        <th scope="col">Item Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">$Sell Price</th>
+                        <th scope="col">$Suggested Rental Price</th>
+                        <th scope="col">Image Upload</th>
+                        <th scope="col"><button class="btn btn-success" @onclick="() => showPopup = true">Add</button></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Items)
                     {
-                        <td>@item.ItemName</td>
-                        <td>@item.Description</td>
-                        <td>@item.SellPrice</td>
-                        <td>@item.SuggestedRentalPrice</td>
-                        <td></td>
-                    }
-                    else
-                    {
+                        <tr>
+                            <td>@item.SerialNumber</td>
+                            @if (selectedItem != item)
+                            {
+                                <td>@item.ItemName</td>
+                                <td>@item.Description</td>
+                                <td>@item.SellPrice</td>
+                                <td>@item.SuggestedRentalPrice</td>
+                                <td></td>
+                            }
+                            else
+                            {
 
-                        <td>
-                            <div class="form-row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control text" @bind="ItemName">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control text" @bind="ItemDescription">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-row">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
+                                <td>
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control text" @bind="ItemName">
+                                        </div>
                                     </div>
-                                    <input type="number" @bind="SellPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-row">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
+                                </td>
+                                <td>
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control text" @bind="ItemDescription">
+                                        </div>
                                     </div>
-                                    <input type="number" @bind="RentPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div>
-                                <InputFile OnChange="@LoadFiles" multiple />
-                            </div>
-                        </td>
-                    }
-                    <td>
-                        
-                        <button class="btn btn-primary" @onclick="() => EditItem(item)">Edit</button>
-                        @if (item == selectedItem)
-                        {
-                            <button class="btn btn-secondary" @onclick="Submit">Submit</button>
+                                </td>
+                                <td>
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="number" @bind="SellPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-row">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="number" @bind="RentPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <InputFile OnChange="@LoadFiles" multiple />
+                                    </div>
+                                </td>
+                            }
                             <td>
-                                <div>
-                                    <input type="checkbox" name="Is Primary" id="IsPrimary" @onclick="swap"/>
-                                    <label for="IsPrimary">Is Primary</label>
-                                </div>
-                            </td>
-                        }
-                   </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
 
-@if(showPopup)
+                                <button class="btn btn-primary" @onclick="() => EditItem(item)">Edit</button>
+                                @if (item == selectedItem)
+                                {
+                                    <button class="btn btn-secondary" @onclick="Submit">Submit</button>
+                                <td>
+                                    <div>
+                                        <input type="checkbox" name="Is Primary" id="IsPrimary" @onclick="swap" />
+                                        <label for="IsPrimary">Is Primary</label>
+                                    </div>
+                                </td>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Authorized>
+<NotAuthorized>
+</NotAuthorized>
+</AuthorizeView>
+
+
+@if (showPopup)
 {
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add New Item</h3>
-                <!-- Button to close the popup -->
-                <button type="button" class="close"
-                @onclick="() => showPopup = false">
-                    <span aria-hidden="true">X</span>
-                </button>
-            </div>
-            <!-- Edit form for the current user -->
-            <div class="modal-body">
-                <!-- Only show Id if not a new user -->
+    <div class="modal" tabindex="-1" style="display:block" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add New Item</h3>
+                    <!-- Button to close the popup -->
+                    <button type="button" class="close"
+                    @onclick="() => showPopup = false">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                </div>
+                <!-- Edit form for the current user -->
+                <div class="modal-body">
+                    <!-- Only show Id if not a new user -->
                     <input class="form-control" type="text" placeholder="SKU" @bind="addItem.SKU" />
                     <input class="form-control" type="text" placeholder="Name" @bind="addItem.ItemName" />
                     <input class="form-control" type="text" placeholder="Description" @bind="addItem.ItemText" />
                     <input type="number" @bind="addItem.SellPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" placeholder="Sell Price" />
-                    <input type="number" @bind="addItem.RentPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" placeholder="Rent Price"/>
+                    <input type="number" @bind="addItem.RentPrice" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" placeholder="Rent Price" />
                     <InputFile OnChange="@LoadFiles" single />
                     <button class="btn btn-primary" @onclick="() => AddItem()">Submit</button>
                     <button class="btn btn-primary" @onclick="() => CancelPopUp()">Cancel</button>
-                <br />
-                @* <span style="color:red">@strError</span> *@
+                    <br />
+                    @* <span style="color:red">@strError</span> *@
+                </div>
             </div>
         </div>
     </div>
-</div>
 }
 
 
@@ -159,6 +165,16 @@
     protected override async Task OnInitializedAsync()
     {
         Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/items");
+
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var name = user.Identity.Name;
+
+        if(user.Identity.Name != config[Constants.DefaultAdminUsername])
+        {
+            nav.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(nav.Uri)}");
+        }
+
     }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
@@ -208,11 +224,16 @@
 
     private async Task Submit()
     {
-        var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, selectedItem.SerialNumber ,SellPrice, RentPrice, filePath + ".jpg", isPrimary);
+        var request = new AddItemRequest(selectedItem.Id, ItemName, ItemDescription, selectedItem.SerialNumber, SellPrice, RentPrice, filePath + ".jpg", isPrimary);
         var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/items/{request}", request);
         await SaveImage();
         selectedItem = null;
         image = null;
         nav.NavigateTo(nav.Uri, forceLoad: true);
+    }
+
+    private async Task Redirect()
+    {
+        nav.NavigateTo("/", forceLoad: true);
     }
 }

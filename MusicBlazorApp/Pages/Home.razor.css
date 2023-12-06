@@ -7,9 +7,13 @@
 
 .guitar-image {
     position: absolute;
-    height: 600px;
-    top: 100px;
-    left: 30vw;
+    height: 630px;
+    top: 231px;
+    left: 27vw;
+}
+
+.items-showcase {
+    margin-top: 292px;
 }
 
 .button-section {
@@ -108,8 +112,66 @@
     max-width: 100%; /* Limit width to parent container */
 }
 
+
 .card {
     /* Your existing card styles */
+    transform: scale3d(0);
+    transition: transform .5s;
 }
+
+    .card:hover {
+        transform: scale3d(1.15, 1.15, 2);
+    }
+
+.container {
+    padding: 100px 30px;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.image-stack::after {
+    content: ' ';
+    display: table;
+    clear: both;
+}
+
+.image-stack__item--top {
+    float: left;
+    width: 75%;
+}
+
+.image-stack__item--bottom {
+    float: right;
+    width: 66%;
+    margin-left: -100%;
+    padding-top: 15%;
+    // arbitrary position: relative;
+    z-index: 1;
+}
+
+@media screen and (min-width: 769px) {
+    .guitar-image {
+        position: absolute;
+        height: 630px;
+        top: 150px;
+        left: 27vw;
+    }
+}
+
+@media (max-width: 1896px) {
+    .container {
+        display: none;
+        visibility: hidden;
+    }
+
+    .decript {
+        justify-content: center;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+}
+
 
 

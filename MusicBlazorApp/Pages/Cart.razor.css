@@ -1,0 +1,17 @@
+﻿.main-container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.red-button{
+    text-decoration:none;
+}
+
+.total-area {
+    background-color: #ededed;
+
+}
+
+.delete-btn:hover {
+    cursor: pointer;
+}

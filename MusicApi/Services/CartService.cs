@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicApi.Data;
+using MusicApi.Dtos;
 using MusicApi.Request;
 
 namespace MusicApi.Services;
 
 public class CartService
 {
-
     private readonly ILogger<CartService> logger;
     private IDbContextFactory<MusicDbContext> contextFactory;
 
@@ -23,7 +23,7 @@ public class CartService
         List<Inventory> invItems = await context.Inventories
             .Include(i => i.Status)
             .Include(i => i.CartItem)
-            .Where(i => i.ItemId == request.ItemId && i.Status.StatusName == request.StatusName && i.CartItem == null)
+            .Where(i => i.ItemId == request.ItemId && i.Status.StatusName == request.StatusName && i.CartItem == null && i.IsPurchased != true)
             .ToListAsync();
 
         int customerId = await context.Customers
@@ -31,7 +31,7 @@ public class CartService
             .Select(c => c.Id)
             .FirstOrDefaultAsync();
 
-        if(invItems.Count < request.Quantity || customerId == 0) 
+        if(invItems.Count < request.Quantity - 1 || customerId == 0) 
         {
             return false;
         }
@@ -65,5 +65,50 @@ public class CartService
             .ToListAsync();
 
         return selection;
+    }
+
+    public async Task DeleteItem(string email, int itemId, int quantity)
+    {
+        var context = contextFactory.CreateDbContext();
+
+        var selection = await context.Inventories
+            .Include(i => i.Status)
+            .Include(i => i.Item)
+             .ThenInclude(i => i.ItemImages)
+            .Include(i => i.CartItem)
+                .ThenInclude(ct => ct.Customer)
+            .Where(i => i.CartItem.Customer.Email == email)
+            .Where(i => i.ItemId == itemId)
+            .ToListAsync();
+
+        if(quantity > selection.Count()) 
+        {
+            return;
+        }
+
+        foreach( var item in selection )
+        {
+            context.Inventories.Remove(item);
+        }
+        await context.SaveChangesAsync();
+    }
+
+    public async Task DeleteItem(int customerId, int itemId, string status)
+    {
+        var context = contextFactory.CreateDbContext();
+
+        var selection = await context.CartItems
+            .Include(i => i.Customer)
+            .Include(i => i.Inventory)
+                .ThenInclude(i => i.Item)
+            .Include(i => i.Inventory.Status)
+            .Where(i => i.Inventory.Item.Id == itemId && i.Inventory.Status.StatusName == status)
+            .ToListAsync();
+
+        foreach (var item in selection)
+        {
+            context.CartItems.Remove(item);
+        }
+        await context.SaveChangesAsync();
     }
 }

@@ -11,6 +11,7 @@
 @inject IHostEnvironment Environment;
 @inject CartState cartState;
 @inject NavigationManager NavManager;
+@inject IJSRuntime JSRuntime
 
 
 <PageTitle>Collaborative Music - Home</PageTitle>
@@ -25,37 +26,41 @@
         <div class="d-flex flex-column align-items-lg-center">
             <h1>Collaborative Music</h1>
             <h3>The one-stop music shop</h3>
-            @* <p>Shop Now</p> *@
         </div>
     </div>
     <div class="col-md-3"></div>
 </div>
 
-<h2>Our Highest Rated Items</h2>
-<div class="p-4">
-   @*  style="overflow-x: auto;" *@
-    <div class="d-flex flex-wrap flex-row">
-        @if (Items is not null)
+
+<!--Highest Rated Items-->
+<div class="p-4 items-showcase">
+    <center><h2>Our Highest Rated Items</h2></center><hr />
+    <div class="d-flex flex-wrap flex-row justify-content-around">
+
+        @if (Items.Count() != 0)
         {
             @foreach (var item in TopRatedItems)
             {
-                <div class="card m-4" style="width: 18rem; border: none; border-radius: 0px; box-shadow: 3px 3px 10px lightgray;" @onclick="() => HandleClick(item.Id)">
-                    @if (item.PrimaryImagePath != "css\\images\\itemImages")
-                    {
-                        @if (item.Quantity == 0)
+                <div class="card m-4" style="width: 18rem;border: none; border-radius: 0px; box-shadow: 3px 3px 10px lightgray;" @onclick="() => HandleClick(item.Id)">
+                    <div style="height:297px;">
+                        @if (item.PrimaryImagePath != "css\\images\\itemImages")
                         {
-                            <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0);">
-                            <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
+                            @if (item.Quantity == 0)
+                            {
+                                <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0);">
+                                <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
+                            }
+                            else
+                            {
+                                <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px;">
+                            }
                         }
                         else
                         {
-                            <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px;">
+                            <img class="card-img-top" src="https://dummyimage.com/400x500/595959/fff&text=no_image" alt="@item.ItemName" style="border-radius: 0px;">
                         }
-                    }
-                    else
-                    {
-                        <img class="card-img-top" src="https://dummyimage.com/400x500/595959/fff&text=no_image" alt="@item.ItemName" style="border-radius: 0px;">
-                    }
+                    </div>
+
 
                     <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
                     <div class="card-body">
@@ -77,36 +82,60 @@
                 </div>
             }
         }
+        else
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                <div class="card m-4" style="width: 18rem;border: none; border-radius: 0px; box-shadow: 3px 3px 10px lightgray;">
+                    <img src="" alt="  " class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title placeholder-glow">
+                            <span class="placeholder col-6"></span>
+                        </h5>
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder col-7"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-6"></span>
+                            <span class="placeholder col-8"></span>
+                        </p>
+                        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+                    </div>
+                </div>
+            }
+        }
     </div>
 </div>
-
 
 <!-- Rent a recording studio -->
 <div class="" style="background-color: #11151D;">
+
     <div class="row m-5">
-        <div class="col-md-6 p-5">
-            <img class="img-fluid img" src="css/images/Recording-Studio.jpg" style="max-width: 600px" />
-            <img class="img-fluid img" src="css/images/Recording-Studio2.jpg" style="max-width: 600px;" />
+        <div class="container col-lg-6">
+            <div class="image-stack">
+                <div class="image-stack__item image-stack__item--top">
+                    <img src="css/images/Recording-Studio3.jpg" alt="" style="max-width:600px;">
+                </div>
+                <div class="image-stack__item image-stack__item--bottom">
+                    <img src="css/images/Recording-Studio2.jpg" alt="" style="max-width:600px;">
+                </div>
+            </div>
         </div>
-        <div class="col-md-6 p-5" style="color: white;">
-            <h3>Rent a Collaborative Music Space </h3>
-            <p>We offer many options for renting spaces</p>
+        <div class="decript col-lg-6 p-5" style="color: white; margin-top:50px;">
+            <h3>Rent a Collaborative Music Space </h3><hr>
+            <p style="font-size:larger">
+                We offer many options for renting spaces! Collaborative Music aims to make recording more accessible for the everyday creator. We do this by:
+                <ul>
+                    <li>Offering different kinds of recording spaces to meet a wide variety of needs, from cozy practice rooms to high-end musical studios</li>
+                    <li>Creating affordable pricing for our customers with minimal commitment required</li>
+                    <li>Equipping our spaces with professional equipment at a fraction of the cost, rather than if members were to purchase that equipment themselves</li>
+                </ul>
+                By creating recording spaces specifically for new-age creators and artists, we have enabled our customers to capitalize on an unmet need in the market.
+            </p>
         </div>
     </div>
-
-
 </div>
 
-<div class="d-none" style="background: linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.5)), url(css/images/Recording-Studio.jpg); height: 450px; background-position: 50% 75%;">
-    <br />
-    <center class="mt-5"><h1 style="color: white;">Rent a Recording Studio</h1></center>
-    <center>
-        <div class="mt-4" style="background-color: black; color: white; width: 85%; padding: 100px;">
-            <p>Collaborate and Practice music together</p>
-        </div>
-    </center>
-
-</div>
 
 
 <!-- Three Button Section -->
@@ -128,7 +157,6 @@
                 <center><i class="ikons fa-solid fa-guitar mt-4"></i></center>
             </div>
         </a>
-
         <a class="links" href="/rent-a-room">
             <div class="service-links m-2 p-5">
                 <center><h2><span class="service-links-name">Rent a Studio </span></h2></center>
@@ -139,8 +167,12 @@
 </div>
 
 <!-- About Us -->
-<center><h1>About</h1></center>
-<p class="lead" style="max-width: 80%; text-align: center;">Collaborative music is the one stop shop to creating a collaborative space idk blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec massa in neque maximus egestas. Cras semper, justo eu sagittis rhoncus, est augue accumsan lorem, vel ultricies urna sem id augue. Donec eleifend eleifend ornare. Aliquam eu vestibulum mauris. Vestibulum fermentum sit amet dolor eget consequat. Sed vitae nisl erat. Sed vitae magna venenatis, luctus magna ut, facilisis turpis. Aenean facilisis sit amet lacus id accumsan. Aenean erat nisi, consequat sit amet lobortis non, sagittis blandit justo. Duis tortor erat, placerat a libero varius, scelerisque ornare ante. Duis ultricies finibus tortor, lacinia efficitur magna tempus et. Donec sit amet lectus nunc. Nulla sed nisi ut elit vestibulum egestas. Donec nec neque ipsum. Ut vitae pretium velit. Quisque vel arcu non metus sodales luctus sed non nunc.</p>
+<div class="p-5" style="margin-bottom:150px;">
+    <center>
+        <h1>About</h1>
+        <p class="lead" style="max-width: 80%; text-align: center;">Collaborative music is the one stop shop to creating a collaborative space idk blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec massa in neque maximus egestas. Cras semper, justo eu sagittis rhoncus, est augue accumsan lorem, vel ultricies urna sem id augue. Donec eleifend eleifend ornare. Aliquam eu vestibulum mauris. Vestibulum fermentum sit amet dolor eget consequat. Sed vitae nisl erat. Sed vitae magna venenatis, luctus magna ut, facilisis turpis. Aenean facilisis sit amet lacus id accumsan. Aenean erat nisi, consequat sit amet lobortis non, sagittis blandit justo. Duis tortor erat, placerat a libero varius, scelerisque ornare ante. Duis ultricies finibus tortor, lacinia efficitur magna tempus et. Donec sit amet lectus nunc. Nulla sed nisi ut elit vestibulum egestas. Donec nec neque ipsum. Ut vitae pretium velit. Quisque vel arcu non metus sodales luctus sed non nunc.</p>
+    </center>
+</div>
 
 <!-- How to Rent -->
 <div>
@@ -150,15 +182,15 @@
         </center>
         <div class="how-to-rent-wrapper d-flex flex-row justify-content-around flex-sm-wrap">
             <div class="rent-descriptions m-2 p-5">
-                <center><h4><a href="#" class="rent-descriptions-name">1. Create an Account</a></h4></center>
+                <center><h4> class="rent-descriptions-name">1. Create an Account</h4></center>
                 <center><i class="ikons fa-regular fa-user mt-4"></i></center>
             </div>
             <div class="rent-descriptions m-2 p-5">
-                <center><h4><a href="#" class="rent-descriptions-name">2. Schedule Online Rental</a></h4></center>
+                <center><h4>class="rent-descriptions-name">2. Schedule Online Rental</h4></center>
                 <center><i class="ikons fa-solid fa-arrow-pointer mt-4"></i></center>
             </div>
             <div class="rent-descriptions m-2 p-5">
-                <center><h4><a href="#" class="rent-descriptions-name">3. Pick Up Rental </a></h4></center>
+                <center><h4> class="rent-descriptions-name">3. Pick Up Rental </h4></center>
                 <center><i class="ikons fa-solid fa-car mt-4"></i></center>
             </div>
         </div>
@@ -181,7 +213,10 @@
 @code
 {
     public string userEmailAddress { get; set; }
+
     public bool notFound { get; set; } = false;
+
+    public string carouselName { get; set; }
 
     public IEnumerable<ItemDto>? Items = new List<ItemDto>();
 
@@ -195,6 +230,13 @@
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         var name = user.Identity?.Name;
+
+        OrderByRating();
+
+        foreach (var item in Items)
+        {
+            item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
+        }
 
         if (name is null)
         {
@@ -211,12 +253,10 @@
     }
 
 
-
     public void OrderByRating()
     {
         Items = Items.OrderByDescending(i => i.AverageItemRating);
         TopRatedItems = Items.Take(5);
-
     }
 
     public void HandleClick(int id)

@@ -10,18 +10,70 @@
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
 
-<div style="max-width: 800px; margin-left: auto; margin-right: auto;">
-<h3>Schedule Your Rental</h3>
 
-@if (Item is not null)
-{
-    <h1>@Item.ItemName</h1>
+<style>
 
-    <label for="selectdate">Select a Pick Up Date</label>
-    <input id="selectdate" type="date" @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" />
+    .rent-bar {
+        background-color: #5B0D13;
+        color: white;
+        margin: 0px;
+        margin-bottom: 100px;
+    }
 
-    <p>@Date</p>
-}
+    .how-to-rent {
+        padding-top: 50px;
+    }
+
+    .how-to-rent-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .ikons {
+        font-size: 100px;
+        color: inherit; /* Inherit text color from the parent */
+    }
+
+</style>
+
+<!-- How to Rent -->
+<div>
+    <div class="rent-bar w-100">
+        <center>
+            <h2 class="how-to-rent">How to Rent Items</h2>
+        </center>
+        <div class="how-to-rent-wrapper d-flex flex-row justify-content-around flex-sm-wrap">
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4>1. Create an Account</h4></center>
+                <center><i class="ikons fa-regular fa-user mt-4"></i></center>
+            </div>
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4>2. Schedule Online Rental</h4></center>
+                <center><i class="ikons fa-solid fa-arrow-pointer mt-4"></i></center>
+            </div>
+            <div class="rent-descriptions m-2 p-5">
+                <center><h4>3. Pick Up Rental </h4></center>
+                <center><i class="ikons fa-solid fa-car mt-4"></i></center>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div style="max-width: 800px; margin-left: auto; margin-right: auto; margin-top: 50px;">
+    <h3>Schedule Your Rental</h3>
+
+    @if (Item is not null)
+    {
+        <h1>@Item.ItemName</h1>
+
+        <label for="selectdate">Select a Pick Up Date</label>
+        <input id="selectdate" type="date" @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" />
+
+        <p>@Date</p>
+
+        <p class="red-button">Confirm your rental pickup</p>
+    }
 </div>
 
 @code {

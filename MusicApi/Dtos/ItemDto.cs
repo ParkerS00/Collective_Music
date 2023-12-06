@@ -21,7 +21,7 @@ public class ItemDto
 
     public string? PrimaryImagePath { get; set; }
 
-    public List<string>? ItemStatuses { get; set; }
+    public List<StatusDto>? ItemStatuses { get; set; }
 
     public int? Quantity { get; set; }
 
@@ -43,8 +43,18 @@ public class ItemDto
 
         if (item.Inventories != null)
         {
-            ItemStatuses = item.Inventories.Select(x => x.Status.StatusName).ToList();
-            Quantity = item.Inventories.GroupBy(i => i.ItemId).Count();
+            ItemStatuses = item.Inventories
+                .Where(i => i.IsPurchased == false && i.CartItem is null)
+                .Select(x => x.Status)
+                .GroupBy(x => x.Id)
+                .Select(x => new StatusDto()
+                {
+                    Name = x.First().StatusName,
+                    Quantity = x.Count()
+
+                })
+                .ToList();
+            Quantity = item.Inventories.Where(x => x.IsPurchased == false).GroupBy(i => i.ItemId).Count();
         }
 
         if (item.ItemCategories != null)

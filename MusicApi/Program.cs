@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
 using System.Configuration;
 using MusicApi.Data;
+using MusicApi.Email;
 
 public class Program
 {
@@ -11,23 +12,26 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
+// Add services to the container.
 
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        builder.Services.AddDbContextFactory<MusicDbContext>(config => config.UseNpgsql(builder.Configuration["MusicDB"]));
-        builder.Services.AddScoped<IItemService<Item>, ItemService>();
-        builder.Services.AddScoped<IRoomRentalService, RoomRentalService>();
-        builder.Services.AddScoped<IRoomService, RoomService>();
-        builder.Services.AddScoped<IReviewService<Review>, ReviewService>();
-        builder.Services.AddScoped<ICustomerService<Customer>, CustomerService>();
-        builder.Services.AddScoped<CartService>();
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDbContextFactory<MusicDbContext>(config => config.UseNpgsql(builder.Configuration["MusicDB"]));
+builder.Services.AddScoped<IItemService<Item>, ItemService>();
+builder.Services.AddScoped<IRoomRentalService, RoomRentalService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IReviewService<Review>, ReviewService>();
+builder.Services.AddScoped<ICustomerService<Customer>, CustomerService>();
+builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped<PurchaseItemService>();
 
-        builder.Services.AddHttpClient();
-        //builder.Services.AddControllers().AddJsonOptions(x =>
-        //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.AddHttpClient();
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
         builder.Services.AddIdentity<IdentityUser, IdentityRole>
@@ -36,7 +40,8 @@ public class Program
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<MusicDbContext>();
 
-        var app = builder.Build();
+var app = builder.Build();
+var emailpassword = builder.Configuration["mailpassword"];
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

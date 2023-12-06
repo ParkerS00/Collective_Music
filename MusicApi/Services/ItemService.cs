@@ -26,6 +26,8 @@ public class ItemService : IItemService<Item>
         return await context.Items
             .Include(i => i.Inventories)
                 .ThenInclude(iStat => iStat.Status)
+            .Include(i => i.Inventories)
+                .ThenInclude(inv => inv.CartItem)
             .Include(c => c.ItemCategories)
                 .ThenInclude(c => c.Category)
             .Include(i => i.ItemImages)
@@ -66,11 +68,6 @@ public class ItemService : IItemService<Item>
         await context.SaveChangesAsync();
 
         return item1;
-    }
-
-    public Task<Item> Delete(int id)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<Item> Update(Item item)

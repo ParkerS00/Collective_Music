@@ -1,77 +1,80 @@
 ﻿@page "/rent-a-room"
 @using MusicApi.Data;
 @using MusicApi.Dtos;
+@using MusicApi.Request;
 @inject IConfiguration config;
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject NavigationManager NavManager;
 
+<center>
+    <h1 class="mt-4">Rent A Room</h1>
 
-<h1>Rent A Room</h1>
-
-<div div class="main-content">
-    <img class="img-fluid img" src="https://dummyimage.com/600x400/000/fff" />
-    <div>
-        <h1 class="p-5">Rent your own recording studio</h1>
+    <div class="main-content">
+        <div>
+            <p class="p-5 lead">Rent your own recording studio</p>
+        </div>
     </div>
-</div>
 
-<div class="row mt-5 main-content">
+    <div class="row mt-5 main-content">
 
-    <h3 class="mt-5">Step One: Select a Room</h3>
+        <h3 class="mt-5">Step One: Select a Room</h3>
 
-
-    <label for="selectedrm" class="form-label">Select Room</label>
-    <select class="select-element" @bind="SelectedRoomId">
-        @foreach (var rm in Rooms)
-        {
-            <option value="@rm.Id" @onclick="() => UpdateRoom(rm.Id)">@rm.RoomName</option>
-        }
-    </select>
-    @if (SelectedRoom is not null)
-    {
-        <p><strong>RoomName:</strong> @SelectedRoom.RoomName</p>
-        <p><strong>Room Type:</strong> @SelectedRoom.RoomTypeName</p>
-        <p><strong>Max Capacity:</strong> @SelectedRoom.MaxCapacity</p>
-    }
-
-    <h3 class="mt-5">Step Two: Select a Date</h3>
-    <input type="date" @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" />
-
-    <h3 class="mt-5">Step Three: Select Time</h3>
-    <label for="starttime">Start Time</label>
-    <input type="time" @bind-value="StartTime" id="starttime" />
-    <label for="endtime">End Time</label>
-    <input type="time" @bind-value="EndTime" id="endtime" />
-
-    <h3>Choose an Available Time</h3>
-    <ul>
+        <div class="justify-content-center">
+            <label for="selectedrm" class="form-label">Select Room</label><br />
+            <select class="select-element" @bind="SelectedRoomId" style="max-width: 300px;">
+                @foreach (var rm in Rooms)
+                {
+                    <option value="@rm.Id" @onclick="() => UpdateRoom(rm.Id)">@rm.RoomName</option>
+                }
+            </select>
+        </div>
         @if (SelectedRoom is not null)
         {
-            <h1>@SelectedRoom.RoomName</h1>
-            @foreach (var timeframe in SelectedRoom.TimeFrames)
+            <p><strong>RoomName:</strong> @SelectedRoom.RoomName</p>
+            <p><strong>Room Type:</strong> @SelectedRoom.RoomTypeName</p>
+            <p><strong>Max Capacity:</strong> @SelectedRoom.MaxCapacity</p>
+        }
+
+        <h3 class="mt-5">Step Two: Select a Date</h3>
+        <div class="justify-content-center">
+            <input type="date" @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" style="max-width: 300px;" />
+            @if (DateError is not null)
             {
-                @if (timeframe.isAvailable)
+                <p class="alert alert-danger">@DateError</p>
+            }
+        </div>
+
+        <ul class="list-unstyled">
+            @if (SelectedRoom is not null && DisplayTimes == true)
+            {
+                <h3 class="mt-5">Step Three: Select Time</h3>
+                @foreach (var timeframe in SelectedRoom.TimeFrames)
                 {
-                    <button class="m-5 d-block" @onclick="() => UpdateSelectedTimeBlock(timeframe)">
-                    <li>@timeframe.startTime to @timeframe.endTime</li></button>
-                }
-                else
-                {
-                    <button class="disabled m-5 d-block">
-                    <li style="text-decoration: overline; color: gray;">@timeframe.startTime to @timeframe.endTime</li></button>
+                    @if (timeframe.isAvailable)
+                    {
+                        <button class="m-5 d-block" @onclick="() => UpdateSelectedTimeBlock(timeframe)" style="border: none;">
+                        <li>@timeframe.startTime to @timeframe.endTime</li></button>
+                    }
                 }
             }
+        </ul>
+        <hr />
+        @if (SelectedTimeBlock is not null && SelectedRoom is not null && Date is not null)
+        {
+            <h5>@SelectedRoom.RoomName for @Date from @SelectedTimeBlock.startTime.ToString("hh:mm tt") to @SelectedTimeBlock.endTime.ToString("hh:mm tt")</h5>
+            <center><button class="btn btn-primary m-5 red-button" style="max-width: 300px; border: none;" @onclick="() => SaveRental()"><strong>Confirm your selection</strong></button></center>
+            @if(StrError.Length > 0)
+            {
+                <div class="alert alert-danger">@StrError</div>
+            }
+            @if(SuccessMessage.Length > 0)
+            {
+                <div class="alert alert-success">@SuccessMessage</div>
+            }
         }
-    </ul>
-
-    @if (SelectedTimeBlock is not null && SelectedRoom is not null && Date is not null)
-    {
-        <p>Confirm your selection</p>
-        <p>@SelectedRoom.RoomName for @Date from @SelectedTimeBlock.startTime.TimeOfDay to @SelectedTimeBlock.endTime.TimeOfDay</p>
-    }
-</div>
-
+    </div>
+</center>
 @code {
     //Chosen rental date
     public DateOnly? Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
@@ -82,15 +85,24 @@
 
     public TimeOnly EndTime { get; set; }
 
-
     public RoomDto SelectedRoom { get; set; }
 
     public int SelectedRoomId { get; set; } = 1;
 
     public TimeAvailability? SelectedTimeBlock { get; set; }
 
+    private bool DisplayTimes { get; set; } = false;
+
+    public String DateError { get; set; }
+
+    public string StrError = "";
+
+    public string SuccessMessage = "";
+
+
     protected override async Task OnInitializedAsync()
     {
+
         Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{Date?.Month}/{Date?.Day}/{Date?.Year}");
 
         SelectedRoom = Rooms.Where(r => r.Id == SelectedRoomId).FirstOrDefault();
@@ -114,13 +126,47 @@
 
     private async Task UpdateDate(DateOnly date)
     {
+        SelectedTimeBlock = null;
+        if(date < DateOnly.FromDateTime(DateTime.Now))
+        {
+            DateError = "Can't make a rental in the past";
+            DisplayTimes = false;
+            return;
+        }
+        DateError = null;
+        DisplayTimes = true;
         Date = date;
         Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{Date?.Month}/{Date?.Day}/{Date?.Year}");
+        SelectedRoom = Rooms.Where(r => r.Id == SelectedRoomId).FirstOrDefault();
     }
 
     private async Task UpdateSelectedTimeBlock(TimeAvailability timeblock)
     {
         SelectedTimeBlock = timeblock;
+    }
+
+    private async Task SaveRental()
+    {
+        StrError = "";
+        SuccessMessage = "";
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var name = user.Identity.Name;
+        if(name is null)
+        {
+            return;
+        }
+        var request = new AddRoomRentalRequest(name, SelectedRoomId, SelectedRoom.RoomPrice, SelectedTimeBlock.startTime, SelectedTimeBlock.endTime);
+        var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/RoomRental/{request}", request);
+        if (!response.IsSuccessStatusCode)
+        {
+            StrError = "Something went wrong with your request. Please ensure you have selected a room, a date, and a time.";
+        }
+        else
+        {
+            SuccessMessage = "Successfully created rental";
+        }
+        NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
     }
 }
 
