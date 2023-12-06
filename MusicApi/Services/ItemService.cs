@@ -15,19 +15,33 @@ public class ItemService : IItemService<Item>
         this.contextFactory = context;
     }
 
-    public async Task<Item> Get(int id)
+    public ItemService()
+    {
+        
+    }
+
+    public async Task<Item?> Get(int id)
+    {
+        if(id < 0)
+        {
+            return null;
+        }
+        return await GetFromDatabase(id);
+    }
+
+    public virtual async Task<Item?> GetFromDatabase(int id)
     {
         var context = contextFactory.CreateDbContext();
         return await context.Items
             .Include(i => i.Inventories)
-                .ThenInclude(iStat => iStat.Status)
+            .ThenInclude(iStat => iStat.Status)
             .Include(i => i.Inventories)
-                .ThenInclude(inv => inv.CartItem)
+            .ThenInclude(inv => inv.CartItem)
             .Include(c => c.ItemCategories)
-                .ThenInclude(c => c.Category)
+            .ThenInclude(c => c.Category)
             .Include(i => i.ItemImages)
             .Include(i => i.Reviews)
-                .ThenInclude(r => r.Customer)
+            .ThenInclude(r => r.Customer)
             .Where(i => i.Id == id)
             .FirstOrDefaultAsync();
     }

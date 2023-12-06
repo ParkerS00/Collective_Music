@@ -6,7 +6,7 @@ namespace MusicApi.Services;
 public interface IItemService<Item>
 {
     Task<IEnumerable<Item>> GetAll();
-    Task<Item> Get(int id);
+    Task<Item?> Get(int id);
     Task<Item> Add(Item item);
     Task<Item> Update(Item item);
 

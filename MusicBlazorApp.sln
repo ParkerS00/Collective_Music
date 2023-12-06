@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicApi", "MusicApi\MusicA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicTests", "MusicTests\MusicTests.csproj", "{8DF9AF3A-11E1-48B7-BBE4-10F3E94A6948}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A064C957-3660-4D3E-AD5F-2FFAA95B71F3}"
+	ProjectSection(SolutionItems) = preProject
+		dump-data.ps1 = dump-data.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
