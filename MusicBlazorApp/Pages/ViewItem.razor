@@ -214,9 +214,13 @@
                         <p class="m-3">@rev.Text</p>
                     </div>
                 }
-                <div>
-                    <div class="red-button" @onclick="() => HandleShowMoreReviews()"><h5><a>Show More Reviews</a></h5></div>
-                </div>
+                @if (Item.Reviews.Count() > 5 && showMoreButton == true)
+                {
+                    <div>
+                        <div class="red-button" @onclick="() => HandleShowMoreReviews()"><h5><a>Show More Reviews</a></h5></div>
+                    </div>
+                }
+
             }
             else
             {
@@ -326,8 +330,9 @@ else
 
     public string strError = "";
 
-
     private string statusClicked { get; set; }
+
+    public bool showMoreButton = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -456,5 +461,6 @@ else
     public void HandleShowMoreReviews()
     {
         Reviews = Item.Reviews;
+        showMoreButton = false;
     }
 }
