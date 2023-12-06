@@ -26,6 +26,7 @@ builder.Services.AddScoped<IReviewService<Review>, ReviewService>();
 builder.Services.AddScoped<ICustomerService<Customer>, CustomerService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<PurchaseItemService>();
+builder.Services.AddScoped<RentalItemService>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
