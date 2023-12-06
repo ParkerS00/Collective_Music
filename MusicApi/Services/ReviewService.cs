@@ -14,7 +14,17 @@ public class ReviewService : IReviewService<Review>
         this.logger = logger;
         this.contextFactory = context;
     }
+
+    public ReviewService()
+    {
+        
+    }
     public async Task<Review> Add(Review review)
+    {
+        return await SaveToDatabase(review);
+    }
+
+    public virtual async Task<Review> SaveToDatabase(Review review)
     {
         var context = contextFactory.CreateDbContext();
         context.Reviews.Add(review);

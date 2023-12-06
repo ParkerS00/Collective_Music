@@ -1,42 +1,52 @@
-﻿using Bunit;
-using FluentAssertions.Common;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using MusicApi.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Testcontainers.PostgreSql;
 
-namespace MusicTests
+namespace Dadabase.IntegrationTests;
+
+public class BlazorIntegrationTestContext : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    public class BlazorIntegrationTestContext : TestContext, IAsyncLifetime
+    private readonly PostgreSqlContainer _dbContainer;
+
+    public BlazorIntegrationTestContext()
     {
-        private readonly PostgreSqlContainer _dbContainer;
+        var whereAmI = Environment.CurrentDirectory;
+        var backupFile = Directory.GetFiles("../../../..", "*.sql", SearchOption.AllDirectories)
+            .Select(f => new FileInfo(f))
+            .OrderByDescending(fi => fi.LastWriteTime)
+            .First();
+        _dbContainer = new PostgreSqlBuilder()
+            .WithImage("postgres")
+            .WithPassword("Strong_password_123!")
+            .WithBindMount(backupFile.FullName, "/docker-entrypoint-initdb.d/init.sql")
+            .Build();
+    }
 
-        public BlazorIntegrationTestContext()
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureTestServices(services =>
         {
-            _dbContainer = new PostgreSqlBuilder()
-                .WithImage("postgres")
-                .WithPassword("Strong_password_123!")
-                .Build();
+            services.RemoveAll(typeof(DbContextOptions<MusicDbContext>));
+            services.AddDbContext<MusicDbContext>(options => options.UseNpgsql(_dbContainer.GetConnectionString()));
+        });
+    }
 
-            Services.AddDbContextFactory<MusicDbContext>(options => options.UseNpgsql(_dbContainer.GetConnectionString()));
-        }
+    public async Task InitializeAsync()
+    {
+        await _dbContainer.StartAsync();
 
-        public async Task InitializeAsync()
-        {
-            await _dbContainer.StartAsync();
+        var dbContext = Services.GetRequiredService<MusicDbContext>();
+        await dbContext.Database.MigrateAsync();
+    }
 
-            var dbContext = Services.GetRequiredService<MusicDbContext>();
-            await dbContext.Database.MigrateAsync();
-        }
-
-        async Task IAsyncLifetime.DisposeAsync()
-        {
-            await _dbContainer.StopAsync();
-        }
+    async Task IAsyncLifetime.DisposeAsync()
+    {
+        await _dbContainer.StopAsync();
     }
 }

@@ -15,6 +15,11 @@ public class ItemService : IItemService<Item>
         this.contextFactory = context;
     }
 
+    public ItemService()
+    {
+        
+    }
+
     public async Task<Item> Get(int id)
     {
         var context = contextFactory.CreateDbContext();
