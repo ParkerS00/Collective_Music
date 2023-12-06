@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
 using System.Configuration;
 using MusicApi.Data;
+using MusicApi.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddScoped<IInventoryService<Inventory>, InventoryService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<PurchaseItemService>();
 
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 builder.Services.AddHttpClient();
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -35,6 +38,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>
     .AddEntityFrameworkStores<MusicDbContext>();
 
 var app = builder.Build();
+var emailpassword = builder.Configuration["mailpassword"];
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
