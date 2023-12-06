@@ -37,9 +37,10 @@
 <h2>Our Highest Rated Items</h2>
 
 <div class="p-4">
-   @*style="overflow-x: auto;" *@
+    @*style="overflow-x: auto;" *@
     <div class="d-flex flex-wrap flex-row justify-content-around">
-        @if (Items is not null)
+
+        @if(Items.Count() != 0)
         {
             @foreach (var item in TopRatedItems)
             {
@@ -86,10 +87,47 @@
         }
         else
         {
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+            for(int i = 0; i < 5; i++)
+            {
+                <div class="card m-4" style="width: 18rem;border: none; border-radius: 0px; box-shadow: 3px 3px 10px lightgray;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title placeholder-glow">
+                            <span class="placeholder col-6"></span>
+                        </h5>
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder col-7"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-6"></span>
+                            <span class="placeholder col-8"></span>
+                        </p>
+                        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+                    </div>
+                </div>
+            }
         }
+
+
+
+
+
+@*         <div class="card" aria-hidden="true">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title placeholder-glow">
+                    <span class="placeholder col-6"></span>
+                </h5>
+                <p class="card-text placeholder-glow">
+                    <span class="placeholder col-7"></span>
+                    <span class="placeholder col-4"></span>
+                    <span class="placeholder col-4"></span>
+                    <span class="placeholder col-6"></span>
+                    <span class="placeholder col-8"></span>
+                </p>
+                <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+            </div>
+        </div> *@
     </div>
 </div>
 
@@ -265,11 +303,6 @@
         }
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        object[] args = { carouselName };
-        await JSRuntime.InvokeVoidAsync("startCarousel", args);
-    }
 
     public void OrderByRating()
     {
