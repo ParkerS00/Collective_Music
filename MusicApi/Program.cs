@@ -21,10 +21,11 @@ builder.Services.AddScoped<IReviewService<Review>, ReviewService>();
 builder.Services.AddScoped<ICustomerService<Customer>, CustomerService>();
 builder.Services.AddScoped<IInventoryService<Inventory>, InventoryService>();
 builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped<PurchaseItemService>();
 
 builder.Services.AddHttpClient();
-//builder.Services.AddControllers().AddJsonOptions(x =>
-//    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>
