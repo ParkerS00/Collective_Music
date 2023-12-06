@@ -23,7 +23,7 @@ public class CartService
         List<Inventory> invItems = await context.Inventories
             .Include(i => i.Status)
             .Include(i => i.CartItem)
-            .Where(i => i.ItemId == request.ItemId && i.Status.StatusName == request.StatusName && i.CartItem == null)
+            .Where(i => i.ItemId == request.ItemId && i.Status.StatusName == request.StatusName && i.CartItem == null && i.IsPurchased != true)
             .ToListAsync();
 
         int customerId = await context.Customers
@@ -31,7 +31,7 @@ public class CartService
             .Select(c => c.Id)
             .FirstOrDefaultAsync();
 
-        if(invItems.Count < request.Quantity || customerId == 0) 
+        if(invItems.Count < request.Quantity - 1 || customerId == 0) 
         {
             return false;
         }

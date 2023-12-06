@@ -21,15 +21,6 @@ public class InventoryController : Controller
     [HttpPatch("{inventoryRequest}")]
     public async Task Update(AddInventoryRequest request)
     {
-        var Inventory = new Inventory()
-        {
-            Id = request.Id,
-            ItemId = request.ItemId,
-            StatusId = request.StatusId,
-            IsRentable = request.IsRentable,
-            IsPurchased = request.IsPurchased,
-        };
-
-        await inventoryService.Update(Inventory);
+        await inventoryService.Update(request.Email);
     }
 }

@@ -1,5 +1,6 @@
 ﻿@page "/cart"
 @using MusicApi.Data;
+@using MusicApi.Request;
 @using MusicBlazorApp.State;
 @using MusicApi.Dtos;
 @inject HttpClient httpClient;
@@ -77,6 +78,7 @@
     public string UserEmail { get; set; }
     public int CustomerId { get; set; }
     public bool NoUser { get; set; }
+    public int ItemId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,7 +120,9 @@
 
     public async Task HandleCheckout()
     {
-        
+        var request = new AddInventoryRequest(UserEmail);
+        var response = await httpClient.PatchAsJsonAsync<AddInventoryRequest>($"{config[Constants.ApiEndpoint]}/inventory/{request}", request);
+        NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
     }
 }
 
