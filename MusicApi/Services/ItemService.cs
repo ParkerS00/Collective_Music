@@ -98,19 +98,28 @@ public class ItemService : IItemService<Item>
         return ruc;
     }
 
-    public async Task AddImageFilePath(string filePath, int itemId, bool isPrimary)
+    public async Task AttemptAddImageFilePath(string filePath, int itemId, bool isPrimary)
     {
-        //TODO: Change all the previous true images to false
-        var context = contextFactory.CreateDbContext();
-
         var newItemImage = new ItemImage()
         {
             ItemId = itemId,
             Filepath = filePath,
             IsPrimary = isPrimary
         };
+        if (!newItemImage.VerifyPath())
+        {
+            return;
+        }
+        await AddImageFilePath(newItemImage);
+       
+    }
 
-        await context.ItemImages.AddAsync(newItemImage);
+    public virtual async Task AddImageFilePath(ItemImage itemImage)
+    {
+        var context = contextFactory.CreateDbContext();
+
+
+        await context.ItemImages.AddAsync(itemImage);
         await context.SaveChangesAsync();
     }
 
