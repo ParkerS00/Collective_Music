@@ -43,7 +43,7 @@
                             @foreach (var category in CategoryStrings)
                             {
                                 <div>
-                                    <input class="form-check-input" type="checkbox" id="flexCheckDefault" @onclick="() => FilterItems(category)">
+                                    <input class="form-check-input" type="checkbox" id="flexCheckDefault" @onclick="() => FilterItemsByCategory(category)">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         @category
                                     </label>
@@ -65,9 +65,9 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" @bind-value="@Filter100Plus" @bind-value:after="FilterItems">
                             <label class="form-check-label" for="flexCheckDefault">
-                                $100.00 - $200.00
+                                $100.00 +
                             </label>
                         </div>
                     </div>
@@ -106,9 +106,7 @@
                                 {
                                     <img class="card-img-top" src="https://dummyimage.com/400x500/595959/fff&text=no_image" alt="@item.ItemName" style="border-radius: 0px;">
                                 }
-
                             </div>
-
                             <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
                             <div class="card-body">
                                 @for (int i = 1; i <= 5; i++)
@@ -123,7 +121,6 @@
                                     }
                                 }
                             </div>
-
                             <div class="card-body">
                                 <p class="card-text"><strong>$@item.SellPrice</strong></p>
 
@@ -171,6 +168,8 @@ else
     [Parameter]
     public bool Filter50to100 { get; set; }
 
+    public bool Filter100Plus { get; set; }
+
     public List<string> CategoryStrings = new();
 
     public List<(string, bool)> SelectedCategories = new List<(string, bool)>();
@@ -196,13 +195,22 @@ else
     public async Task FilterItems()
     {
         Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
+        foreach (var item in Items)
+        {
+            item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
+        }
+
         if (FilterLt50)
         {
             Items = Items.Where(i => i.SellPrice <= 50).ToList();
         }
         if (Filter50to100)
         {
-            Items = Items.Where(i => i.SellPrice >= 50).ToList();
+            Items = Items.Where(i => (i.SellPrice >= 50 && i.SellPrice < 100)).ToList();
+        }
+        if(Filter100Plus)
+        {
+            Items = Items.Where(i => i.SellPrice > 100).ToList();
         }
         // if (CategoryStrings.Count > 0)
         // {
@@ -214,9 +222,29 @@ else
 
     }
 
-    public async Task FilterItems(string categoryName)
+    public async Task FilterItemsByCategory(string categoryName)
     {
-        Items = Items.Where(i => i.ItemCategories.Contains(categoryName));
+        UpdateSelectedCategories(categoryName);
+
+        Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
+        foreach (var item in Items)
+        {
+            item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
+        }
+
+        foreach (var cat in SelectedCategories)
+        {
+            Items = Items.Where(i => i.ItemCategories.Contains(cat.Item1));
+        }
+        if (SelectedCategories.Count == 0)
+        {
+            Items = await httpClient.GetFromJsonAsync<List<ItemDto>>($"{config[Constants.ApiEndpoint]}/Items");
+            foreach (var item in Items)
+            {
+                item.PrimaryImagePath = Path.Combine("css", "images", "itemImages", $"{item.PrimaryImagePath}");
+            }
+        }
+
     }
 
     public async Task SearchItems()
@@ -256,7 +284,7 @@ else
         //     }
         // }
 
-        if (SelectedCategories.Any(m => m.Item1 == selectedCategory))
+        if (!SelectedCategories.Any(m => m.Item1 == selectedCategory))
         {
             SelectedCategories.Add((selectedCategory, true));
         }
