@@ -94,6 +94,7 @@
         var authstate = await auth.GetAuthenticationStateAsync();
         var user = authstate.User;
         var name = user.Identity.Name;
+        CurrentUserName = name;
 
         var allCustomers = await httpClient.GetFromJsonAsync<IEnumerable<Customer>>($"{config[Constants.ApiEndpoint]}/customer");
 
@@ -113,4 +114,12 @@
         Date = date;
     }
 
+    private async Task ConfirmRental()
+    {
+        if(CurrentUserName is null)
+        {
+            return;
+        }
+        //var request = AddItemRentalRequest(CurrentUserName, )
+    }
 }
