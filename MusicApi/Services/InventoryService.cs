@@ -21,19 +21,29 @@ public class InventoryService : IInventoryService<Inventory>
         return await context.Inventories.ToListAsync();
     }
 
-    public async Task<Inventory> Update(Inventory inventory)
+    public async Task<bool> Update(string email)
     {
         var context = contextFactory.CreateDbContext();
-        var iuc = await context.Inventories.Where(i => i.ItemId == inventory.ItemId).FirstOrDefaultAsync();
+        var cartItems = await context.CartItems
+            .Include(x => x.Customer)
+            .Include(x => x.Inventory)
+            .Where(x => x.Customer.Email == email)
+            .ToListAsync();
 
-        iuc.ItemId = inventory.ItemId;
-        iuc.StatusId = inventory.StatusId;
-        iuc.IsRentable = inventory.IsRentable;
-        iuc.IsPurchased = inventory.IsPurchased;
+        foreach (var cuc in cartItems)
+        {
+            /*if (cuc.Inventory.IsPurchased == true)
+            {
+                return false;
+            }*/
+            cuc.Inventory.IsPurchased = true;
+            context.Inventories.Update(cuc.Inventory);
 
-        context.Inventories.Update(iuc);
+            context.CartItems.Remove(cuc);
+        }
+
         await context.SaveChangesAsync();
 
-        return iuc;
+        return true;
     }
 }

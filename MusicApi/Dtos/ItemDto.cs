@@ -44,6 +44,7 @@ public class ItemDto
         if (item.Inventories != null)
         {
             ItemStatuses = item.Inventories
+                .Where(i => i.IsPurchased == false && i.CartItem is null)
                 .Select(x => x.Status)
                 .GroupBy(x => x.Id)
                 .Select(x => new StatusDto()
@@ -53,7 +54,7 @@ public class ItemDto
 
                 })
                 .ToList();
-            Quantity = item.Inventories.GroupBy(i => i.ItemId).Count();
+            Quantity = item.Inventories.Where(x => x.IsPurchased == false).GroupBy(i => i.ItemId).Count();
         }
 
         if (item.ItemCategories != null)

@@ -21,6 +21,8 @@ public class ItemService : IItemService<Item>
         return await context.Items
             .Include(i => i.Inventories)
                 .ThenInclude(iStat => iStat.Status)
+            .Include(i => i.Inventories)
+                .ThenInclude(inv => inv.CartItem)
             .Include(c => c.ItemCategories)
                 .ThenInclude(c => c.Category)
             .Include(i => i.ItemImages)

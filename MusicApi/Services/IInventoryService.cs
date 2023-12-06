@@ -6,6 +6,6 @@ namespace MusicApi.Services
     {
         Task<IEnumerable<Inventory>> GetAll();
 
-        Task<Inventory> Update(Inventory inventory);    
+        Task<bool> Update(string email);    
     }
 }
