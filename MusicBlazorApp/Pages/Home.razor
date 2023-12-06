@@ -34,12 +34,12 @@
 
 
 <!--Highest Rated Items-->
-<h2>Our Highest Rated Items</h2>
-
 <div class="p-4">
-   @*style="overflow-x: auto;" *@
+    @*style="overflow-x: auto;" *@
+    <center><h2>Our Highest Rated Items</h2></center><hr />
     <div class="d-flex flex-wrap flex-row justify-content-around">
-        @if (Items is not null)
+
+        @if(Items.Count() != 0)
         {
             @foreach (var item in TopRatedItems)
             {
@@ -86,10 +86,47 @@
         }
         else
         {
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+            for(int i = 0; i < 5; i++)
+            {
+                <div class="card m-4" style="width: 18rem;border: none; border-radius: 0px; box-shadow: 3px 3px 10px lightgray;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title placeholder-glow">
+                            <span class="placeholder col-6"></span>
+                        </h5>
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder col-7"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-6"></span>
+                            <span class="placeholder col-8"></span>
+                        </p>
+                        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+                    </div>
+                </div>
+            }
         }
+
+
+
+
+
+@*         <div class="card" aria-hidden="true">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title placeholder-glow">
+                    <span class="placeholder col-6"></span>
+                </h5>
+                <p class="card-text placeholder-glow">
+                    <span class="placeholder col-7"></span>
+                    <span class="placeholder col-4"></span>
+                    <span class="placeholder col-4"></span>
+                    <span class="placeholder col-6"></span>
+                    <span class="placeholder col-8"></span>
+                </p>
+                <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+            </div>
+        </div> *@
     </div>
 </div>
 
@@ -132,9 +169,18 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 p-5" style="color: white;">
-            <h3>Rent a Collaborative Music Space </h3>
-            <p>We offer many options for renting spaces</p>
+        <div class="col-md-6 p-5" style="color: white; margin-top:50px;">
+            <center><h3>Rent a Collaborative Music Space </h3></center><hr>      
+            <p style="font-size:larger">
+                We offer many options for renting spaces! Collaborative Music aims to make recording more accessible for the everyday creator. We do this by:
+                <ul>
+                    <li>Offering different kinds of recording spaces to meet a wide variety of needs, from cozy practice rooms to high-end musical studios</li>
+                    <li>Creating affordable pricing for our customers with minimal commitment required</li>
+                    <li>Equipping our spaces with professional equipment at a fraction of the cost, rather than if members were to purchase that equipment themselves</li>
+                </ul>
+                By creating recording spaces specifically for new-age creators and artists, we have enabled our customers to capitalize on an unmet need in the market.
+
+            </p>
         </div>
     </div>
 </div>
@@ -265,11 +311,6 @@
         }
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        object[] args = { carouselName };
-        await JSRuntime.InvokeVoidAsync("startCarousel", args);
-    }
 
     public void OrderByRating()
     {

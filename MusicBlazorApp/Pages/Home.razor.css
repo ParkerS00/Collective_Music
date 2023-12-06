@@ -112,6 +112,18 @@
     /* Your existing card styles */
 }
 
+.card:hover {
+    transform: scale3d(1.15, 1.15, 2);
+}
+
+
+
+
+
+
+
+
+
 .container {
     padding: 100px 30px;
     width: 100%;
