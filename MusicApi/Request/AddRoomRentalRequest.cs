@@ -2,7 +2,7 @@
 {
     public class AddRoomRentalRequest
     {
-        public string? userEmail { get; set; }
+        public string? UserEmail { get; set; }
         public int? Id { get; set; }
         public int? RoomId { get; set; }
         public decimal? ActualPrice { get; set; }
@@ -20,7 +20,7 @@
             ActualPrice = actualPrice;
             StartTime = startTime;
             EndTime = endTime;
-            userEmail = email;
+            UserEmail = email;
         }
     }
 }

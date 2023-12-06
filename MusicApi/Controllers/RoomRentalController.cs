@@ -34,7 +34,7 @@ public class RoomRentalController : Controller
             EndTime = request.EndTime,
         };
 
-        await roomRentalService.Add(roomRental, request.userEmail);
+        await roomRentalService.Add(roomRental, request.UserEmail);
     }
 
 }

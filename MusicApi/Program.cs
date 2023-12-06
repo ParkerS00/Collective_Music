@@ -6,7 +6,11 @@ using System.Configuration;
 using MusicApi.Data;
 using MusicApi.Email;
 
-var builder = WebApplication.CreateBuilder(args);
+public class Program
+{
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -20,9 +24,9 @@ builder.Services.AddScoped<IRoomRentalService, RoomRentalService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IReviewService<Review>, ReviewService>();
 builder.Services.AddScoped<ICustomerService<Customer>, CustomerService>();
-builder.Services.AddScoped<IInventoryService<Inventory>, InventoryService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<PurchaseItemService>();
+builder.Services.AddScoped<RentalItemService>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
@@ -31,30 +35,34 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>
-    (options => options.SignIn.RequireConfirmedAccount = true)
-    .AddDefaultUI()
-    .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<MusicDbContext>();
+        builder.Services.AddIdentity<IdentityUser, IdentityRole>
+            (options => options.SignIn.RequireConfirmedAccount = true)
+            .AddDefaultUI()
+            .AddDefaultTokenProviders()
+            .AddEntityFrameworkStores<MusicDbContext>();
 
 var app = builder.Build();
 var emailpassword = builder.Configuration["mailpassword"];
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.Run();
+    }
 }
 
-app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.Run();
