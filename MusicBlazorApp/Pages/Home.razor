@@ -37,7 +37,7 @@
     <center><h2>Our Highest Rated Items</h2></center><hr />
     <div class="d-flex flex-wrap flex-row justify-content-around">
 
-        @if(Items.Count() != 0)
+        @if (Items.Count() != 0)
         {
             @foreach (var item in TopRatedItems)
             {
@@ -84,7 +84,7 @@
         }
         else
         {
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 <div class="card m-4" style="width: 18rem;border: none; border-radius: 0px; box-shadow: 3px 3px 10px lightgray;">
                     <img src="..." class="card-img-top" alt="...">
@@ -111,7 +111,7 @@
 <div class="" style="background-color: #11151D;">
 
     <div class="row m-5">
-        <div class="container">
+        <div class="container col-lg-6">
             <div class="image-stack">
                 <div class="image-stack__item image-stack__item--top">
                     <img src="css/images/Recording-Studio3.jpg" alt="" style="max-width:600px;">
@@ -121,8 +121,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 p-5" style="color: white; margin-top:50px;">
-            <center><h3>Rent a Collaborative Music Space </h3></center><hr>      
+        <div class="decript col-lg-6 p-5" style="color: white; margin-top:50px;">
+            <h3>Rent a Collaborative Music Space </h3><hr>
             <p style="font-size:larger">
                 We offer many options for renting spaces! Collaborative Music aims to make recording more accessible for the everyday creator. We do this by:
                 <ul>
@@ -131,21 +131,11 @@
                     <li>Equipping our spaces with professional equipment at a fraction of the cost, rather than if members were to purchase that equipment themselves</li>
                 </ul>
                 By creating recording spaces specifically for new-age creators and artists, we have enabled our customers to capitalize on an unmet need in the market.
-
             </p>
         </div>
     </div>
 </div>
 
-<div class="d-none" style="background: linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.5)), url(css/images/Recording-Studio.jpg); height: 450px; background-position: 50% 75%;">
-    <br />
-    <center class="mt-5"><h1 style="color: white;">Rent a Recording Studio</h1></center>
-    <center>
-        <div class="mt-4" style="background-color: black; color: white; width: 85%; padding: 100px;">
-            <p>Collaborate and Practice music together</p>
-        </div>
-    </center>
-</div>
 
 
 <!-- Three Button Section -->
