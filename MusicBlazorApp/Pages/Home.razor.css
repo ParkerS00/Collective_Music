@@ -112,21 +112,16 @@
     max-width: 100%; /* Limit width to parent container */
 }
 
+
 .card {
     /* Your existing card styles */
+    transform: scale3d(0);
+    transition: transform .5s;
 }
 
-.card:hover {
-    transform: scale3d(1.15, 1.15, 2);
-}
-
-
-
-
-
-
-
-
+    .card:hover {
+        transform: scale3d(1.15, 1.15, 2);
+    }
 
 .container {
     padding: 100px 30px;
@@ -142,7 +137,6 @@
 }
 
 .image-stack__item--top {
-
     float: left;
     width: 75%;
 }
@@ -164,3 +158,20 @@
         left: 27vw;
     }
 }
+
+@media (max-width: 1896px) {
+    .container {
+        display: none;
+        visibility: hidden;
+    }
+
+    .decript {
+        justify-content: center;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+}
+
+
+
