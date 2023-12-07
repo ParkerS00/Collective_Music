@@ -46,6 +46,27 @@ a, .btn-link {
     color: goldenrod;
 }
 
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Apply the animation to the element */
+.fade-in {
+    animation: fadeIn 1.05s ease-in-out; /* Adjust the duration and timing function as needed */
+}
+
+/* Initially hide the element */
+.fade-in {
+    opacity: 1;
+}
+
 .red-button {
     background-color: #5B0D13;
     color: white;

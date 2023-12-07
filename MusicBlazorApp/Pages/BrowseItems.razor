@@ -10,12 +10,14 @@
 @inject NavigationManager NavManager;
 @inject IConfiguration config;
 
+<PageTitle>Browse Items</PageTitle>
+
 
 <div class="row">
     <div class="col-lg-2 col-md-3">
         <div class="sticky-top" style="top: 75px;">
             <!-- Filter Section -->
-            <nav id="filter-sidebar" class="collapse d-lg-block sidebar collapse bg-white">
+            <nav id="filter-sidebar fade-in" class="collapse d-lg-block sidebar collapse bg-white">
                 <div class=" mx-3">
                     <h4>Filter</h4>
                     
@@ -58,9 +60,9 @@
     <div class=" col-lg-10 col-md-9">
         <!-- SEARCH BAR AND TITLE -->
         <h1>Browse Instruments</h1>
-        <div class="my-5 mx-3 d-flex justify-content-end">
-            <InputText @bind-Value="SearchQuery"></InputText>
-            <button @onclick="SearchItems" type="submit">Search</button>
+        <div class="my-5 mx-3 d-flex justify-content-end search-wrapper fade-in" >
+            <span><InputText @bind-Value="SearchQuery" class="search-input"></InputText></span>
+            <button @onclick="SearchItems" type="submit" class="search-btn">Search</button>
         </div>
 
         <div class="p-4 d-flex flex-wrap flex-row" style="background-color: #EEEEEE; margin-right: 100px;">
@@ -109,6 +111,10 @@
                     </div>
                 }
             }
+            else if (SearchQuery.Length > 0 || SelectedCategories.Count() > 0)
+            {
+                <h4 style="color: darkgray;">No items match your search</h4>
+            }
             else
             {
                 for (int i = 0; i < 10; i++)
@@ -138,7 +144,7 @@
 
 
 @code {
-    public string? SearchQuery { get; set; }
+    public string? SearchQuery = "";
 
     public IEnumerable<ItemDto>? Items { get; set; }
 
@@ -204,13 +210,11 @@
         {
             Items = Items.Where(i => i.SellPrice > 100).ToList();
         }
-        // if (CategoryStrings.Count > 0)
-        // {
-        //     foreach (var str in CategoryStrings)
-        //     {
-        //         Items = Items.Where(i => i.ItemCategories.Contains(str));
-        //     }
-        // }
+
+        if (SearchQuery.Length > 0)
+        {
+            SearchItems();
+        }
 
     }
 
@@ -233,7 +237,10 @@
 
     public async Task SearchItems()
     {
-        Items = Items.Where(i => i.ItemName.ToLower().Contains(SearchQuery));
+        if (SearchQuery.Length > 0)
+        {
+            Items = Items.Where(i => i.ItemName.ToLower().Contains(SearchQuery));
+        }
     }
 
     public async Task CompileCategories()
@@ -255,18 +262,6 @@
 
     public void UpdateSelectedCategories(string selectedCategory)
     {
-        // foreach (var tup in SelectedCategories)
-        // {
-        //     // if the category names match, and the item is already selected, remove :)
-        //     if (tup.Item1 == selectedCategory && tup.Item2 == true)
-        //     {
-        //         SelectedCategories.RemoveAll(item => item.Item1 == selectedCategory);
-        //     }
-        //     else if (tup.Item1 == selectedCategory && tup.Item2 == false)
-        //     {
-        //         SelectedCategories.RemoveAll(item => item.Item1 == selectedCategory);
-        //     }
-        // }
 
         if (!SelectedCategories.Any(m => m.Item1 == selectedCategory))
         {

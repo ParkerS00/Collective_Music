@@ -8,13 +8,23 @@
 .guitar-image {
     position: absolute;
     height: 630px;
-    top: 231px;
-    left: 27vw;
+    top: 221px;
+    left: 23vw;
 }
 
-.items-showcase {
-    margin-top: 292px;
+
+.rnt-room-btn {
+    color: white;
+    text-decoration: none;
+    padding-top: 3px;
 }
+    .rnt-room-btn:hover {
+        color: white;
+    }
+
+    .items-showcase {
+        margin-top: 292px;
+    }
 
 .button-section {
     margin-top: 150px;
@@ -120,7 +130,7 @@
 }
 
     .card:hover {
-        transform: scale3d(1.15, 1.15, 2);
+        transform: scale3d(1.05, 1.05, 2);
     }
 
 .container {
@@ -153,9 +163,9 @@
 @media screen and (min-width: 769px) {
     .guitar-image {
         position: absolute;
-        height: 630px;
-        top: 150px;
-        left: 27vw;
+        height: 750px;
+        top: 100px;
+        left: 23vw;
     }
 }
 
