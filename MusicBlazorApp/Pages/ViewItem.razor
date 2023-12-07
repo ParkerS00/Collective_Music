@@ -59,7 +59,7 @@
     {
         <div style="background-color: white; position: fixed; z-index: 1; bottom: 20px; right: 20px; padding: 30px; border-radius: 10px; box-shadow: -5px 5px 5px 10px lightgray;">
             <h3>Successfully Added</h3>
-            <div class="red-button"><h5><a href="/cart">View Your Cart</a></h5></div>
+            <div class="red-button"><h5><a href="/cart" class="stretched-link">View Your Cart</a></h5></div>
         </div>
 
     }
@@ -74,7 +74,7 @@
         </div>
         <div class="col-md-6">
             <h1>@Item.ItemName</h1>
-            <p><strong>$@Item.SellPrice</strong></p>
+            <h3><strong>$@Item.SellPrice</strong></h3>
             <div class="ratings my-5">
                 @if (Item.AverageItemRating != 0)
                 {
@@ -89,7 +89,7 @@
                             <i class="fa fa-star"></i>
                         }
                     }
-                    <span class="mx-3">@Item.AverageItemRating rating out of 5</span>
+                    <span class="mx-3">@Item.AverageItemRating rating out of 5<br /><small>@Item.Reviews.Count() reviews</small></span>
                 }
                 else
                 {
@@ -171,16 +171,16 @@
                     {
                         @if (CurrentUserId == 0)
                         {
-                            <div class="red-button"><h5><a href="/Identity/Account/Login">Rent</a></h5></div>
+                            <div class="red-button"><h5><a href="/Identity/Account/Login" class="stretched-link">Rent</a></h5></div>
                         }
                         else
                         {
-                            <div class="red-button"><h5><a href="/Account">Rent</a></h5></div>
+                            <div class="red-button"><h5><a href="/Account" class="stretched-link">Rent</a></h5></div>
                         }
                     }
                     else
                     {
-                        <div class="red-button"><h5><a @onclick="() => HandleRentClick(Item.Id)">Rent</a></h5></div>
+                        <a @onclick="() => HandleRentClick(Item.Id)"><div class="red-button"><h5>Rent</h5></div></a>
                     }
                 </div>
             </div>
