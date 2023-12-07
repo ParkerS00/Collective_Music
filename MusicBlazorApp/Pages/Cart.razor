@@ -10,6 +10,9 @@
 @inject AuthenticationStateProvider auth;
 
 
+<PageTitle>Your Cart</PageTitle>
+
+
 @if (cartState.SelectedItems is not null && !NoUser)
 {
     @if (cartState.SelectedItems.Count == 0)
