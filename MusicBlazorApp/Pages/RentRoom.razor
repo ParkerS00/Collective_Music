@@ -25,6 +25,10 @@
 
 
 <div class="row mt-5 main-content">
+    @if(SuccessMessage.Length > 0)
+    {
+        <div class="alert alert-success">@SuccessMessage</div>
+    }
 
     <div class="stepOne">
         <h1 class="mt-5 fw-bold">Step One: Select a Room</h1>
@@ -193,7 +197,10 @@
         {
             SuccessMessage = "Successfully created rental";
         }
-        NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+
+        Date = null;
+        SelectedRoom = null;
+        //NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
     }
 }
 
