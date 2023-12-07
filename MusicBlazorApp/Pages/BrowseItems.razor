@@ -17,7 +17,7 @@
     <div class="col-lg-2 col-md-3">
         <div class="sticky-top" style="top: 75px;">
             <!-- Filter Section -->
-            <nav id="filter-sidebar" class="collapse d-lg-block sidebar collapse bg-white">
+            <nav id="filter-sidebar fade-in" class="collapse d-lg-block sidebar collapse bg-white">
                 <div class=" mx-3">
                     <h4>Filter</h4>
                     
@@ -60,7 +60,7 @@
     <div class=" col-lg-10 col-md-9">
         <!-- SEARCH BAR AND TITLE -->
         <h1>Browse Instruments</h1>
-        <div class="my-5 mx-3 d-flex justify-content-end search-wrapper" >
+        <div class="my-5 mx-3 d-flex justify-content-end search-wrapper fade-in" >
             <span><InputText @bind-Value="SearchQuery" class="search-input"></InputText></span>
             <button @onclick="SearchItems" type="submit" class="search-btn">Search</button>
         </div>
