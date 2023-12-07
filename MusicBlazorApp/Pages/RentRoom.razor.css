@@ -99,4 +99,24 @@
 }
 
 
+.button {
+    border-style: dashed;
+    border-color: black;
+    border-radius: 8px;
+    color: black;
+    padding: 15px 32px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 30%;
+}
+
+
+    .button:focus {
+        border-style: solid;
+        background-color: #5B0D13;
+        color: white;
+    }
+
 
