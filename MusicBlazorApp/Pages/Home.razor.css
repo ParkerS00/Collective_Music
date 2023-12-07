@@ -9,9 +9,26 @@
     position: absolute;
     height: 630px;
     top: 221px;
-    left: 23vw;
+    left: 20vw;
 }
 
+.special-btn {
+    width: 200px;
+    height: 40px;
+    border: solid white 1px;
+    padding: 8px;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 40px;
+    border-radius: 20px;
+    transition: background-color .5s;
+}
+
+    .special-btn:hover {
+        background-color: white;
+        color: #19222D;
+    }
 
 .rnt-room-btn {
     color: white;
@@ -165,7 +182,7 @@
         position: absolute;
         height: 750px;
         top: 100px;
-        left: 23vw;
+        left: 15vw;
     }
 }
 
