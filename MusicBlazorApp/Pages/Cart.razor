@@ -49,8 +49,8 @@
                                         <tbody>
                                             <tr>
                                                 <td>@itemResult.Item.SellPrice</td>
-                                                <td><input type="number" min="0" @bind="@itemResult.Quantity" @onclick="CalculateCartTotal" /></td>
-                                                <td>$@(itemResult.Item.Quantity * itemResult.Item.SellPrice)</td>
+                                                <td>@itemResult.Quantity</td>
+                                                <td>$@(itemResult.Quantity * itemResult.Item.SellPrice)</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -111,9 +111,10 @@
 
     public void CalculateCartTotal()
     {
+        CartTotal = 0;
         foreach (var itemResult in cartState.SelectedItems)
         {
-            int? qty = itemResult.Item.Quantity;
+            int? qty = itemResult.Quantity;
             decimal? sprice = itemResult.Item.SellPrice;
             CartTotal += (qty * sprice);
         }
@@ -123,7 +124,7 @@
     {
         var request = new AddInventoryRequest(UserEmail);
         var response = await httpClient.PatchAsJsonAsync<AddInventoryRequest>($"{config[Constants.ApiEndpoint]}/inventory/{request}", request);
-        NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+        NavManager.NavigateTo("/confirm", forceLoad: true);
     }
 }
 

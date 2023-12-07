@@ -1,4 +1,6 @@
-﻿@using MusicApi.Data;
+﻿@page "/confirm"
+
+@using MusicApi.Data;
 @using MusicBlazorApp.State;
 @using MusicApi.Dtos;
 @inject HttpClient httpClient;
@@ -8,45 +10,34 @@
 @inject AuthenticationStateProvider auth;
 
 
-<h3>Confirm Your Purchase</h3>
 
+@if (cartState.SelectedItems is not null)
+{
+    <div style="max-width: 1000px; margin-left: auto; margin-right: auto; margin-bottom: 300px;">
+        <center>
+        <h3 class="my-5">Thank you for your order!</h3>
 
-<div class="col-md-9">
-    <div class="row">
-        @foreach (var itemResult in cartState.SelectedItems)
-        {
-            <div class="row">
-                <div class="col-xl-4">
-                    <img width="150" class="img-fluid img" src="@Path.Combine("css", "images", "itemImages", $"{itemResult.Item.PrimaryImagePath}")">
+        <h4>What's Next?</h4>
+        <p>Now that you have purchased, we will reserve your item for pickup.</p>
+
+            <h4><a class=" p-3 pt-1 px-4 red-button mb-5" href="/my-account" sytle="text-decoration: none; text-underline: none;">View Account Information</a></h4></center>
+
+        <!-- Visit our Location -->
+        <div class="button-section mx-5 mt-5">
+            <div class="location-wrapper d-flex flex-row justify-content-center flex-sm-wrap">
+                <div class="location-descriptions m-2 p-5 ">
+                    <center><h1 style="font-weight: 900;">Visit our location</h1></center>
+                    <h4>54 N Main St<br /> Ephraim, Utah <br />84337<br /> <br />(435) 111-1234</h4>
                 </div>
-                <div class="col-xl-8">
-                    <div class="justify-content-center">
-                        <h3><strong>@itemResult.Item.ItemName</strong></h3>
-                        <p>Condition: @itemResult.StatusName</p>
-                    </div>
-                    <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">each</th>
-                                <th scope="col">qty</th>
-                                <th scope="col">total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>@itemResult.Item.SellPrice</td>
-                                <td><input type="number" min="0" @bind="@itemResult.Quantity" @onclick="CalculateCartTotal" /></td>
-                                <td>$@(itemResult.Item.Quantity * itemResult.Item.SellPrice)</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="location-descriptions m-2 p-5">
+                    <img class="map img img-fluid" src="css/images/map.png" style="max-width: 300px;" />
                 </div>
             </div>
-            <hr />
-        }
-    </div>
+        </div>
+
 </div>
+}
+
 
 
 @code {
@@ -84,7 +75,7 @@
     {
         foreach (var itemResult in cartState.SelectedItems)
         {
-            int? qty = itemResult.Item.Quantity;
+            int? qty = itemResult.Quantity;
             decimal? sprice = itemResult.Item.SellPrice;
             CartTotal += (qty * sprice);
         }

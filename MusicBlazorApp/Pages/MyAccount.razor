@@ -15,10 +15,10 @@
 {
 
     <div style="max-width: 1000px; margin-left: auto; margin-right: auto;">
-        <h1>Hello @Customer.FirstName</h1>
+        <h1 class="my-5">Hello @Customer.FirstName</h1>
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8 d-none">
                 <div class="border" style="border: solid 1px gray; border-radius: 15px; padding: 50px;">
                     <h3>Your Upcoming Rentals</h3>
                     <div style="background-color: #ededed; border-radius: 15px; padding: 40px;">
@@ -27,7 +27,7 @@
                         <p>Due Date and Time</p>
                     </div>
                 </div>
-                <div class="border my-5" style="border: solid 1px gray; border-radius: 15px; padding: 50px;">
+                <div class="border my-5 d-none" style="border: solid 1px gray; border-radius: 15px; padding: 50px;">
                     <h3>Previous Purchases</h3>
                     <div style="background-color: #ededed; border-radius: 15px; padding: 40px;">
                         <h5>Purchase Date</h5>
@@ -47,11 +47,12 @@
                         <div class="progress-bar" style=" background-color: darkred;"></div>
                     </div> *@
                     <div class="d-flex justify-content-center text-align-center">
-                        <strong>@Customer.RewardPoints points</strong>
+                        <h1><strong style="font-weight: 900;">@Customer.RewardPoints points</strong></h1>
                     </div>
                 </div>
-                <div class="my-3" style="border: solid 1px gray; border-radius: 30px; height: 100px; padding: 20px;">
+                <div class="my-3" style="border: solid 1px gray; border-radius: 30px;  padding: 20px;">
                     <h3>Configure your Profile</h3>
+                    <a href="/Identity/Account/Manage" target="_blank" rel="noopener">Edit Account Information</a>
                 </div>
             </div>
         </div>

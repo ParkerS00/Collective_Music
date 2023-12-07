@@ -14,7 +14,7 @@
                         <Authorized>
                             <a class="nav-link" href="/cart"><i class="fa-solid fa-cart-shopping" style="font-size: x-large;"></i></a>
                             <a class="user nav-link" href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
-                            <form method="post" action="Identity/Account/Logout">
+                            <form method="post" action="/my-account">
                                 <button type="submit" class="nav-link btn btn-link">Log out</button>
                             </form>
                         </Authorized>
