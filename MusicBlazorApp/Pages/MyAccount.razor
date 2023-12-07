@@ -47,7 +47,16 @@
                         <div class="progress-bar" style=" background-color: darkred;"></div>
                     </div> *@
                     <div class="d-flex justify-content-center text-align-center">
-                        <h1><strong style="font-weight: 900;">@Customer.RewardPoints points</strong></h1>
+                        @if(Customer.RewardPoints is not null)
+                        {
+                            <h1><strong style="font-weight: 900;">@Customer.RewardPoints points</strong></h1>
+
+                        }
+                        else
+                        {
+                            <h1><strong style="font-weight: 900;">0 points</strong></h1>
+
+                        }
                     </div>
                 </div>
                 <div class="my-3" style="border: solid 1px gray; border-radius: 30px;  padding: 20px;">
@@ -68,7 +77,6 @@
     public Customer Customer { get; set; }
     public string? name { get; set; }
     public string? url { get; set; }
-    public int ratio { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,7 +91,6 @@
         }
         Customer = await httpClient.GetFromJsonAsync<Customer>($"{config[Constants.ApiEndpoint]}/customer/{name}");
 
-        ratio = (int)(Customer?.RewardPoints / 100);
     }
 
 }
