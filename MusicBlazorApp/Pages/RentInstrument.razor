@@ -70,10 +70,15 @@
 
         <label for="selectdate">Select a Pick Up Date</label>
         <input id="selectdate" type="date" @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" />
+        @if (DateError is not null)
+        {
+            <p class="alert alert-danger">@DateError</p>
+        }
 
-        <p>@Date</p>
-
-        <p class="red-button" @onclick="ConfirmRental">Confirm your rental pickup</p>
+        @if (DateError is null)
+        {
+            <p class="red-button" @onclick="ConfirmRental">Confirm your rental pickup</p>
+        }
     }
 </div>
 
@@ -94,6 +99,10 @@
     public string StrError = "";
 
     public string SuccessMessage = "";
+
+    private bool DisplayTimes { get; set; } = false;
+
+    public String DateError { get; set; }
 
 
     protected override async Task OnInitializedAsync()
@@ -120,6 +129,14 @@
 
     private async Task UpdateDate(DateOnly date)
     {
+        if (date < DateOnly.FromDateTime(DateTime.Now))
+        {
+            DateError = "Can't make a rental in the past";
+            DisplayTimes = false;
+            return;
+        }
+        DateError = null;
+        DisplayTimes = true;
         Date = date;
     }
 
