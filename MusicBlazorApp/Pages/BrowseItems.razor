@@ -17,7 +17,7 @@
     <div class="col-lg-2 col-md-3">
         <div class="sticky-top" style="top: 75px;">
             <!-- Filter Section -->
-            <nav id="filter-sidebar" class="collapse d-lg-block sidebar collapse bg-white">
+            <nav id="filter-sidebar fade-in" class="collapse d-lg-block sidebar collapse bg-white">
                 <div class=" mx-3">
                     <h4>Filter</h4>
                     
@@ -60,7 +60,7 @@
     <div class=" col-lg-10 col-md-9">
         <!-- SEARCH BAR AND TITLE -->
         <h1>Browse Instruments</h1>
-        <div class="my-5 mx-3 d-flex justify-content-end search-wrapper" >
+        <div class="my-5 mx-3 d-flex justify-content-end search-wrapper fade-in" >
             <span><InputText @bind-Value="SearchQuery" class="search-input"></InputText></span>
             <button @onclick="SearchItems" type="submit" class="search-btn">Search</button>
         </div>
@@ -77,17 +77,17 @@
                             {
                                 @if (item.Quantity == 0)
                                 {
-                                    <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0); max-width:288px; max-height:288px;">
+                                    <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0); max-height: 288px; max-width: 18rem; width: auto; margin-left: auto; margin-right: auto;">
                                     <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
                                 }
                                 else
                                 {
-                                    <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px;">
+                                    <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style=" max-height: 288px; max-width: 18rem; width: auto; margin-left: auto; margin-right: auto;">
                                 }
                             }
                             else
                             {
-                                <img class="card-img-top" src="css\images\No-Image.png" alt="@item.ItemName" style="border-radius: 0px; max-width:288px; max-height:288px;">
+                                <img class="card-img-top img-fluid img-fluid" src="css\images\No-Image.png" alt="@item.ItemName" style=" max-height: 288px; max-width: 18rem; width: auto; margin-left: auto; margin-right: auto;">
                             }
                         </div>
                         <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>

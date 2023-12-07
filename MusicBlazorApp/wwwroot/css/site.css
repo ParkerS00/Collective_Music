@@ -46,6 +46,36 @@ a, .btn-link {
     color: goldenrod;
 }
 
+card-img-top {
+    border-radius: 0px;
+    max-height: 288px;
+    max-width: 18rem;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Apply the animation to the element */
+.fade-in {
+    animation: fadeIn 1.05s ease-in-out; /* Adjust the duration and timing function as needed */
+}
+
+/* Initially hide the element */
+.fade-in {
+    opacity: 1;
+}
+
 .red-button {
     background-color: #5B0D13;
     color: white;

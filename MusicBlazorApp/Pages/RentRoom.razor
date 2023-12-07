@@ -2,6 +2,8 @@
 @using MusicApi.Data;
 @using MusicApi.Dtos;
 @using MusicApi.Request;
+@using Radzen;
+@using Radzen.Blazor;
 @inject IConfiguration config;
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
@@ -58,7 +60,12 @@
     </div>
     <h1 class="mt-5 fw-bold">Step Two: Select a Date</h1><hr>
     <div class="justify-content-center">
-        <input type="date" @onchange="(d) => UpdateDate(DateOnly.Parse(d.Value.ToString()))" style="max-width: 300px;" />
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenDatePicker @bind-Value="@dateTime" Inline="true" @onclick="() => UpdateDate(dateTime)" />
+        </div>
+
+
+
         @if (DateError is not null)
         {
             <p class="alert alert-danger">@DateError</p>
@@ -73,7 +80,7 @@
             {
                 @if (timeframe.isAvailable)
                 {
-                    <button class="m-5 col-md-2" @onclick="() => UpdateSelectedTimeBlock(timeframe)" style="border: dashed; border-radius:5px;">
+                    <button class="button button4 m-3" @onclick="() => UpdateSelectedTimeBlock(timeframe)">
                     <li>@timeframe.startTime.ToString("MM/dd/yyyy hh:mm tt") to @timeframe.endTime.ToString("hh:mm tt")</li></button>
                 }
             }
@@ -107,6 +114,8 @@
     //Chosen rental date
     public DateOnly? Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
+    public DateTime dateTime { get; set; }
+
     private IEnumerable<RoomDto> Rooms = new List<RoomDto>();
 
     public TimeOnly StartTime { get; set; }
@@ -128,6 +137,7 @@
     public string StrError = "";
 
     public string SuccessMessage = "";
+
 
 
     protected override async Task OnInitializedAsync()
@@ -158,10 +168,11 @@
         SelectedRoom = Rooms.Where(r => r.Id == SelectedRoomId).FirstOrDefault();
     }
 
-    private async Task UpdateDate(DateOnly date)
+
+    private async Task UpdateDate(DateTime date)
     {
         SelectedTimeBlock = null;
-        if (date < DateOnly.FromDateTime(DateTime.Now))
+        if (date < DateTime.Now)
         {
             DateError = "Can't make a rental in the past";
             DisplayTimes = false;
@@ -169,8 +180,7 @@
         }
         DateError = null;
         DisplayTimes = true;
-        Date = date;
-        Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{Date?.Month}/{Date?.Day}/{Date?.Year}");
+        Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{date.Month}/{date.Day}/{date.Year}");
         SelectedRoom = Rooms.Where(r => r.Id == SelectedRoomId).FirstOrDefault();
     }
 
