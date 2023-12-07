@@ -46,6 +46,15 @@ a, .btn-link {
     color: goldenrod;
 }
 
+card-img-top {
+    border-radius: 0px;
+    max-height: 288px;
+    max-width: 18rem;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 
 @keyframes fadeIn {
     from {
