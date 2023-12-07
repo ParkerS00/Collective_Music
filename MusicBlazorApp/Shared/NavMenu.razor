@@ -10,9 +10,9 @@
                 <div class="navbar-nav mr-auto">
                     <a class="nav-link" href="/browse-instruments">Purchase or Rent Equipment</a>
                     <a class="nav-link" href="/rent-a-room">Rent a Recording Studio</a>
-                    <a class="nav-link" href="/cart">Proceed to Purchase</a>
                     <AuthorizeView>
                         <Authorized>
+                            <a class="nav-link" href="/cart"><i class="fa-solid fa-cart-shopping" style="font-size: x-large;"></i></a>
                             <a class="user nav-link" href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
                             <form method="post" action="Identity/Account/Logout">
                                 <button type="submit" class="nav-link btn btn-link">Log out</button>
