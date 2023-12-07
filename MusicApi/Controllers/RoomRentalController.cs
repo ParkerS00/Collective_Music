@@ -17,11 +17,7 @@ public class RoomRentalController : Controller
         this.roomRentalService = roomRentalService;
     }
 
-    [HttpGet()]
-    public async Task<IEnumerable<RoomRental>> Get()
-    {
-        return await roomRentalService.GetAll();
-    }
+
 
     [HttpPost("{request}")]
     public async Task Post([FromBody] AddRoomRentalRequest request)

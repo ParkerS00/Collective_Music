@@ -13,13 +13,6 @@ public class RoomRentalService : IRoomRentalService
         this.contextFactory = contextFactory;
     }
 
-    public async Task<IEnumerable<RoomRental>> GetAll()
-    {
-        var context = contextFactory.CreateDbContext();
-        return await context.RoomRentals
-            .Include(r => r.Room)
-            .ToListAsync();
-    }
 
     public async Task<RoomRental?> Add(RoomRental roomRental, string email)
     {

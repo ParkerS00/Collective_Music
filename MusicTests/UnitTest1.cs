@@ -14,11 +14,11 @@ public class CustomerController : IClassFixture<BlazorIntegrationTestContext>
     }
 
     [Fact]
-    public async Task CanCallApi()
+    public async Task GetsCorrectCustomerFromDatabase()
     {
-        var response = await httpClient.GetAsync($"/customer");
-        var customers = await response.Content.ReadFromJsonAsync < List < Customer>> ();
-        var customer1 = customers[0];
+        var response = await httpClient.GetAsync($"/customer/admin@snow.edu");
+        var customers = await response.Content.ReadFromJsonAsync<Customer> ();
+        var customer1 = customers;
         customer1.Should().BeEquivalentTo(new Customer
         {
             Id = 82,
@@ -27,6 +27,6 @@ public class CustomerController : IClassFixture<BlazorIntegrationTestContext>
             Email = "admin@snow.edu",
             Address = "Admin",
             PhoneNumber = "Admin"
-        }, o => o.Excluding(si => new { si.CartItems, si.Rentals, si.Purchases }));
+        });
     }
 }
