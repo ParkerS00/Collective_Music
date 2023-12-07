@@ -85,15 +85,23 @@
     @if (SelectedTimeBlock is not null && SelectedRoom is not null && Date is not null)
     {
         <h5>@SelectedRoom.RoomName for @Date from @SelectedTimeBlock.startTime.ToString("hh:mm tt") to @SelectedTimeBlock.endTime.ToString("hh:mm tt")</h5>
-        <center><button class="btn btn-primary m-5 red-button" style="max-width: 300px; border: none;" @onclick="() => SaveRental()"><strong>Confirm your selection</strong></button></center>
-        @if (StrError.Length > 0)
+        @if(CurrentUser is not null)
         {
-            <div class="alert alert-danger">@StrError</div>
+            <center><button class="btn btn-primary m-5 red-button" style="max-width: 300px; border: none;" @onclick="() => SaveRental()"><strong>Confirm your selection</strong></button></center>
+            @if (StrError.Length > 0)
+            {
+                <div class="alert alert-danger">@StrError</div>
+            }
+            @if (SuccessMessage.Length > 0)
+            {
+                <div class="alert alert-success">@SuccessMessage</div>
+            }
         }
-        @if (SuccessMessage.Length > 0)
+        else
         {
-            <div class="alert alert-success">@SuccessMessage</div>
+            <center><a href="/Identity/Account/Login"><button class="btn btn-primary m-5 red-button" style="max-width: 300px; border: none;"><strong>Confirm your selection</strong></button></a></center>
         }
+
     }
 </div>
 
@@ -117,6 +125,8 @@
 
     public String DateError { get; set; }
 
+    public string CurrentUser { get; set; }
+
     public string StrError = "";
 
     public string SuccessMessage = "";
@@ -128,6 +138,10 @@
         Rooms = await httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>($"{config[Constants.ApiEndpoint]}/room/{Date?.Month}/{Date?.Day}/{Date?.Year}");
 
         SelectedRoom = Rooms.Where(r => r.Id == SelectedRoomId).FirstOrDefault();
+
+        var authstate = await auth.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        CurrentUser = user.Identity.Name;
     }
 
     private async Task MakeRoomRental()
@@ -171,14 +185,11 @@
     {
         StrError = "";
         SuccessMessage = "";
-        var authstate = await auth.GetAuthenticationStateAsync();
-        var user = authstate.User;
-        var name = user.Identity.Name;
-        if (name is null)
+        if (CurrentUser is null)
         {
             return;
         }
-        var request = new AddRoomRentalRequest(name, SelectedRoomId, SelectedRoom.RoomPrice, SelectedTimeBlock.startTime, SelectedTimeBlock.endTime);
+        var request = new AddRoomRentalRequest(CurrentUser, SelectedRoomId, SelectedRoom.RoomPrice, SelectedTimeBlock.startTime, SelectedTimeBlock.endTime);
         var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/RoomRental/{request}", request);
         if (!response.IsSuccessStatusCode)
         {

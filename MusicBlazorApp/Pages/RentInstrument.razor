@@ -9,6 +9,7 @@
 @inject HttpClient httpClient;
 @inject AuthenticationStateProvider auth;
 @inject IHostEnvironment Environment;
+@inject NavigationManager NavManager;
 
 
 <style>
@@ -140,5 +141,6 @@
         {
             SuccessMessage = "Successfully created rental";
         }
+        NavManager.NavigateTo("/confirm", forceLoad: true);
     }
 }
