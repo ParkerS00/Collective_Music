@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MusicApi.Data;
+using System.IO;
 
 namespace MusicApi.Dtos;
 
@@ -82,7 +83,6 @@ public class ItemDto
             }
             ImageFilePaths.Add(path.Filepath.ToString());
         }
-
 
         if (item.Reviews.Count() > 0 && Quantity > 0)
         {

@@ -131,30 +131,40 @@
                 </div>
 
                 <div class="d-flex flex-row justify-content-between" style="padding-top:25px;">
-                    <select class="dropdown" style="border-style: solid; height:50px;">
-                        @foreach (int i in Enumerable.Range(1, selectedStatus.Quantity))
-                        {
-                            <option @onclick="() => ChangeQuantity(i)">@i</option>
-                        }
-
-                    </select>
-                    <div class="col-md-6" style="padding-top: 5px; padding-bottom: 50px;">
-                        @if (CurrentUserName is null)
-                        {
-                            @if (CurrentUserId == 0)
+                    @if (Item.Quantity > 0)
+                    {
+                        <select class="dropdown" style="border-style: solid; height:50px;">
+                            @if (selectedStatus is not null)
                             {
-                                <center><div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Identity/Account/Login">Add to Cart</a></h5></div></center>
+                                @foreach (int i in Enumerable.Range(1, selectedStatus.Quantity))
+                                {
+                                    <option @onclick="() => ChangeQuantity(i)">@i</option>
+                                }
+                            }
+
+                        </select>
+                        <div class="col-md-6" style="padding-top: 5px; padding-bottom: 50px;">
+                            @if (CurrentUserName is null)
+                            {
+                                @if (CurrentUserId == 0)
+                                {
+                                    <center><div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Identity/Account/Login">Add to Cart</a></h5></div></center>
+                                }
+                                else
+                                {
+                                    <center><div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Account">Add to Cart</a></h5></div></center>
+                                }
                             }
                             else
                             {
-                                <center><div class="red-button"><h5 @onclick="() => urlState.Url = CurrentUrl"><a href="/Account">Add to Cart</a></h5></div></center>
+                                <div class="red-button"><h5 @onclick="() => AddItemToCart(Item)">Add to Cart</h5></div>
                             }
-                        }
-                        else
-                        {
-                            <div class="red-button"><h5 @onclick="() => AddItemToCart(Item)">Add to Cart</h5></div>
-                        }
-                    </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>out of stock, sorry!</p>
+                    }
                 </div>
                 @if (AddToCartError.Length > 0)
                 {
@@ -166,23 +176,30 @@
             <hr />
             <div class="row">
                 <div class="col-md-6"><p>Rent this item. Pick up and drop off in store.</p></div>
-                <div class="col-md-6">
-                    @if (CurrentUserName is null)
-                    {
-                        @if (CurrentUserId == 0)
+                @if (Item.Quantity > 0)
+                {
+                    <div class="col-md-6">
+                        @if (CurrentUserName is null)
                         {
-                            <div class="red-button"><h5><a href="/Identity/Account/Login" class="stretched-link">Rent</a></h5></div>
+                            @if (CurrentUserId == 0)
+                            {
+                                <a href="/Identity/Account/Login"><div class="red-button"><h5>Rent</h5></div></a>
+                            }
+                            else
+                            {
+                                <a href="/Account"><div class="red-button"><h5>Rent</h5></div></a>
+                            }
                         }
                         else
                         {
-                            <div class="red-button"><h5><a href="/Account" class="stretched-link">Rent</a></h5></div>
+                            <a @onclick="() => HandleRentClick(Item.Id)"><div class="red-button"><h5>Rent</h5></div></a>
                         }
-                    }
-                    else
-                    {
-                        <a @onclick="() => HandleRentClick(Item.Id)"><div class="red-button"><h5>Rent</h5></div></a>
-                    }
-                </div>
+                    </div>
+                }
+                else
+                {
+                    <p>out of stock, sorry!</p>
+                }
             </div>
         </div>
 
@@ -366,8 +383,11 @@ else
 
         if (Item is not null)
         {
-            selectedStatus = Item.ItemStatuses.First();
-            statusClicked = selectedStatus.Name;
+            if (Item.ItemStatuses.Count > 0)
+            {
+                selectedStatus = Item.ItemStatuses.First();
+                statusClicked = selectedStatus.Name; 
+            }
         }
     }
 
