@@ -75,7 +75,7 @@
                             {
                                 @if (item.Quantity == 0)
                                 {
-                                    <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0);">
+                                    <img class="card-img-top" src="@item.PrimaryImagePath" alt="@item.ItemName" style="border-radius: 0px; filter: saturate(0); max-width:288px; max-height:288px;">
                                     <p style="background-color: darkred; color: white; position:absolute; top: 30px; padding: 10px; left: -5px;">Out of Stock</p>
                                 }
                                 else
@@ -85,7 +85,7 @@
                             }
                             else
                             {
-                                <img class="card-img-top" src="https://dummyimage.com/400x500/595959/fff&text=no_image" alt="@item.ItemName" style="border-radius: 0px;">
+                                <img class="card-img-top" src="css\images\No-Image.png" alt="@item.ItemName" style="border-radius: 0px; max-width:288px; max-height:288px;">
                             }
                         </div>
                         <div class="card-title"><h5 class="m-2">@item.ItemName</h5></div>
