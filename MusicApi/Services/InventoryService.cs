@@ -61,6 +61,10 @@ public class InventoryService : IInventoryService<Inventory>
                 InventoryId = (int)cuc.InventoryId,
                 FinalPrice = cuc.Inventory.Item.SellPrice
             };
+            if (customer.RewardPoints is null)
+            {
+                customer.RewardPoints = 0;
+            }
             customer.RewardPoints += (int)cuc.Inventory.Item.SellPrice; 
             context.PurchaseItems.Add(piuc);
             context.CartItems.Remove(cuc);
