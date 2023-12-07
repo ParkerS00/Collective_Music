@@ -35,9 +35,13 @@ public class ItemsController : Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<ItemDto> Get(int id)
+    public async Task<ItemDto?> Get(int id)
     {
         Item item = await itemService.Get(id);
+        if(item == default(Item))
+        {
+            return null;
+        }
         return new ItemDto(item);
     }
 

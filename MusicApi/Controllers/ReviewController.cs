@@ -35,4 +35,11 @@ public class ReviewController : Controller
         await reviewService.Add(review);
    
     }
+
+    [HttpGet("{itemId}")]
+    public async Task<List<Review>> Get(int itemId)
+    {
+        return await reviewService.GetItemReviews(itemId);
+    }
+
 }

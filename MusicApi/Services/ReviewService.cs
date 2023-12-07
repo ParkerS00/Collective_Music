@@ -32,4 +32,12 @@ public class ReviewService : IReviewService<Review>
         return review;
     }
 
+    public async Task<List<Review>> GetItemReviews(int itemId)
+    {
+        var context = contextFactory.CreateDbContext();
+        return await context.Reviews
+                .Where(r => r.ItemId == itemId)
+                .ToListAsync();
+    }
+
 }
