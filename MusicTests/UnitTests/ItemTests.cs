@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicTests
+namespace MusicTests.UnitTests
 {
     public class ItemTests
     {

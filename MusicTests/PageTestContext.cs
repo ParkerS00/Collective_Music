@@ -1,20 +1,23 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Bunit;
+using FluentAssertions.Common;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MusicApi.Data;
 using Testcontainers.PostgreSql;
 
-namespace Dadabase.IntegrationTests;
+namespace MusicTests;
 
-public class BlazorIntegrationTestContext : WebApplicationFactory<Program>, IAsyncLifetime
+public class PageTestContext : TestContext, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _dbContainer;
 
-    public BlazorIntegrationTestContext()
+    public PageTestContext()
     {
         var whereAmI = Environment.CurrentDirectory;
         var backupFile = Directory.GetFiles("../../../..", "*.sql", SearchOption.AllDirectories)
@@ -29,19 +32,14 @@ public class BlazorIntegrationTestContext : WebApplicationFactory<Program>, IAsy
     }
 
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder.ConfigureTestServices(services =>
-        {
-            services.RemoveAll(typeof(DbContextOptionsBuilder<MusicDbContext>));
-            services.AddDbContextFactory<MusicDbContext>(options => options.UseNpgsql(_dbContainer.GetConnectionString()));
-        });
-    }
-
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
-
+        Services.RemoveAll(typeof(DbContextOptionsBuilder<MusicDbContext>));
+        Services.AddDbContextFactory<MusicDbContext>((provider, options) => {
+            IConfiguration config = provider.GetRequiredService<IConfiguration>();
+            options.UseSqlServer(_dbContainer.GetConnectionString());
+        });
         var factory = Services.GetRequiredService<IDbContextFactory<MusicDbContext>>();
         var dbContext = factory.CreateDbContext();
         await dbContext.Database.MigrateAsync();

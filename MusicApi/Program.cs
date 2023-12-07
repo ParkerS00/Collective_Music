@@ -24,6 +24,7 @@ builder.Services.AddScoped<IRoomRentalService, RoomRentalService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IReviewService<Review>, ReviewService>();
 builder.Services.AddScoped<ICustomerService<Customer>, CustomerService>();
+builder.Services.AddScoped<IInventoryService<Inventory>, InventoryService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<PurchaseItemService>();
 builder.Services.AddScoped<RentalItemService>();
