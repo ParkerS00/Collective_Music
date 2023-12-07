@@ -39,11 +39,6 @@
     <ProjectReference Include="..\MusicApi\MusicApi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\css\images\itemImages\" />
-    <Folder Include="wwwroot\css\images\itemImages\" />
-  </ItemGroup>
-
 
 
 
