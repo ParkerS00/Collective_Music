@@ -1,15 +1,9 @@
 ﻿using Azure;
-using Castle.Core.Resource;
 using FluentAssertions;
 using MusicApi.Data;
 using MusicApi.Dtos;
 using MusicApi.FrontFacingData;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MusicTests.ControllerTests;
 

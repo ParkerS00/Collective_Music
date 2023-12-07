@@ -132,19 +132,20 @@
                     <br />
                 </div>
 
+
                 <div class="d-flex flex-row justify-content-between" style="padding-top:25px;">
                     @if (Item.Quantity > 0)
                     {
-                        <select class="dropdown" style="border-style: solid; height:50px;">
+                        <RadzenDropDown TValue="int" @bind-Value="quantity" Data="@Enumerable.Range(1, selectedStatus.Quantity)" class="dropdown" style="border-style: solid; height:50px;">
                             @if (selectedStatus is not null)
                             {
                                 @foreach (int i in Enumerable.Range(1, selectedStatus.Quantity))
                                 {
-                                    <option @onclick="() => ChangeQuantity(i)">@i</option>
+                                    <RadzenDropDownItem TValue="int" @onmouseup="() => ChangeQuantity(i)">@i</RadzenDropDownItem>
                                 }
                             }
-
-                        </select>
+                        </RadzenDropDown>
+                        
                         <div class="col-md-6" style="padding-top: 5px; padding-bottom: 50px;">
                             @if (CurrentUserName is null)
                             {
