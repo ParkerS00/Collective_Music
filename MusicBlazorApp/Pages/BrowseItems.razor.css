@@ -6,3 +6,16 @@
 .rating-color {
     color: goldenrod;
 }
+
+.search-wrapper {
+    margin-right: 200px !important;
+}
+
+.search-btn {
+    padding: 5px 10px 5px 10px;
+    background-color: #19222D;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    margin-left: 15px;
+}
