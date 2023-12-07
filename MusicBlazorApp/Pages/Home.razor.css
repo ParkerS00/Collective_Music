@@ -12,9 +12,18 @@
     left: 27vw;
 }
 
-.items-showcase {
-    margin-top: 292px;
+.rnt-room-btn {
+    color: white;
+    text-decoration: none;
+    padding-top: 3px;
 }
+    .rnt-room-btn:hover {
+        color: white;
+    }
+
+    .items-showcase {
+        margin-top: 292px;
+    }
 
 .button-section {
     margin-top: 150px;

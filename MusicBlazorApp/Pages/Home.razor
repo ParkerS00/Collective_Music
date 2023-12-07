@@ -24,7 +24,7 @@
     </div>
     <div class="col-md-3">
         <div class="d-flex flex-column align-items-lg-center">
-            <h1>Collaborative Music</h1>
+            <h1 style="font-weight: 800;">Collaborative Music</h1>
             <h3>The one-stop music shop</h3>
         </div>
     </div>
@@ -36,7 +36,6 @@
 <div class="p-4 items-showcase">
     <center><h2>Our Highest Rated Items</h2></center><hr />
     <div class="d-flex flex-wrap flex-row justify-content-around">
-
         @if (Items.Count() != 0)
         {
             @foreach (var item in TopRatedItems)
@@ -105,6 +104,7 @@
             }
         }
     </div>
+    <center><a href="/browse-instruments" style="text-decoration: none; "><h5 class="red-button w-50" style="padding-top: 12px;">See More</h5></a></center>
 </div>
 
 <!-- Rent a recording studio -->
@@ -132,6 +132,7 @@
                 </ul>
                 By creating recording spaces specifically for new-age creators and artists, we have enabled our customers to capitalize on an unmet need in the market.
             </p>
+            <center><a href="/rent-a-room" class="rnt-room-btn"><h5 class="red-button w-50" style="padding-top: 12px;">Rent a Recording Studio</h5></a></center>
         </div>
     </div>
 </div>
@@ -167,10 +168,16 @@
 </div>
 
 <!-- About Us -->
-<div class="p-5" style="margin-bottom:150px;">
+<div class="p-5" style="margin-bottom:50px;">
     <center>
         <h1>About</h1>
-        <p class="lead" style="max-width: 80%; text-align: center;">Collaborative music is the one stop shop to creating a collaborative space idk blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec massa in neque maximus egestas. Cras semper, justo eu sagittis rhoncus, est augue accumsan lorem, vel ultricies urna sem id augue. Donec eleifend eleifend ornare. Aliquam eu vestibulum mauris. Vestibulum fermentum sit amet dolor eget consequat. Sed vitae nisl erat. Sed vitae magna venenatis, luctus magna ut, facilisis turpis. Aenean facilisis sit amet lacus id accumsan. Aenean erat nisi, consequat sit amet lobortis non, sagittis blandit justo. Duis tortor erat, placerat a libero varius, scelerisque ornare ante. Duis ultricies finibus tortor, lacinia efficitur magna tempus et. Donec sit amet lectus nunc. Nulla sed nisi ut elit vestibulum egestas. Donec nec neque ipsum. Ut vitae pretium velit. Quisque vel arcu non metus sodales luctus sed non nunc.</p>
+        <div style="max-width: 60%; margin-left: auto; margin-right: auto;">
+            <div>
+            <p class="lead">Immerse yourself in our inviting space, designed to foster collaboration and artistic expression. From cozy jam rooms to state-of-the-art recording studios, Collaborative provides the ideal environment for musicians of all levels to connect, collaborate, and bring their musical visions to life.</p>
+            <p class="lead">Need the perfect instrument for your session? Explore our instrument rental and purchase options, featuring a diverse range of high-quality guitars, drums, keyboards, and more. At Collaborative Music, we believe in removing barriers to creativity, ensuring you have the tools you need to make your musical dreams a reality.</p>
+                <p class="lead">Check out Collaborative Music, where the harmony of collaboration meets the melody of possibility. 🎵✨</p>
+            </div>
+        </div>
     </center>
 </div>
 
