@@ -24,12 +24,6 @@
 
 
 
-
-<div class="main-content">
-    <div>
-    </div>
-</div>
-
 <div class="row mt-5 main-content">
 
     <div class="stepOne">
@@ -39,7 +33,7 @@
             <select class="dropdown" @bind="SelectedRoomId" style="max-width: 300px;">
                 @foreach (var rm in Rooms)
                 {
-                    <option value="@rm.Id" @onclick="() => UpdateRoom(rm.Id)">@rm.RoomName</option>
+                    <option value="@rm.Id" @onclick="() => UpdateRoom(rm.Id)" style="font-family:'Arial Rounded MT'">@rm.RoomName</option>
                 }
             </select>
         </div>
@@ -70,13 +64,13 @@
     <ul class="list-unstyled">
         @if (SelectedRoom is not null && DisplayTimes == true)
         {
-            <h3 class="mt-5">Step Three: Select Time</h3>
+            <h1 class="mt-5 fw-bold">Step Three: Select Time</h1><hr />
             @foreach (var timeframe in SelectedRoom.TimeFrames)
             {
                 @if (timeframe.isAvailable)
                 {
-                    <button class="m-5 d-block" @onclick="() => UpdateSelectedTimeBlock(timeframe)" style="border: none;">
-                    <li>@timeframe.startTime to @timeframe.endTime</li></button>
+                    <button class="m-5 col-md-2" @onclick="() => UpdateSelectedTimeBlock(timeframe)" style="border: dashed; border-radius:5px;">
+                    <li>@timeframe.startTime.ToString("MM/dd/yyyy hh:mm tt") to @timeframe.endTime.ToString("hh:mm tt")</li></button>
                 }
             }
         }
