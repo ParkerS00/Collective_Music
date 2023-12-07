@@ -249,13 +249,22 @@
         {
             return;
         }
+        Customer customer;
+        var response = await httpClient.GetAsync($"{config[Constants.ApiEndpoint]}/customer/{name}");
+        if(response.StatusCode == System.Net.HttpStatusCode.NoContent)
+        {
+            customer = null;
+        }
+        else
+        {
+            customer = await response.Content.ReadFromJsonAsync<Customer>();
+        }
 
-        var customer = await httpClient.GetFromJsonAsync<Customer?>($"{config[Constants.ApiEndpoint]}/customer/{name}");
 
         if (customer is null)
         {
             var request = new AddCustomerRequest(name);
-            var response = await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
+            await httpClient.PostAsJsonAsync($"{config[Constants.ApiEndpoint]}/customer/{request}", request);
         }
     }
 
