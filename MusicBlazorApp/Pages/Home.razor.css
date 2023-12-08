@@ -47,6 +47,11 @@
     margin-top: 150px;
 }
 
+.location-address {
+    margin-left: 10px !important;
+}
+
+
 .service-tag {
     margin-top: 25px;
     margin-bottom: 25px;
@@ -183,6 +188,9 @@
         height: 750px;
         top: 100px;
         left: 15vw;
+    }
+    .location-address {
+        margin-left: 400px !important;
     }
 }
 
