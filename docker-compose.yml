@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./20231205.03.32.57.sql:/docker-entrypoint-initdb.d/A_init.sql
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+
+  musicapi:
+    build: ./Dockerfile.api
+    environment:
+      - MusicDB=user id = postgres; password=postgres; server=db; database= postgres; port= 5432
+    depends_on:
+      - db   
+
+  blazorapp:
+    build: ./Dockerfile.app
+    ports:
+      - 8070:8080
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      MusicDB: user id = postgres; password=postgres; server=db; database= postgres; port= 5432
+      defaultAdminUsername: admin
+      defaultAdminPassword: default
+      ApiEndpoint: https://musicapi:7236
+    depends_on:
+      - musicapi
+    restart: unless-stopped
